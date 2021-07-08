@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+<!--    android:background="@drawable/layout_rounded_white_background"-->
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:padding="10dp"
+            android:visibility="gone"
+            />
+    <!--<pl.droidsonroids.gif.GifImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/salon_gif_logo_new"
+        />-->
+    <com.cunoraz.gifview.library.GifView
+        android:id="@+id/gif1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+       app:gif="@drawable/ring_gif" />
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+       android:background="@color/grey"
+        android:textSize="16dp"
+        android:visibility="gone"
+        />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:padding="10dp"
+           android:visibility="gone"
+           >
+               <ProgressBar
+                   android:id="@+id/pbProgress"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   />
+               <com.prometteur.sathiya.utills.TextViewCustomFont
+                   android:id="@+id/tvProgressMsg"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Loading..."
+                   android:textSize="16dp"
+                   />
+       </LinearLayout>
+
+</LinearLayout>

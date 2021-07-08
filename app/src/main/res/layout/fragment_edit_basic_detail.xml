@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lightGrey"
+            android:orientation="vertical"
+            tools:context=".Fragments.EditBasicDetailFragment">
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:text="@string/basic_details"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15sdp"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_corner_round_whitefill"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="@string/full_name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:text="*"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/bg_gray_rounded_rectengle"
+                    android:drawableLeft="@drawable/ic_user_logo"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text=""
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:hint="@string/firstname_lastname"
+                    android:textColor="@color/black"
+                    style="@style/EditTextviewStyle"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/email"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="*"
+                        android:textColor="@color/red"
+                        android:visibility="gone"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/bg_corner_round_greyfill"
+                    android:drawableLeft="@drawable/ic_email_logo"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text=""
+                    android:hint="@string/enter_here"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    style="@style/EditTextviewStyle"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/mobile_number"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:text="*"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtMobileNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/bg_corner_round_greyfill"
+                    android:drawableLeft="@drawable/ic_smartphone_logo"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:digits="1234567890"
+                    android:hint="@string/enter_here"
+                    android:text=""
+                    android:textColor="@color/black"
+                    style="@style/EditTextviewStyle"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:text="@string/gender"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp" />
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:text="*"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:text="@string/dob"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp" />
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:text="*"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+                        <Spinner
+                            android:id="@+id/spGender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            android:layout_marginLeft="@dimen/_15sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_gravity="bottom"/>
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/edtGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:background="@drawable/bg_corner_round_greyfill"
+                            android:drawableLeft="@drawable/ic_gender_logo"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:text=""
+                            android:hint="@string/gender"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            style="@style/EditTextviewStyle"
+                            android:gravity="center_vertical"/>
+
+                    </FrameLayout>
+
+
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/edtDOB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_corner_round_greyfill"
+                        android:drawableLeft="@drawable/ic_calanderchecked_logo"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:text=""
+                        android:hint="DD-MM-YYYY"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        style="@style/EditTextviewStyle"
+                        android:gravity="center_vertical"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:text="@string/state"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp" />
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:text="*"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:text="@string/city"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp" />
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:text="*"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/edtState"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_corner_round_greyfill"
+                        android:drawableLeft="@drawable/ic_locationmap_logo"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:hint="@string/please_select"
+                        android:drawableRight="@drawable/icn_blck_down"
+                        android:textColor="@color/black"
+                        android:singleLine="true"
+                        android:gravity="center_vertical"
+                        />
+
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/edtCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_corner_round_greyfill"
+                        android:drawableLeft="@drawable/ic_locationhouse_logo"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:hint="@string/please_select"
+                        android:drawableRight="@drawable/icn_blck_down"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/height_ft_ln"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:text="*"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+                <vn.nms.dynamic_seekbar.DynamicSeekBarView
+                    android:id="@+id/dynamicSeekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dsbv_progressColor="@color/colorPrimary"
+                    app:dsbv_progressBackgroundColor="@color/gray_bold"
+                    app:dsbv_infoTextSize="12dp"
+                    app:dsbv_infoTextColor="@android:color/white"
+                    app:dsbv_infoBackgroundColor="@color/colorPrimary"
+                    app:dsbv_infoRadius="5"
+                    app:dsbv_max="8"
+                    app:dsbv_progress="0"
+                    app:dsbv_thumbDrawable="@drawable/ic_habbit"
+                    app:dsbv_thumbSize="40dp"
+                    app:dsbv_infoInitText="@string/init_info_ft"/>
+                <vn.nms.dynamic_seekbar.DynamicSeekBarView
+                    android:id="@+id/dynamicSeekbarInch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dsbv_progressColor="@color/colorPrimary"
+                    app:dsbv_progressBackgroundColor="@color/gray_bold"
+                    app:dsbv_infoTextSize="12dp"
+                    app:dsbv_infoTextColor="@android:color/white"
+                    app:dsbv_infoBackgroundColor="@color/colorPrimary"
+                    app:dsbv_infoRadius="5"
+                    app:dsbv_max="12"
+                    app:dsbv_progress="0"
+                    app:dsbv_thumbDrawable="@drawable/ic_habbit"
+                    app:dsbv_thumbSize="40dp"
+                    app:dsbv_infoInitText="@string/init_info_in"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:text="@string/brief_description"
+                    android:textColor="@color/gray_bold"
+                    android:textSize="@dimen/_15sdp" />
+                <!--<com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:text="*"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_12sdp" />-->
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_corner_round_whitefill"
+                android:orientation="horizontal"
+                android:weightSum="1.5">
+
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_corner_round_greyfill"
+                    android:drawableLeft="@drawable/ic_idcard_logo"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text=""
+                    android:hint="@string/enter_here"
+                    android:textColor="@color/black"
+                    style="@style/EditTextviewStyle"/>
+
+                <com.github.siyamed.shapeimageview.CircularImageView
+                    android:id="@+id/cirMicrophone"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_weight=".5"
+                    android:src="@drawable/ic_microphone_logo" />
+
+
+            </LinearLayout>
+
+
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvNextClick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_curcorner_lightgreen"
+                android:paddingLeft="@dimen/_20sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingRight="@dimen/_20sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sdp" />
+
+
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:id="@+id/sliding_page"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/red_transperant"
+
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/sliding_drawer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/sevenfive"
+            android:background="#ffdddddd"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout1"
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:background="@color/colorWhite" />
+
+            <include
+                android:id="@+id/includeSlide"
+                layout="@layout/sliding_drowaer1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/layout1"
+                android:visibility="visible" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relMoreCMSView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/red_transperant"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:id="@+id/linSlidingDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@color/colorWhite"
+            android:orientation="vertical"
+            android:padding="@dimen/onefive">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textCMSTitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/five"
+                    android:gravity="left"
+                    android:text="Terms and Conditions"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/onesix" />
+
+                <ImageView
+                    android:id="@+id/textClose"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icn_close"/>
+
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/textCMSContaints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_gravity="left"
+                android:paddingBottom="@dimen/_15sdp"
+                ></WebView>
+
+
+        </LinearLayout>
+
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/btnMenuClose"
+        android:layout_width="@dimen/twozero"
+        android:layout_height="@dimen/twozero"
+        android:layout_marginLeft="@dimen/onezero"
+        android:layout_marginTop="@dimen/onefive"
+        android:src="@drawable/icon_arrow_left"
+        android:visibility="gone" />
+</RelativeLayout>

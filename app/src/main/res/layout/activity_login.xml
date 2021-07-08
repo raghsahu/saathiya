@@ -1,0 +1,229 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+
+
+    <!-- Login progress -->
+  <!--  <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_255sdp"
+            android:src="@drawable/img_login_bg"
+            android:scaleType="fitXY"/>
+            <LinearLayout
+                android:id="@+id/linBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/bg_white_round_conrner"
+                android:orientation="horizontal"
+                android:elevation="5dp">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/icn_previous"
+                    android:visibility="visible" />
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/textviewHeaderText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/poppinsregular"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/two"
+                    android:paddingRight="@dimen/eight"
+                    android:text="@string/back"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/onetwo"
+                    android:visibility="visible" />
+            </LinearLayout>
+            </FrameLayout>
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_gravity="left"
+                android:text="@string/sign_in"
+                android:fontFamily="@font/poppinsmedium"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_20sdp" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtEmailId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mobile_no_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="15dp"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:drawableStart="@drawable/ic_username"
+                    android:textColorHint="@color/grey2"
+                    android:background="@drawable/login_edt_rounded_white_background"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="18dp"
+                    android:paddingRight="18dp"/>
+
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:passwordToggleEnabled="true"
+                app:hintEnabled="false"
+                app:boxBackgroundMode="none"
+                >
+
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:drawableStart="@drawable/ic_password"
+                    android:background="@drawable/login_edt_rounded_white_background"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:drawablePadding="@dimen/_10sdp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textColorHint="@color/grey2"
+                    android:singleLine="true"
+                    android:textSize="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="18dp"
+                    android:paddingRight="18dp">
+
+                </com.prometteur.sathiya.utills.CustomeEditText>
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/txtForgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_weight="0."
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center|right"
+                android:text="@string/forgot_password"
+                android:layout_gravity="right"
+                android:textColor="@color/colorPrimaryDark"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:gravity="center"
+                android:background="@drawable/bg_orange_rounded_rectengle"
+                android:elevation="10dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingLeft="65dp"
+                android:paddingRight="65dp"
+                android:text="@string/login_now"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="15dp" />
+
+
+            <LinearLayout
+                android:id="@+id/llRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingTop="20dp"
+                android:paddingBottom="8dp">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvnotyest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center|bottom"
+                    android:text="@string/don_t_have_an_account"
+                    android:textColor="@color/lightblack"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="@dimen/_11sdp" />
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvRegister"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center|bottom"
+                    android:layout_below="@+id/tvnotyest"
+                    android:text="@string/register_now"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="@dimen/_11sdp"  />
+            </LinearLayout>
+        </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+  <!--  </ScrollView>-->
+
+</LinearLayout>
+</ScrollView>

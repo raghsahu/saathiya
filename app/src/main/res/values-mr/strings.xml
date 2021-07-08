@@ -1,0 +1,375 @@
+<resources>
+    <string name="app_name">Saathiya</string>
+    <string name="go_back">Are you sure want to go back?</string>
+    <string name="Login">LOGIN</string>
+    <string name="Sign_Up">REGISTER FREE</string>
+    <string name="data_not_avelable">Data not available</string>
+    <string name="Registration">REGISTRATION</string>
+    <string name="Indias_most_trusted_matrimony_app">India\'s most trusted \nPremium Matrimony app</string>
+    <string name="login_now">LOGIN</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password1">Forgot Password</string>
+    <string name="Please_enter_username_and_password">Please enter email id and password.</string>
+    <string name="Please_enter_username">Please enter email id.</string>
+    <string name="Please_enter_password">Please enter password.</string>
+    <string name="Please_Wait">Please Wait…</string>
+    <string name="Please_enter_valid_email_address">Please enter valid email address</string>
+    <string name="Enter_Email_Id_Or_Username">Enter Email Id Or Username</string>
+    <string name="Submit">SUBMIT</string>
+    <string name="Profile_Created_By">PROFILE CREATED FOR</string>
+    <string name="Gender">Gender</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <string name="Religion">Religion</string>
+    <string name="Caste">Caste</string>
+    <string name="Mother_Tongue">Mother Tongue</string>
+    <string name="Country">Country</string>
+    <string name="Country_Code">Country Code</string>
+
+    <string name="Verify_continue">VERIFY &amp; CONTINUE</string>
+    <string name="edit">EDIT</string>
+    <string name="edit_mobile_no">Edit Mobile No</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="Please_enter_your_register_your_mobile_no">Please enter your register your mobile no.</string>
+    <string name="CONTINUE">CONTINUE</string>
+
+    <string-array name="arr_marital_status">
+        <item>Never Married</item>
+        <item>Widower</item>
+        <item>Divorced</item>
+        <item>Awaiting Divorce</item>
+    </string-array>
+
+    <string-array name="arr_physical_status">
+        <item>Normal</item>
+        <item>Physically Challenged</item>
+    </string-array>
+
+
+
+    <string-array name="arr_Employed_in">
+        <item>Government</item>
+        <item>Private</item>
+        <item>Business</item>
+        <item>Defence</item>
+        <item>Self Employed</item>
+    </string-array>
+
+
+
+
+
+
+    <string-array name="arr_diet">
+        <item>Any</item>
+        <item>Vegetarian</item>
+        <item>Non-Vegetarian</item>
+        <item>Eggetarian</item>
+    </string-array>
+
+    <string-array name="arr_manglik">
+        <item>No</item>
+        <item>Yes</item>
+        <item>I do not know</item>
+    </string-array>
+
+    <string-array name="arr_gender">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="arr_hobbies">
+        <item>Reading</item>
+        <item>Yoga</item>
+        <item>Swimming</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="find_your_nperfect_match_ntoday">Find Your\nPerfect match\nToday</string>
+    <string name="english">English</string>
+    <string name="select_language">Select Language?</string>
+    <string name="select_language1">Select Language</string>
+    <string name="selected">Selected</string>
+    <string name="marathi">Marathi</string>
+    <string name="hindi">Hindi</string>
+    <string name="gujarati">Gujarati</string>
+    <string name="back">Back</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register_now">Register Now!</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="init_info_text">0 KM</string>
+    <string name="init_info_calls">0 number of calls</string>
+    <string name="init_info_ft">0 ft</string>
+    <string name="init_info_in">0 in</string>
+    <string name="init_info_income">0 lacs</string>
+
+
+
+    <string name="buy_now">Buy Now</string>
+    <string name="when_they_install_this_app_you_will_10_calls_in_your_account">
+When they install this app, you will get 10 calls in your account.
+</string>
+
+    <string name="copy_your_code">Copy your code -</string>
+    <string name="basic_details">Basic Details</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="gender">Gender</string>
+    <string name="dob">DOB</string>
+    <string name="height">Height</string>
+    <string name="city">District</string>
+    <string name="state">State</string>
+    <string name="brief_description">Brief Description</string>
+    <string name="educational_profession_details">Educational/Profession Details</string>
+    <string name="profession">Profession</string>
+    <string name="employed_in">Employed In</string>
+    <string name="income_lpa">Income (In Month)</string>
+    <string name="religion_details">Religion Details</string>
+    <string name="caste">Caste</string>
+    <string name="sub_caste">Sub Caste</string>
+    <string name="other_details">Other Details</string>
+    <string name="manged_by">Managed By</string>
+    <string name="mobile_parent">Mobile (Parent)</string>
+    <string name="shaadi_budget">Shaadi Budget</string>
+    <string name="specially_abled">Specially Abled</string>
+    <string name="call_timing">Call Timing</string>
+    <string name="block">Block</string>
+
+
+    <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="shadi_budget">Shadi Budget</string>
+    <string name="income">Income</string>
+    <string name="mobile_number_parent">Mobile Number(Parent)</string>
+    <string name="manglik_status">Manglik Status</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="mother_tongue">Mother Tongue</string>
+    <string name="all_time">Any Time</string>
+    <string name="document_details">Document Details</string>
+    <string name="tap_to_add_document_photo">Tap to add document photo</string>
+    <string name="tap_to_add_photo">Tap to add photo</string>
+    <string name="photos_details">Photos Details</string>
+    <string name="update_photos">Update Photos</string>
+    <string name="title_activity_liked_users">Liked Users</string>
+    <string name="terms_conditions">Accept terms and condition</string>
+    <string name="ok">Ok</string>
+    <string name="male">Male</string>
+    <string name="please_select">Please select</string>
+    <string name="education_profession_details">Education / Profession Details</string>
+    <string name="occupation">Occupation</string>
+    <string name="password_does_not_match">Password does not match</string>
+    <string name="please_enter_new_password">Please enter new password</string>
+    <string name="please_enter_confirm_password">Please enter confirm password</string>
+    <string name="please_enter_valid_mobile_no">Please enter valid mobile no</string>
+    <string name="please_enter_mobile_no">Please enter mobile no</string>
+    <string name="please_enter_valid_email_address">Please enter valid email address</string>
+    <string name="enter_password_with_special_characters">Password should be at least 8 characters long, must include letters, numbers and special characters.</string>
+    <string name="please_enter_valid_mobile_number">Please enter valid mobile number</string>
+    <string name="please_select_gender">Please select gender</string>
+    <string name="verify">Verify</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="retype_new_password">Retype New Password</string>
+    <string name="password">Password</string>
+    <string name="update_password">Update Password</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="chat_list">Chat List</string>
+    <string name="users_list">Users List</string>
+    <string name="profile_details">Profile Details</string>
+    <string name="photos">Photos</string>
+    <string name="filter">Filter</string>
+    <string name="clear">Clear</string>
+    <string name="age">Age</string>
+    <string name="height_ft_in">Height (Ft In)</string>
+    <string name="religion">Religion</string>
+    <string name="income_in_lacs">Income (In Lacs)</string>
+    <string name="manglik">Manglik</string>
+    <string name="diet">Diet</string>
+    <string name="education">Education</string>
+    <string name="search">Search</string>
+    <string name="hobbies_and_interest">Hobbies and Interest</string>
+    <string name="my_interest">My Interest</string>
+    <string name="other">Other</string>
+    <string name="recent_profile_not_found">Recent profile not found</string>
+    <string name="membership_status">Membership Status -</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="liked_profile">Liked Profile</string>
+    <string name="likes_received">Likes Received</string>
+    <string name="hobbies_amp_interest"><![CDATA[Hobbies & Interest]]></string>
+    <string name="visited_users">Visited Users</string>
+    <string name="called_users">Called Users</string>
+    <string name="messaged_users">Messaged Users</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="package1">Package</string>
+    <string name="setting">Setting</string>
+    <string name="languages">Languages</string>
+    <string name="mobile_no_email">Mobile No / Email</string>
+    <string name="notifications">Notifications</string>
+    <string name="invite_to_other_member">Invite to other member</string>
+    <string name="invite_your_friends_to_saathiya">Invite your friends to saathiya</string>
+    <string name="invite">Invite</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="blocked_users_list">Blocked Users List</string>
+    <string name="called_users_list">Called Users List</string>
+    <string name="like_received">Like Received</string>
+    <string name="waiting_for_response">Waiting for response</string>
+    <string name="accepted">Accepted</string>
+    <string name="rejected">Rejected</string>
+    <string name="liked_users">Liked Users</string>
+    <string name="liked_users_list">Liked Users List</string>
+    <string name="visited_users_list">Visited Users List</string>
+    <string name="language">Language</string>
+    <string name="deactivate_account">Deactivate account</string>
+    <string name="register">Register</string>
+    <string name="go_to">Go to</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="mobile_no">Mobile No</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="like">Like</string>
+    <string name="call">Call</string>
+    <string name="chat">Chat</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="hobby">Hobby</string>
+    <string name="submit">Submit</string>
+    <string name="after_approval_of_account_you_can_login">Your account is successfully registered</string>
+    <string name="message">Message..!</string>
+    <string name="reason">Reason</string>
+    <string name="please_select_your_reason">Please select your reason</string>
+    <string name="found_partner">Found partner</string>
+    <string name="looking_at_other_matrimony_app">Looking at other matrimony app</string>
+    <string name="looking_offline">Looking offline</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="radius_range">Radius Range</string>
+    <string name="update_field">Update Field</string>
+    <string name="please_fill_below_fields">Please fill below fields</string>
+    <string name="full_name">Full Name</string>
+    <string name="enter_here">Enter here</string>
+    <string name="skip_now">Skip Now</string>
+    <string name="update">Update</string>
+    <string name="warning">Warning..!</string>
+    <string name="are_you_sure_want_to_logout">Are you sure want to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="firstname_lastname">Firstname Lastname</string>
+    <string name="height_ft_ln">Height (Ft ln)</string>
+    <string name="prime_quality_of_your_sathiya">Prime quality of your sathiya</string>
+    <string name="next">Next</string>
+    <string name="verifcation_code">Verifcation Code</string>
+    <string name="otp_has_been_sent_to_your_mobile_number_please_verify">OTP has been sent to your mobile number. Please verify</string>
+    <string name="resent_in_30_sec">Resent in 30 Sec</string>
+    <string name="unblock">Unblock</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="do_you_want_to_deactivate_account">Do you want to deactivate account?</string>
+    <string name="please_select_reason">Please select reason</string>
+    <string name="listening">Listening...</string>
+    <string name="getting_all_friends">Getting all friends</string>
+    <string name="email_not_found">Email not found</string>
+    <string name="your_password_link_sent">Your password Link Sent Successfully to Your Email</string>
+    <string name="search_by_matri_id">Search by matri Id</string>
+    <string name="registration_successful">Registration successful</string>
+    <string name="please_select_date_of_birth">Please select date of birth</string>
+    <string name="please_select_city">Please select city</string>
+    <string name="please_select_state">Please select state</string>
+    <string name="please_select_height">Please select height</string>
+    <string name="please_enter_brief_description">Please enter brief description</string>
+    <string name="please_enter_prime_quality">Please enter prime quality of your sathiya</string>
+    <string name="please_select_education">Please select education</string>
+    <string name="please_select_occupation">Please select occupation</string>
+    <string name="please_select_employed_in">Please select employed in</string>
+    <string name="please_select_monthly_income">Please select monthly income</string>
+    <string name="please_select_religion">Please select religion</string>
+    <string name="please_select_caste">Please select caste</string>
+    <string name="please_select_sub_caste">Please select sub caste</string>
+    <string name="please_enter_firstname_lastname">Please enter firstname and lastname</string>
+    <string name="not_available">Not Available</string>
+    <string name="please_enter_valid_matri_id">Please enter valid matri id.</string>
+    <string name="profile_not_found">Profile not found</string>
+    <string name="i_am">I am </string>
+    <string name="years_old"> years old</string>
+    <string name="i_do_not_know">I do not know</string>
+    <string name="i_am_manglik">I am Manglik</string>
+    <string name="my_salary_is">My salary is </string>
+    <string name="per_month"> per month</string>
+    <string name="i_am_from">I am from </string>
+    <string name="i_am_not_manglik">I am not Manglik</string>
+    <string name="my_height_is">My height is </string>
+    <string name="unlike">Unlike</string>
+    <string name="years">yr</string>
+    <string name="paid">Paid</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="please_enter_your_password">Please enter your password</string>
+    <string name="please_enter_firstname">Please enter first name</string>
+    <string name="please_enter_lastname">Please enter last name</string>
+    <string name="please_accept_terms_and_conditions">Please accept terms and conditions.</string>
+    <string name="please_check_your_internet">Please check your internet connection.</string>
+    <string name="email_not_exist_or_wrong_password">Email not exist or wrong password!</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="no_notification_found">No notification found</string>
+    <string name="reject">Reject</string>
+    <string name="new_message">New Message</string>
+    <string name="my_mother_tongue_is">My mother tongue is</string>
+    <string name="successfully_blocked">Successfully blocked.</string>
+    <string name="sucessfully_unblock">Successfully unblock.</string>
+    <string name="block_cap">BLOCK</string>
+    <string name="unblock_cap">UNBLOCK</string>
+    <string name="failed_to_add_friend_success">False to add friend success</string>
+    <string name="add_friend_success">Friend added successfully</string>
+    <string name="additional_details">Additional Details</string>
+    <string name="please_enter_valide_matri_id">Please enter valid matri id.</string>
+    <string name="error_occured_during_deleting_friend">Error occurred during deleting friend</string>
+    <string name="password_not_matched">Password not matched</string>
+    <string name="email_exist_or_weak_password">Email exist or weak password!</string>
+    <string name="sent_mail_to">Sent email to</string>
+    <string name="failed_to_sent_email_to">Failed to sent email to</string>
+    <string name="copied">Copied</string>
+    <string name="please_select_calls">Please select calls</string>
+    <string name="permission_granted">Permission Granted</string>
+    <string name="please_upload_photo">Please upload photo</string>
+    <string name="friend_deleting_successfully">Friend deleting successfully</string>
+    <string name="delete_friend">Delete Friend</string>
+    <string name="are_you_sure_want_to_delete">Are you sure want to delete</string>
+    <string name="deleting">Deleting…</string>
+    <string name="cancel">CANCEL</string>
+    <string name="your_payment_failed">Your Payment Failed</string>
+    <string name="this_member_has_blocked_you">This member has blocked you. You can\'t express your interest.</string>
+    <string name="you_are_not_paid_memeber">You are not paid member. Please update your membership to express your interest.</string>
+    <string name="this_member_has_blocked_you_for_message">This member has blocked you. You can\'t send message.</string>
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove this photo?</string>
+    <string name="remove">Remove</string>
+    <string name="liked_profiles">Liked Profiles</string>
+    <string name="mutually_liked">Mutually Liked</string>
+    <string name="you_rejected_by">You are rejected by</string>
+    <string name="you_rejected">You rejected</string>
+    <string name="rejected_users">Rejected Users</string>
+    <string name="enter_mobile_no">Enter Mobile No</string>
+    <string name="basic">Basic</string>
+    <string name="additional">Additional</string>
+    <string name="select_state">Select State</string>
+    <string name="you_are_about_to_reject">You are about to reject this Profile</string>
+    <string name="you_are_about_to_like">You are about to like this profile</string>
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="enter_calls">Enter Calls</string>
+    <string name="please_enter_calls">Please enter calls</string>
+    <string name="calls_not_available">Available calls are</string>
+    <string name="so_enter_within_that">so enter within that range</string>
+    <string name="messaged_users_not_found">Messaged users not found</string>
+    <string name="gift_calls">Gift Calls</string>
+    <string name="please_enter_valid_username_or_password">Please enter valid username or password.</string>
+    <string name="mobile_no_prof">Mobile No</string>
+    <string name="above_50k">Above 50K</string>
+    <string name="your_viewed_all_the_profiles">You viewed all the profiles please update your filter</string>
+    <string name="please_select_mother_tongue">Please select mother tongue</string>
+    <string name="please_select_specially_abled">Please select specially abled</string>
+    <string name="please_select_diet">Please select diet</string>
+    <string name="you_are_all_caught_for_now">You are all cought for now</string>
+    <string name="profile_video">Profile Video</string>
+</resources>

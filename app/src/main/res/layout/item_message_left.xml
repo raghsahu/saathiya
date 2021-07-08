@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/linProfile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingStart="@dimen/_5sdp"
+    android:paddingEnd="@dimen/_2sdp"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_5sdp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<!--<com.prometteur.sathiya.utills.TextViewCustomFont
+    android:id="@+id/tvDate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_5sdp"
+    android:layout_centerHorizontal="true"
+    android:background="@drawable/chat_shap"
+    android:padding="3dp"
+    android:text="22/01/2021"
+    android:visibility="gone"/>-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/_90sdp"
+            android:layout_toRightOf="@+id/civProfileImg"
+            >
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:id="@+id/tvSentMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum is simply dummy text of the printing industry."
+                android:background="@drawable/bg_pink_chat_left_rectangle"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:textStyle="bold"
+android:textColor="@color/white"
+            android:ellipsize="end"
+            />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true">
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvDateTime"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_5sdp"
+                android:paddingTop="@dimen/_4sdp"
+                android:paddingBottom="@dimen/_4sdp"
+                android:gravity="bottom|left"
+                android:text="11:11 AM"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>

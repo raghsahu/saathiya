@@ -1,0 +1,47 @@
+<LinearLayout android:id="@+id/linProfile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/_12sdp"
+    android:paddingEnd="@dimen/_12sdp"
+    android:layout_marginBottom="@dimen/_5sdp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civProfileImg"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:src="@drawable/bg_circle_placeholder_blackfill"/>
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:id="@+id/tvProfileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingEnd="@dimen/_12sdp"
+            android:paddingTop="2dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp"
+            android:gravity="center_vertical"
+            /> <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hydrabad, India"
+        android:paddingStart="@dimen/_12sdp"
+        android:paddingEnd="@dimen/_12sdp"
+        android:paddingBottom="2dp"
+        android:paddingTop="@dimen/_2sdp"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/ic_place_black_24dp"
+        android:drawableTint="@color/colorDarkGray"
+        android:drawablePadding="5dp"
+
+        />
+    </LinearLayout>
+</LinearLayout>

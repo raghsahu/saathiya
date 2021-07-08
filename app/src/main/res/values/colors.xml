@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+
+    <color name="colorPrimary">#FF606F</color> <!--#558B2F -->
+    <color name="colorPrimaryDark">#7CDBCD</color><!--#FF387011-->
+    <color name="colorAccent">#FF848F</color><!--#FF2F5019-->
+    <!--<color name="colorPrimary">#C50061</color> &lt;!&ndash;#558B2F &ndash;&gt;-->
+    <!--<color name="colorPrimaryDark">#bc5185</color>&lt;!&ndash;#FF387011&ndash;&gt;-->
+    <!--<color name="colorAccent">#600531</color>&lt;!&ndash;#FF2F5019&ndash;&gt;-->
+
+    <color name="backgroundLightGrey">#F9F9F9</color>
+    <color name="backgroundWhite">#F8F8F8</color>
+    <color name="transparnt">#00000000</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorDarkGray">#212121</color>
+    <color name="colorDarkGrayH">#666666</color>
+    <color name="colorOrange">#EF6C00</color>
+    <color name="transcolorOrange">#55EF6C00</color>
+
+
+    <color name="transcolorOrange1">#88EF6C00</color>
+    <color name="transcolorRed">#88EF0014</color>
+    <color name="transcolorGreen">#8854EF00</color>
+
+    <color name="transcolorBlue">#557CDBCD</color>
+    <color name="transcolorBlack">#55000000</color>
+
+
+
+    <color name="text_color">#68d200</color>
+    <color name="text_1">#09A935</color>
+    <!--<color name="colorOrange">#0217db</color>&lt;!&ndash;#EF6C00&ndash;&gt;
+    <color name="colorOrange1">#2a3ffc</color> &lt;!&ndash;#FF9800&ndash;&gt;-->
+
+    <color name="grey8">#F2F2F2</color>
+    <color name="colorOrangeH">#ac4f02</color>
+    <color name="colorGray">#ffcfcfcf</color>
+    <color name="colorGray1">#EEEEEE</color>
+    <color name="red_transperant">#70000000</color>
+    <color name="colorTransparent">#00000000</color>
+
+    <color name="lighttransparent">#22000000</color>
+
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorAA">#ffaaaaaa</color>
+    <color name="colorGreen">#005500</color>
+    <!--<color name="colorRed">#ffFF0000</color>-->
+    <color name="colorRed">#ff001a</color>
+    <!--<color name="colorPhone">#ff0070C0</color>-->
+
+
+    <color name="lightblack">#636363</color>
+    <color name="lightblack1">#303030</color>
+<!--    <color name="white">#FFFFFF</color>-->
+<!--    <color name="black">#FF111010</color>-->
+    <color name="offBlack">#FF4C4A4A</color>
+
+    <color name="lightGrey">#F7F7F7</color>
+    <color name="grey_1">#E1E1E1</color>
+    <color name="grey0">#e2e2e2</color>
+    <color name="grey2">#707070</color>
+    <color name="grey3">#b1babed0</color>
+    <color name="grey9">#CDCDCD</color>
+    <color name="colorBlue">#82C8DA</color>
+
+    <color name="darkGray">#626161</color>
+    <color name="colorRedd">#F44336</color>
+
+
+    <color name="Edtxtxgrey">#D3D1D1</color>
+    <color name="lightpink">#f99192</color>
+    <color name="fadepink">#F6CACA</color>
+    <color name="lightgreen">#6bbcaf</color>
+    <color name="lightBlue">#dcfffb</color>
+    <color name="blackButton">#DC656565</color>
+    <color name="circlebrown">#D58F6C70</color>
+
+    <color name="logoutgray">#D58F6C70</color>
+    <color name="colorCardView">#f7f7f7</color>
+</resources>

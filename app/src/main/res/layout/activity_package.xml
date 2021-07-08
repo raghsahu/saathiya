@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundLightGrey"
+    tools:context=".packages.PackageActivity">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolBar"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="₹ 00"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:background="@color/lightgreen"
+                />
+            <vn.nms.dynamic_seekbar.DynamicSeekBarView
+                android:id="@+id/dynamicSeekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:dsbv_progressColor="@color/colorPrimary"
+                app:dsbv_progressBackgroundColor="@color/gray_bold"
+                app:dsbv_infoTextSize="12dp"
+                app:dsbv_infoTextColor="@android:color/white"
+                app:dsbv_infoBackgroundColor="@color/colorPrimary"
+                app:dsbv_infoRadius="5"
+                app:dsbv_max="200"
+                app:dsbv_progress="0"
+                app:dsbv_thumbDrawable="@drawable/ic_habbit"
+                app:dsbv_infoInitText="@string/init_info_calls"/>
+
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/buyNow"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:text="@string/buy_now"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_11sdp"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_orange_rounded_rectengle"
+                android:paddingEnd="@dimen/_12sdp"
+                android:paddingStart="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+    android:id="@+id/cvBorrowCalls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        android:visibility="visible"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvBorrowCalls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gift_calls"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:background="@color/lightgreen"
+                />
+            <com.prometteur.sathiya.utills.CustomeEditText
+                android:id="@+id/edtMobileNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:padding="@dimen/_10sdp"
+                android:hint="@string/enter_mobile_number"
+                android:inputType="number"
+                android:digits="1234567890"
+                android:maxLength="10"
+                style="@style/EditTextviewStyle"
+               android:background="@drawable/login_edt_rounded_white_background"/>
+            <com.prometteur.sathiya.utills.CustomeEditText
+                android:id="@+id/edtNoOfCalls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:padding="@dimen/_10sdp"
+                android:hint="@string/enter_calls"
+                android:inputType="number"
+                android:digits="1234567890"
+                style="@style/EditTextviewStyle"
+               android:background="@drawable/login_edt_rounded_white_background"/>
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvBalanceCalls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Balance Calls"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                />
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/sendCalls"
+                android:layout_width="90dp"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:text="Send"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_11sdp"
+                android:gravity="center"
+                android:background="@drawable/bg_orange_rounded_rectengle"
+                android:paddingEnd="@dimen/_12sdp"
+                android:paddingStart="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:text="@string/invite_to_other_member"
+        android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
+        />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_8sdp"
+        android:layout_margin="@dimen/_10sdp"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/invite_your_friends_to_saathiya"
+                android:textSize="@dimen/_13sdp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                />
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/when_they_install_this_app_you_will_10_calls_in_your_account"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_8sdp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                >
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/copy_your_code"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11sdp"
+
+                    />
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@color/backgroundLightGrey"
+                    android:text="ASD056"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:textColor="@color/lightgreen"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:paddingRight="@dimen/_8sdp"
+                    />
+                <ImageView
+                    android:id="@+id/imgCode"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_copy_greyfill"/>
+
+
+
+            </LinearLayout>
+
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="@string/invite"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_pink_rectengle_selected"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_11sdp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:paddingStart="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+  </LinearLayout>

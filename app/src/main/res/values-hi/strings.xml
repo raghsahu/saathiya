@@ -1,0 +1,376 @@
+<resources>
+    <string name="app_name">साथिया </string>
+    <string name="go_back">क्या आप पिछले पेज पर वापस जाना चाहते हैं ?</string>
+    <string name="Login">लोगिन </string>
+    <string name="Sign_Up">फ्री में रजिस्टर करें </string>
+    <string name="data_not_avelable">डाटा उपलब्ध नहीं है </string>
+    <string name="Registration">रजिस्ट्रेशन</string>
+    <string name="Indias_most_trusted_matrimony_app">इंडिया का विश्वसनीय   \nविवाह-रिश्ते ढूंढ़ने वाला एप्प </string>
+    <string name="login_now">लोगिन</string>
+    <string name="forgot_password">पासवर्ड याद नहीं ?</string>
+    <string name="forgot_password1">पासवर्ड याद नहीं </string>
+    <string name="Please_enter_username_and_password">कृपया अपना ईमेल एवं पासवर्ड डालें </string>
+    <string name="Please_enter_username">कृपया अपना ईमेल डालें </string>
+    <string name="Please_enter_password">कृपया अपना पासवर्ड डालें</string>
+    <string name="Please_Wait">कृपया इंतज़ार करें …</string>
+    <string name="Please_enter_valid_email_address">कृपया अपना सही ईमेल डालें</string>
+    <string name="Enter_Email_Id_Or_Username">ईमेल अथवा यूजर-नाम डालें</string>
+    <string name="Submit">ओके</string>
+    <string name="Profile_Created_By">प्रोफाइल किसने बनाई है ?</string>
+    <string name="Gender">लिंग</string>
+    <string name="Male">पुरुष</string>
+    <string name="Female">महिला</string>
+    <string name="Religion">धर्म</string>
+    <string name="Caste">जाति</string>
+    <string name="Mother_Tongue">घर में बोले जानी वाली भाषा</string>
+    <string name="Country">देश</string>
+    <string name="Country_Code">देश का कोड</string>
+
+    <string name="Verify_continue">सत्यापित करके जारी रखे</string>
+    <string name="edit">बदलाव करें</string>
+    <string name="edit_mobile_no">मोबाइल नंबर बदलें</string>
+    <string name="enter_otp">ओ-टी-पी डालें</string>
+    <string name="Please_enter_your_register_your_mobile_no">कृपया अपना दर्ज़ किया हुआ मोबाइल नंबर डालें </string>
+    <string name="CONTINUE">जारी रखें </string>
+
+    <string-array name="arr_marital_status">
+        <item>अभी तक नहीं</item>
+        <item>विधवा</item>
+        <item>तलाकशुदा</item>
+        <item>तलाक चल रहा है</item>
+    </string-array>
+
+    <string-array name="arr_physical_status">
+        <item>सामान्य</item>
+        <item>विकलांग</item>
+    </string-array>
+
+
+
+    <string-array name="arr_Employed_in">
+        <item>सरकारी</item>
+        <item>प्राइवेट</item>
+        <item>बिज़नेस</item>
+        <item>डिफेंस</item>
+        <item>अपना बिज़नेस</item>
+    </string-array>
+
+
+
+
+
+
+    <string-array name="arr_diet">
+        <item>सब कुछ</item>
+        <item>शाकाहारी</item>
+        <item>मांसाहारी</item>
+        <item>अंडहारी</item>
+    </string-array>
+
+    <string-array name="arr_manglik">
+        <item>नहीं</item>
+        <item>हाँ</item>
+        <item>पता नहीं </item>
+    </string-array>
+
+    <string-array name="arr_gender">
+        <item>लिंग</item>
+        <item>पुरुष</item>
+        <item>महिला</item>
+    </string-array>
+
+    <string-array name="arr_hobbies">
+        <item>पढ़ना</item>
+        <item>योगा</item>
+        <item>तैराकी</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="find_your_nperfect_match_ntoday">आज ही अपना जीवनसाथी ढूंढ़े</string>
+    <string name="english">इंग्लिश</string>
+    <string name="select_language">भाषा चुनें?</string>
+    <string name="select_language1">भाषा चुनें</string>
+    <string name="selected">चुनी हुई</string>
+    <string name="marathi">मराठी</string>
+    <string name="hindi">हिंदी</string>
+    <string name="gujarati">गुजराती</string>
+    <string name="back">पीछे जाए</string>
+    <string name="sign_in">साइन-इन </string>
+    <string name="register_now">अभी रजिस्टर करें!</string>
+    <string name="don_t_have_an_account">क्या आपका अकाउंट नहीं है?</string>
+    <string name="navigation_drawer_open">साइड-पैनल खोले</string>
+    <string name="navigation_drawer_close">साइड-पैनल बंद करें</string>
+
+    <string name="init_info_text">0 किमी </string>
+    <string name="init_info_calls">0 कॉल्स </string>
+    <string name="init_info_ft">0 फुट</string>
+    <string name="init_info_in">0 इंच</string>
+    <string name="init_info_income">0 लाख</string>
+
+
+
+    <string name="buy_now">अभी खरीदें</string>
+    <string name="when_they_install_this_app_you_will_10_calls_in_your_account">
+जब वो इस अप्प को इनस्टॉल करेंगे,तो आपको 10 कॉल्स फ्री मिलेंगे
+</string>
+
+    <string name="copy_your_code"> अपना कोड कॉपी करें -</string>
+    <string name="basic_details">सामान्य जानकारी</string>
+    <string name="mobile_number">मोबाइल नंबर</string>
+    <string name="gender">लिंग</string>
+    <string name="dob">जन्म तिथि</string>
+    <string name="height">लम्बाई</string>
+    <string name="city">शहर</string>
+    <string name="state">राज्य</string>
+    <string name="brief_description">परिचय</string>
+    <string name="educational_profession_details">शैक्षिक/व्यावसायिक जानकारी</string>
+    <string name="profession">व्यवसाय</string>
+    <string name="employed_in">काम कहाँ करते है ?</string>
+    <string name="income_lpa">इनकम (एक महीना)</string>
+    <string name="religion_details">धार्मिक जानकारी</string>
+    <string name="caste">जाति</string>
+    <string name="sub_caste">उप जाति</string>
+    <string name="other_details">अन्य जानकारी</string>
+    <string name="manged_by">कौन इस्तेमाल कर रहा है ?</string>
+    <string name="mobile_parent">मोबाइल (पापा/भाई)</string>
+    <string name="shaadi_budget">शादी बजट</string>
+    <string name="specially_abled">विकलांग</string>
+    <string name="call_timing">आपको कॉल करें का समय</string>
+    <string name="block">ब्लॉक</string>
+
+
+    <string name="title_activity_edit_profile">प्रोफाइल में बदलाव करें</string>
+    <string name="shadi_budget">शादी बजट</string>
+    <string name="income">इनकम</string>
+    <string name="mobile_number_parent">मोबाइल (पापा/भाई)</string>
+    <string name="manglik_status">मांगलिक स्तिथि</string>
+    <string name="marital_status">शादीशुदा</string>
+    <string name="mother_tongue">घर में बोले जानी वाली भाषा</string>
+    <string name="all_time">किसी भी वक्त</string>
+    <string name="document_details">डॉक्यूमेंट-डिटेल</string>
+    <string name="tap_to_add_document_photo">डॉक्युमनेट के फोटो ऐड करें</string>
+    <string name="tap_to_add_photo">फोटो ऐड करें</string>
+    <string name="photos_details">फोटो के बारे में</string>
+    <string name="update_photos">फोटो बदले/और डालें</string>
+    <string name="title_activity_liked_users">तुमने लाइक किये</string>
+    <string name="terms_conditions">अपने नियम और शर्त स्वीकार करें</string>
+    <string name="ok">ओके</string>
+    <string name="male">पुरुष</string>
+    <string name="please_select">कृपया सेलेक्ट करें</string>
+    <string name="education_profession_details">शैक्षिक/व्यावसायिक जानकारी</string>
+    <string name="occupation">व्यवसाय</string>
+    <string name="password_does_not_match">पासवर्ड गलत है</string>
+    <string name="please_enter_new_password">नया पासवर्ड डालें</string>
+    <string name="please_enter_confirm_password">नया पासवर्ड डालें</string>
+    <string name="please_enter_valid_mobile_no">सही मोबाइल नंबर डालें </string>
+    <string name="please_enter_mobile_no">मोबाइल नंबर डालें</string>
+    <string name="please_enter_valid_email_address">सही ईमेल डालें</string>
+    <string name="enter_password_with_special_characters">पासवर्ड 8 अक्षर/अंक  से बड़ा होना चाईये(इसमें अक्षर,अंक, और सिंबल होने चाईये)</string>
+    <string name="please_enter_valid_mobile_number">सही मोबाइल नंबर डालें r</string>
+    <string name="please_select_gender">लिंग चुनें</string>
+    <string name="verify">वेरीफाई करें</string>
+    <string name="change_password">पासवर्ड बदलें</string>
+    <string name="old_password">पुराना पासवर्ड</string>
+    <string name="new_password">नया पासवर्ड</string>
+    <string name="retype_new_password">पासवर्ड दुबारा डालें</string>
+    <string name="password"><font color="#707070">पासवर्ड</font><font color="@android:color/red">*</font></string>
+    <string name="update_password">पासवर्ड बदलें</string>
+    <string name="type_a_message">मैसेज लिखें</string>
+    <string name="chat_list">चैट लिस्ट</string>
+    <string name="users_list">यूजर लिस्ट</string>
+    <string name="profile_details">प्रोफइल की जानकारी</string>
+    <string name="photos">फोटो</string>
+    <string name="filter">फ़िल्टर</string>
+    <string name="clear">दोबारा डालें</string>
+    <string name="age">उम्र</string>
+    <string name="height_ft_in">लम्बाई(फ़ीट इंच)</string>
+    <string name="religion">धर्म</string>
+    <string name="income_in_lacs">इनकम(एक माह)</string>
+    <string name="manglik">मांगलिक</string>
+    <string name="diet">आहार</string>
+    <string name="education">शिक्षा</string>
+    <string name="search">खोजें</string>
+    <string name="hobbies_and_interest">शौक एवं रुचि</string>
+    <string name="my_interest">मेरे शौक एवं रुचि</string>
+    <string name="other">अन्य</string>
+    <string name="recent_profile_not_found">प्रोफाइल नहीं मिली </string>
+    <string name="membership_status">मेम्बरशिप -</string>
+    <string name="edit_profile">प्रोफाइल बदलाव</string>
+    <string name="liked_profile">तुमने लाइक किए</string>
+    <string name="likes_received">तुम्हे लाइक मिले</string>
+    <string name="hobbies_amp_interest">शौक और रुचि</string>
+    <string name="visited_users">देखे हुए प्रोफाइल</string>
+    <string name="called_users">कॉल किये</string>
+    <string name="messaged_users">मैसेज किये</string>
+    <string name="blocked_users">ब्लॉक किये</string>
+    <string name="package1">पैकेज</string>
+    <string name="setting">सेटिंग्स</string>
+    <string name="languages">भाषाएँ</string>
+    <string name="mobile_no_email"><font color="#707070">मोबाइल नंबर/ईमेल</font><font color="@android:color/red">*</font></string>
+    <string name="notifications">सूचना</string>
+    <string name="invite_to_other_member">दूसरे मेंबर्स को बुलाएंr</string>
+    <string name="invite_your_friends_to_saathiya">दोस्त/रिश्तेदारों को साथिया पे ऐड करें</string>
+    <string name="invite">बुलाएं</string>
+    <string name="profile">प्रोफाइल</string>
+    <string name="logout">लॉगआउट</string>
+    <string name="blocked_users_list">ब्लॉक यूजर-लिस्ट</string>
+    <string name="called_users_list">कॉल  यूजर-लिस्ट</string>
+    <string name="like_received">लाइक मिले और भेजे</string> <!--तुम्हे -->
+    <string name="waiting_for_response">तुम्हारे लाइक का इंतज़ार</string>
+    <string name="accepted">स्वीकार किये</string>
+    <string name="rejected">अस्वीकार किये</string>
+    <string name="liked_users">लाइक किये </string>
+    <string name="liked_users_list">लाइक किये-लिस्ट</string>
+    <string name="visited_users_list">देखे हुए प्रोफाइल-लिस्ट</string>
+    <string name="language">भाषाएँ</string>
+    <string name="deactivate_account">अकाउंट बंद करें</string>
+    <string name="register">रजिस्टर करें</string>
+    <string name="go_to">आगे जाएं</string>
+    <string name="first_name">नाम</string>
+    <string name="last_name">उपनाम</string>
+    <string name="email">ईमेल</string>
+    <string name="mobile_no"><font color="#707070">मोबाइल नंबर</font><font color="@android:color/red">*</font></string>
+    <string name="confirm_password"><font color="#707070">पासवर्ड की पुष्टि</font><font color="@android:color/red">*</font></string>
+    <string name="like">लाइक</string>
+    <string name="call">कॉल</string>
+    <string name="chat">चैट</string>
+    <string name="add_photo">फोटो डालें</string>
+    <string name="hobby">शौक</string>
+    <string name="submit">ओके</string>
+<!--    <string name="after_approval_of_account_you_can_login">अकाउंट मंजूर होने के बाद लॉगिन कर सकते है</string>-->
+    <string name="after_approval_of_account_you_can_login">आपका खाता सफलतापूर्वक पंजीकृत है</string>
+    <string name="message">मैसेज..!</string>
+    <string name="reason">वजह</string>
+    <string name="please_select_your_reason">वजह चुनें</string>
+    <string name="found_partner">रिश्ता हो गया</string>
+    <string name="looking_at_other_matrimony_app">दूसरी एप्प  इस्तेमाल कर रहे हैं</string>
+    <string name="looking_offline">कहीं और देख रहे है</string>
+    <string name="deactivate">बंद करें</string>
+    <string name="radius_range">रेंज</string>
+    <string name="update_field">अपडेट</string>
+    <string name="please_fill_below_fields">नीचे के स्थान भरें</string>
+    <string name="full_name">पूरा नाम</string>
+    <string name="enter_here">यहाँ भरें</string>
+    <string name="skip_now">बाद के लिए छोड़े</string>
+    <string name="update">बदलें</string>
+    <string name="warning">चेतावनी..!</string>
+    <string name="are_you_sure_want_to_logout">क्या आप सच्ची में लॉगआउट करना चाहते है?</string>
+    <string name="yes">हां</string>
+    <string name="no">नहीं</string>
+    <string name="firstname_lastname">नाम उपनाम</string>
+    <string name="height_ft_ln">लम्बाई (फ़ीट इंच )</string>
+    <string name="prime_quality_of_your_sathiya">आपके होने वाले साथिया में ,ये सब जरूर हो</string>
+    <string name="next">अगला</string>
+    <string name="verifcation_code">पुष्टि कोड</string>
+    <string name="otp_has_been_sent_to_your_mobile_number_please_verify">ओ-टी-पी आपके मोबाइल पे भेज दिया गया है,पुष्टि करें </string>
+    <string name="resent_in_30_sec">30 सेकन्ड में दुबारा भेजें</string>
+    <string name="unblock">ब्लॉक से हटाएँ </string>
+    <string name="confirm">पुष्टि करें</string>
+    <string name="do_you_want_to_deactivate_account">क्या आप खाता निष्क्रिय करना चाहते हैं?</string>
+    <string name="please_select_reason">कृपया कारण चुनें</string>
+    <string name="listening">सुन रहे हैं …</string>
+    <string name="getting_all_friends">सभी दोस्त मिल रहे हैं</string>
+    <string name="email_not_found">ईमेल नहीं मिला</string>
+    <string name="your_password_link_sent">आपका पासवर्ड लिंक आपके ईमेल पर सफलतापूर्वक भेजा गया</string>
+    <string name="registration_successful">पंजीकरण सफल</string>
+    <string name="please_select_date_of_birth">कृपया जन्म तिथि चुनें</string>
+    <string name="please_select_city">कृपया शहर चुनें</string>
+    <string name="please_select_state">कृपया राज्य चुनें</string>
+    <string name="please_select_height">कृपया ऊंचाई चुनें</string>
+    <string name="please_enter_brief_description">कृपया संक्षिप्त विवरण दर्ज करें</string>
+    <string name="please_enter_prime_quality">कृपया अपने सथिया की मुख्य गुणवत्ता दर्ज करें</string>
+    <string name="please_select_education">कृपया शिक्षा का चयन करें</string>
+    <string name="please_select_occupation">कृपया व्यवसाय चुनें</string>
+    <string name="please_select_employed_in">कृपया चुनें कि आप कहाँ काम कर रहे हैं</string>
+    <string name="please_select_monthly_income">कृपया मासिक आय का चयन करें</string>
+    <string name="please_select_religion">कृपया धर्म का चयन करें</string>
+    <string name="please_select_caste">कृपया जाति का चयन करें</string>
+    <string name="please_select_sub_caste">कृपया उप जाति का चयन करें</string>
+    <string name="please_enter_firstname_lastname">कृपया पहला नाम और अंतिम नाम दर्ज करें</string>
+    <string name="not_available">उपलब्ध नहीं है</string>
+    <string name="please_enter_valid_matri_id">कृपया मान्य आईडी डालें</string>
+    <string name="search_by_matri_id">मान्य आईडी खोजें</string>
+    <string name="profile_not_found">प्रोफ़ाइल नहीं मिला</string>
+    <string name="i_am">मैं हूँ </string>
+    <string name="years_old"> साल पुराना</string>
+    <string name="i_do_not_know">मुझे नहीं मालूम</string>
+    <string name="i_am_manglik">मैं मांगलिक हूँ</string>
+        <string name="my_salary_is">मेरा वेतन है </string>
+    <string name="per_month"> प्रति माह</string>
+    <string name="i_am_from">मैं यहां से आया हूं </string>
+    <string name="i_am_not_manglik">मैं मांगलिक नहीं हूं</string>
+    <string name="my_height_is">मेरी लंबाई है </string>
+    <string name="unlike">भिन्न</string>
+    <string name="years">साल</string>
+    <string name="paid">भुगतान किया</string>
+    <string name="unpaid">अवैतनिक</string>
+    <string name="please_enter_your_password">अपना पासवर्ड दर्ज करें</string>
+    <string name="please_enter_firstname">कृपया पहला नाम दर्ज करें</string>
+    <string name="please_enter_lastname">कृपया अंतिम नाम दर्ज करें</string>
+    <string name="please_accept_terms_and_conditions">कृपया नियम और शर्तें स्वीकार करें।</string>
+    <string name="please_check_your_internet">कृपया अपने इंटरनेट कनेक्शन की जाँच करें।</string>
+    <string name="email_not_exist_or_wrong_password">ईमेल मौजूद नहीं है या गलत पासवर्ड है!</string>
+    <string name="profile_photo">प्रोफ़ाइल तस्वीर</string>
+    <string name="no_notification_found">कोई सूचना नहीं मिली</string>
+    <string name="reject">अस्वीकार</string>
+    <string name="new_message">नया संदेश</string>
+    <string name="my_mother_tongue_is">मेरी मातृभाषा है</string>
+    <string name="successfully_blocked">सफलतापूर्वक ब्लॉक कर दिया गया।</string>
+    <string name="sucessfully_unblock">सफलतापूर्वक अनब्लॉक किया गया।</string>
+    <string name="block_cap">ब्लॉक</string>
+    <string name="unblock_cap">अनब्लॉक</string>
+    <string name="failed_to_add_friend_success">मित्र जोड़ने में विफल</string>
+    <string name="add_friend_success">मित्र सफलतापूर्वक जोड़ा गया</string>
+    <string name="additional_details">अतिरिक्त जानकारिया</string>
+    <string name="please_enter_valide_matri_id">कृपया वैध मॅट्री आईडी दर्ज करें।</string>
+    <string name="error_occured_during_deleting_friend">मित्र को हटाने के दौरान त्रुटि हुई</string>
+    <string name="password_not_matched">पासवर्ड मिलान नहीं हुआ</string>
+    <string name="email_exist_or_weak_password">ईमेल मौजूद या कमजोर पासवर्ड!</string>
+    <string name="sent_mail_to">को ईमेल भेजा</string>
+    <string name="failed_to_sent_email_to">को ईमेल भेजने में विफल</string>
+    <string name="copied">कॉपी किया गया</string>
+    <string name="please_select_calls">कृपया कॉल का चयन करें</string>
+    <string name="permission_granted">अनुमति दी</string>
+    <string name="please_upload_photo">कृपया फोटो अपलोड करें</string>
+    <string name="friend_deleting_successfully">मित्र सफलतापूर्वक हटा रहा है</string>
+    <string name="delete_friend">मित्र को हटाएँ</string>
+    <string name="are_you_sure_want_to_delete">क्या आप वाकई हटाना चाहते हैं?</string>
+    <string name="deleting">हटा रहा है …</string>
+    <string name="cancel">रद्द</string>
+    <string name="your_payment_failed">आपका भुगतान विफल हो गया</string>
+    <string name="this_member_has_blocked_you">इस सदस्य ने आपको ब्लॉक कर दिया है। आप अपनी रुचि व्यक्त नहीं कर सकते।</string>
+    <string name="you_are_not_paid_memeber">आप भुगतान किए गए सदस्य नहीं हैं। अपनी रुचि व्यक्त करने के लिए कृपया अपनी सदस्यता अपडेट करें।</string>
+    <string name="this_member_has_blocked_you_for_message">इस सदस्य ने आपको ब्लॉक कर दिया है। आप संदेश भेज नहीं सकते।</string>
+    <string name="are_you_sure_you_want_to_remove">क्या आप वाकई इस फ़ोटो को निकालना चाहते हैं?</string>
+    <string name="remove">हटाना</string>
+    <string name="liked_profiles">लाइक प्रोफाइल</string>
+    <string name="mutually_liked">पारस्परिक रूप से पसंद किया गया</string>
+    <string name="you_rejected_by">आप द्वारा अस्वीकार कर दिया जाता है</string>
+    <string name="you_rejected">आपने अस्वीकार कर दिया</string>
+    <string name="rejected_users">अस्वीकृत</string>
+    <string name="enter_mobile_no">Enter Mobile No</string>
+    <string name="basic">Basic</string>
+    <string name="additional">Additional</string>
+    <string name="select_state">Select State</string>
+    <string name="you_are_about_to_reject">You are about to reject this Profile</string>
+    <string name="you_are_about_to_like">You are about to like this profile</string>
+    <string name="approved">Approved</string>
+    <string name="pending">Pending</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="enter_calls">Enter Calls</string>
+    <string name="please_enter_calls">Please enter calls</string>
+    <string name="calls_not_available">Available calls are</string>
+    <string name="so_enter_within_that">so enter within that range</string>
+    <string name="messaged_users_not_found">Messaged users not found</string>
+    <string name="gift_calls">Gift Calls</string>
+    <string name="please_enter_valid_username_or_password">Please enter valid username or password.</string>
+    <string name="mobile_no_prof">मोबाइल नंबर</string>
+    <string name="above_50k">Above 50K</string>
+    <string name="your_viewed_all_the_profiles">You viewed all the profiles please update your filter</string>
+    <string name="please_select_mother_tongue">Please select mother tongue</string>
+    <string name="please_select_specially_abled">Please select specially abled</string>
+    <string name="please_select_diet">Please select diet</string>
+    <string name="you_are_all_caught_for_now">You are all cought for now</string>
+    <string name="profile_video">Profile Video</string>
+</resources>

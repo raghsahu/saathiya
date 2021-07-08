@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@+id/accept_refresh"
+    android:layout_width="match_parent"
+    android:layout_below="@+id/header"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.EditDocumentFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:text="@string/document_details"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15sdp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_corner_round_whitefill"
+        android:layout_margin="@dimen/_8sdp">
+
+        <com.github.siyamed.shapeimageview.RoundedImageView
+            android:id="@+id/rivCamera"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:src="@drawable/bg_corner_round_greyfill"
+            android:visibility="gone"
+            />
+
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tap_to_add_document_photo"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_20sdp"/>
+
+    </LinearLayout>
+
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvBackClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_corner_round_blackfill"
+        android:paddingLeft="@dimen/_20sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingRight="@dimen/_20sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_gravity="center"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp" />
+
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:gravity="center"
+        android:background="@drawable/bg_orange_rounded_rectengle"
+        android:elevation="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="65dp"
+        android:paddingRight="65dp"
+        android:text="Update"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="15dp"
+        android:visibility="gone"/>
+
+</LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

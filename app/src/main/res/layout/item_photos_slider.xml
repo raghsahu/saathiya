@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width= "match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:layout_marginRight="@dimen/_5sdp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/imgSlide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/shape_corner_round_square"
+            android:scaleType="fitCenter"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_rounds_transparent_bottom"
+            android:orientation="horizontal">
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvHobbieName"
+                android:layout_width="@dimen/fournine"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:text=""
+                android:gravity="center_vertical"
+                android:padding="@dimen/two"
+                android:src="@drawable/ic_edit_black_24dp"
+                android:textColor="@color/white" />
+            <ImageView
+                android:id="@+id/imgHeart"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="@dimen/_5sdp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_heart"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

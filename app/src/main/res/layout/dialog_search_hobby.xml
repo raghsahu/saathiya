@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_white_round_conrner">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_orange_rounded_top_rectengle"
+            >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="@string/search"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:textSize="25dp"
+                android:layout_centerVertical="true"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
+
+
+
+
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/hobby"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/spHobbies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_gravity="bottom"/>
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvHobbies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Please select"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="15dp"
+                android:textColorHint="@color/grey2"
+                android:textColor="@color/colorDarkGray"
+                android:drawableRight="@drawable/icn_blck_down"
+                android:drawableTint="@color/darkGray"
+                android:background="@drawable/login_edt_rounded_white_background"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"/>
+
+        </FrameLayout>
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/radius_range"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            />
+        <vn.nms.dynamic_seekbar.DynamicSeekBarView
+            android:id="@+id/dynamicSeekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dsbv_progressColor="@color/colorPrimary"
+            app:dsbv_progressBackgroundColor="@color/gray_bold"
+            app:dsbv_infoTextSize="12dp"
+            app:dsbv_infoTextColor="@android:color/white"
+            app:dsbv_infoBackgroundColor="@color/colorPrimary"
+            app:dsbv_infoRadius="5"
+            app:dsbv_max="60"
+            app:dsbv_progress="0"
+            app:dsbv_thumbDrawable="@drawable/ic_habbit"
+            app:dsbv_infoInitText="@string/init_info_text"/>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="@dimen/_20sdp"
+    android:layout_marginBottom="@dimen/_20sdp"
+    android:layout_marginLeft="@dimen/_15sdp"
+    android:layout_marginRight="@dimen/_15sdp">
+
+    <Button
+            android:id="@+id/btnNo"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_orange_rounded_rectengle"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:text="@string/search"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+        android:onClick="closeDialog"
+            android:textSize="15dp"
+        android:gravity="center"/>
+</LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

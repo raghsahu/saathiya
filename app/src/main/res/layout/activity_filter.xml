@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLightGrey"
+    xmlns:tools="http://schemas.android.com/tools">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-15dp"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/ivBackArrowimg"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_back"
+                    android:tint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/filter"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivBackArrowimg"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/btnSearch"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/bg_pink_rectengle"
+                    android:text="@string/search"
+                    android:textAllCaps="false"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp" />
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/btnClearSearch"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/bg_pink_rectengle"
+                    android:text="@string/clear"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                     />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/LL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/appbar">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/header"
+            >
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/_10sdp">
+
+        <LinearLayout
+            android:id="@+id/inputSec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white_rectangle_15_radious"
+            android:elevation="50dp"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp"
+            android:layout_margin="@dimen/_10sdp"
+           >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/age"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp" />
+
+            <com.appyvet.materialrangebar.RangeBar
+                android:id="@+id/rangebarAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrb_barWeight="2dp"
+                app:mrb_connectingLineWeight="2dp"
+                app:mrb_leftThumbColor="@color/colorAccent"
+                app:mrb_minThumbDistance="-1"
+                app:mrb_pinColor="@color/colorAccent"
+                app:mrb_pinMaxFont="15sp"
+                app:mrb_pinMinFont="12sp"
+                app:mrb_pinRadius="15dp"
+                app:mrb_pinTextColor="@color/white"
+                app:mrb_rangeBar="true"
+                app:mrb_rangeBarPaddingBottom="10dp"
+                app:mrb_rangeBar_rounded="false"
+                app:mrb_rightThumbColor="@color/colorAccent"
+                app:mrb_temporaryPins="false"
+                app:mrb_thumbBoundaryColor="@color/colorAccent"
+                app:mrb_thumbBoundarySize="2dp"
+                app:mrb_thumbSize="10dp"
+                app:mrb_tickDefaultColor="@color/grey2"
+                app:mrb_tickEnd="60"
+                app:mrb_tickHeight="1dp"
+                app:mrb_tickInterval="1"
+                app:mrb_tickLabelColor="@color/colorPrimary"
+                app:mrb_tickLabelSelectedColor="@color/colorAccent"
+                app:mrb_tickLabelSize="4sp"
+                app:mrb_tickStart="18"
+                app:mrb_connectingLineColor="@color/colorPrimary"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/height"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"/>
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvFeetInches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"/>
+</LinearLayout>
+            <com.appyvet.materialrangebar.RangeBar
+                android:id="@+id/rangebarHeight"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:mrb_barWeight="2dp"
+                app:mrb_connectingLineWeight="2dp"
+                app:mrb_leftThumbColor="@color/colorAccent"
+                app:mrb_minThumbDistance="-1"
+                app:mrb_pinColor="@color/colorAccent"
+                app:mrb_pinMaxFont="15sp"
+                app:mrb_pinMinFont="12sp"
+                app:mrb_pinRadius="0dp"
+                app:mrb_pinTextColor="@color/white"
+                app:mrb_rangeBar="true"
+                app:mrb_rangeBarPaddingBottom="10dp"
+                app:mrb_rangeBar_rounded="false"
+                app:mrb_rightThumbColor="@color/colorAccent"
+                app:mrb_temporaryPins="false"
+                app:mrb_thumbBoundaryColor="@color/colorAccent"
+                app:mrb_thumbBoundarySize="2dp"
+                app:mrb_thumbSize="10dp"
+                app:mrb_tickDefaultColor="@color/grey2"
+                app:mrb_tickEnd="48"
+                app:mrb_tickHeight="1dp"
+                app:mrb_connectingLineColor="@color/colorPrimary"
+                app:mrb_tickInterval="1"
+                app:mrb_tickLabelColor="@color/colorPrimary"
+                app:mrb_tickLabelSelectedColor="@color/colorAccent"
+                app:mrb_tickLabelSize="4sp"
+                app:mrb_tickStart="1" />
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/religion"
+                android:textColor="@color/black"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvReligion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/please_select"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textColorHint="@color/grey2"
+                    android:textColor="@color/colorDarkGray"
+                    android:drawableRight="@drawable/icn_blck_down"
+                    android:drawableTint="@color/darkGray"
+                    android:background="@drawable/login_edt_rounded_white_background"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="18dp"
+                    android:paddingRight="18dp"
+                    />
+
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+               >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="@string/Caste"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp"
+                        />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/tvCaste"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/please_select"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColorHint="@color/grey2"
+                            android:textColor="@color/colorDarkGray"
+                            android:drawableRight="@drawable/icn_blck_down"
+                            android:drawableTint="@color/darkGray"
+                            android:background="@drawable/login_edt_rounded_white_background"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="18dp"
+                            android:paddingRight="18dp"
+                           />
+
+                    </FrameLayout>
+                </LinearLayout> <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/sub_caste"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+
+                    />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvSubCaste"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/please_select"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textColorHint="@color/grey2"
+                    android:textColor="@color/colorDarkGray"
+                    android:drawableRight="@drawable/icn_blck_down"
+                    android:drawableTint="@color/darkGray"
+                    android:background="@drawable/login_edt_rounded_white_background"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="18dp"
+                    android:paddingRight="18dp" />
+                </FrameLayout>
+            </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="@string/mother_tongue"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Spinner
+                            android:id="@+id/spMotherTongue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_gravity="bottom"/>
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/tvMotherTongue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/please_select"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColorHint="@color/grey2"
+                            android:textColor="@color/colorDarkGray"
+                            android:drawableRight="@drawable/icn_blck_down"
+                            android:drawableTint="@color/darkGray"
+                            android:background="@drawable/login_edt_rounded_white_background"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="18dp"
+                            android:paddingRight="18dp" />
+
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/income_in_lacs"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"/>
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvPerMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:layout_marginTop="@dimen/_10sdp"/>
+            </LinearLayout>
+            <com.appyvet.materialrangebar.RangeBar
+                android:id="@+id/rangebarIncome"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:mrb_barWeight="2dp"
+                app:mrb_connectingLineWeight="1dp"
+                app:mrb_leftThumbColor="@color/colorAccent"
+                app:mrb_minThumbDistance="2"
+                app:mrb_pinColor="@color/colorAccent"
+                app:mrb_pinMaxFont="15sp"
+                app:mrb_pinMinFont="12sp"
+                app:mrb_pinRadius="0dp"
+                app:mrb_pinTextColor="@color/white"
+                app:mrb_rangeBar="true"
+                app:mrb_rangeBarPaddingBottom="10dp"
+                app:mrb_rangeBar_rounded="false"
+                app:mrb_rightThumbColor="@color/colorAccent"
+                app:mrb_temporaryPins="false"
+                app:mrb_thumbBoundaryColor="@color/colorAccent"
+                app:mrb_thumbBoundarySize="2dp"
+                app:mrb_thumbSize="10dp"
+                app:mrb_tickDefaultColor="@color/grey2"
+                app:mrb_tickEnd="50"
+                app:mrb_tickHeight="0dp"
+                app:mrb_tickInterval="1"
+                app:mrb_tickLabelColor="@color/colorPrimary"
+                app:mrb_tickLabelSelectedColor="@color/colorAccent"
+                app:mrb_tickLabelSize="4sp"
+                app:mrb_tickStart="0"
+                app:mrb_connectingLineColor="@color/colorPrimary"/>
+            <CheckBox
+                android:id="@+id/cbAbove50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:text="@string/above_50k"
+                android:textSize="@dimen/_12sdp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_10sdp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="@string/state"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp"
+                        />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/tvState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/please_select"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColorHint="@color/grey2"
+                            android:textColor="@color/colorDarkGray"
+                            android:drawableRight="@drawable/icn_blck_down"
+                            android:drawableTint="@color/darkGray"
+                            android:background="@drawable/login_edt_rounded_white_background"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="18dp"
+                            android:paddingRight="18dp"
+                            />
+
+                    </FrameLayout>
+                </LinearLayout> <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/city"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+
+                    />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/tvCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/please_select"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:fontFamily="@font/poppinsregular"
+                        android:textColorHint="@color/grey2"
+                        android:textColor="@color/colorDarkGray"
+                        android:drawableRight="@drawable/icn_blck_down"
+                        android:drawableTint="@color/darkGray"
+                        android:background="@drawable/login_edt_rounded_white_background"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="18dp"
+                        android:paddingRight="18dp"/>
+                </FrameLayout>
+            </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_10sdp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="@string/manglik"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp"
+                        />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <Spinner
+                            android:id="@+id/spManglik"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_gravity="bottom"/>
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/tvManglik"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/please_select"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:fontFamily="@font/poppinsregular"
+                            android:textColorHint="@color/grey2"
+                            android:textColor="@color/colorDarkGray"
+                            android:drawableRight="@drawable/icn_blck_down"
+                            android:drawableTint="@color/darkGray"
+                            android:background="@drawable/login_edt_rounded_white_background"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="18dp"
+                            android:paddingRight="18dp"/>
+
+                    </FrameLayout>
+                </LinearLayout> <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:visibility="visible">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/diet"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_15sdp"
+
+                    />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/tvDiet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/please_select"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:fontFamily="@font/poppinsregular"
+                        android:textColorHint="@color/grey2"
+                        android:textColor="@color/colorDarkGray"
+                        android:drawableRight="@drawable/icn_blck_down"
+                        android:drawableTint="@color/darkGray"
+                        android:background="@drawable/login_edt_rounded_white_background"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="18dp"
+                        android:paddingRight="18dp"/>
+                </FrameLayout>
+            </LinearLayout>
+            </LinearLayout>
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/education"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_10sdp"/>
+
+
+
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/edtEducation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/login_edt_rounded_white_background"
+                    android:hint="@string/please_select"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:maxLength="30"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:paddingLeft="18dp"
+                    android:paddingTop="10dp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:paddingRight="18dp"
+                    android:paddingBottom="10dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/grey2"
+                    android:drawableRight="@drawable/icn_blck_down"
+                    android:drawableTint="@color/darkGray"
+                   />
+
+
+
+        <!--    <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+
+                <Button
+                    android:id="@+id/btnSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_pink_rectengle"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/search"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>-->
+
+
+        </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/sliding_page"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/red_transperant"
+
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/sliding_drawer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/sevenfive"
+            android:background="#ffdddddd"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout1"
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:background="@color/colorWhite" />
+
+            <include
+                android:id="@+id/includeSlide"
+                layout="@layout/sliding_drowaer4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/layout1"
+                android:visibility="visible" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relMoreCMSView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/red_transperant"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:id="@+id/linSlidingDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@color/colorWhite"
+            android:orientation="vertical"
+            android:padding="@dimen/onefive">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textCMSTitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/five"
+                    android:gravity="left"
+                    android:text="Terms and Conditions"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/onesix" />
+
+                <ImageView
+                    android:id="@+id/textClose"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icn_close"/>
+
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/textCMSContaints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_gravity="left"
+                android:paddingBottom="@dimen/_15sdp"
+                />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/btnMenuClose"
+        android:layout_width="@dimen/twozero"
+        android:layout_height="@dimen/twozero"
+        android:layout_marginLeft="@dimen/onezero"
+        android:layout_marginTop="@dimen/onefive"
+        android:src="@drawable/icon_arrow_left"
+        android:visibility="gone" />
+</RelativeLayout>
+

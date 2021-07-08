@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_white_round_conrner">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_orange_rounded_top_rectengle"
+            >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="@string/profile_video"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:textSize="25dp"
+                android:layout_centerVertical="true"
+                android:textStyle="bold" />
+<ImageView
+    android:id="@+id/ivClose"
+    android:layout_width="@dimen/_25sdp"
+    android:layout_height="@dimen/_25sdp"
+    android:src="@drawable/ic_close"
+    android:layout_alignParentEnd="true"
+    android:layout_centerVertical="true"
+    android:layout_marginRight="15dp"/>
+        </RelativeLayout>
+
+
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <VideoView
+                android:id="@+id/video_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+
+
+            <TextView
+                android:id="@+id/tvDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:elevation="5dp"
+                android:padding="10dp"
+                android:background="@drawable/bg_rounds_transparent"
+                />
+            <ImageView
+                android:id="@+id/ivPlayPause"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_play_circle_white"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

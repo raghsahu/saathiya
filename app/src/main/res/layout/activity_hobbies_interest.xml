@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundLightGrey"
+    tools:context=".profilestatus.ProfileLikedActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-15dp"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/ivBackArrowimg"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_back"
+                    android:tint="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="@string/hobbies_and_interest"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/ivBackArrowimg"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <ImageView
+                    android:id="@+id/ivSearch"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_searchh"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.965"
+                    app:layout_constraintStart_toEndOf="@+id/tvTitle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteY="0dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+        <RadioGroup
+            android:id="@+id/radioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <com.prometteur.sathiya.utills.RadioButtonCustomFont
+                android:id="@+id/tvMyInterest"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="@string/my_interest"
+                android:background="@drawable/bg_left_round_rectengle"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:textColor="@drawable/textcolor_likereceived_selected"
+                android:paddingStart="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:paddingBottom="@dimen/_4sdp"
+                android:paddingTop="@dimen/_4sdp" />
+
+            <com.prometteur.sathiya.utills.RadioButtonCustomFont
+                android:id="@+id/tvOther"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="40dp"
+                android:text="@string/other"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/bg_right_round_rectengle"
+                android:textColor="@drawable/textcolor_likereceived_selected"
+                android:paddingStart="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:paddingBottom="@dimen/_4sdp"
+                android:paddingTop="@dimen/_4sdp"
+                />
+        </RadioGroup>
+    </LinearLayout>
+<!--    My Interest -->
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/photos_details"
+        android:paddingStart="@dimen/_12sdp"
+        android:paddingEnd="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_4sdp"
+        android:paddingTop="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        />
+<!--    Other-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvLikedUsers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        tools:listitem="@layout/item_photos"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOthersHobbies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        tools:listitem="@layout/item_photos"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    <TextView
+        android:id="@+id/tvEmptyMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Photos not found"
+        android:textSize="20dp"
+        android:visibility="gone"/>
+    </RelativeLayout>
+    <!--<include layout="@layout/activity_no_data"
+       android:id="@+id/includeEmpty"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"/>-->
+</LinearLayout>

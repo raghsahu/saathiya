@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_back"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_rectangle_selected"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:src="@drawable/ic_back"
+        android:padding="6dp"/>
+
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:textColor="@color/black"
+        android:paddingEnd="@dimen/_5sdp"/>
+
+</LinearLayout>

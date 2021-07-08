@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:elevation="2dp"
+    android:titleMarginStart="25dp"
+    android:titleTextColor="@color/black">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/ivBackArrowimg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:padding="7dp"
+            android:src="@drawable/ic_back"
+            android:visibility="visible" />
+
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:id="@+id/toolBarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ivBackArrowimg"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp" />
+
+
+        <ImageView
+            android:id="@+id/ivSearchIcon"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_searchh" />
+
+       <!-- <ImageView
+            android:id="@+id/ivCloseIcon"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
+            android:src="@mipmap/ic_cross_greyfill"
+            android:visibility="gone"/>-->
+
+       <!-- <com.prometteur.sathiya.utills.CustomeEditText
+            android:id="@+id/edtSearchField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/ivCloseIcon"
+            android:imeOptions="actionSearch"
+            android:visibility="gone"/>-->
+
+
+    </RelativeLayout>
+</androidx.appcompat.widget.Toolbar>

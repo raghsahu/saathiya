@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width= "@dimen/_150sdp"
+    android:layout_height="@dimen/_120sdp"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardUseCompatPadding="true">
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/linShowPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+                <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                    android:id="@+id/rivProfileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/shape_corner_round_square"
+                    android:background="@drawable/shape_corner_round_square"
+                    app:siShape="@drawable/shape_corner_round_square"
+                    app:siSquare="false"
+                    android:scaleType="fitXY"
+                     />
+
+                <LinearLayout
+                    android:id="@+id/lltext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:background="@color/transcolorOrange1">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvProfilePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/_2sdp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textColor="@color/white"/>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgClose"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_close_white"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/bg_rounds_transparent_bottom"
+                android:orientation="horizontal">
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvHobbieName"
+                    android:layout_width="@dimen/fournine"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:text="Hobbie Name"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/two"
+                    android:src="@drawable/ic_edit_black_24dp"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+    android:id="@+id/linAddPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="@dimen/_70sdp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_rounds_transparent_blue">
+
+                        <ImageView
+                            android:id="@+id/tvAddPhoto"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:src="@drawable/ic_photoes"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/tvTap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/tap_to_add_photo"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/two"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:src="@drawable/ic_edit_black_24dp"
+                        android:textColor="@color/colorDarkGray" />
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</LinearLayout>
+</androidx.cardview.widget.CardView>

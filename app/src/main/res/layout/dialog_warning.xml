@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_white_round_conrner">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_orange_rounded_top_rectengle"
+            >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="@string/warning"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:textSize="25dp"
+                android:layout_centerVertical="true"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/are_you_sure_want_to_logout"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:textColor="@color/black"
+                android:textSize="25dp" />
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvUserNme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp">
+            <Button
+                android:id="@+id/btnYes"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_orange_rounded_rectengle"
+                android:onClick="closeDialog"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:text="@string/yes"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:gravity="center"
+                />
+            <Button
+                android:id="@+id/btnNo"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_gray_rounded_rectengle"
+                android:onClick="closeDialog"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:text="@string/no"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

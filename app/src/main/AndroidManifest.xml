@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.prometteur.sathiya">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name= "android.permission.VIBRATE" />
+    <uses-permission android:name= "android.permission.DEFAULT_NOTIFICATION_URI" />
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:largeHeap="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:label">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="false" />
+
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.SathiyaNoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="jodimate.com"
+                    android:scheme="https" />
+                <data
+                    android:host="jodimate.com"
+                    android:scheme="http" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/Login"
+            android:screenOrientation="fullSensor"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".SignUpStep1Activity"
+            android:label="@string/Login"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="true"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".profilestatus.ProfileLikedActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profilestatus.ProfileCalledActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profilestatus.ProfileVisitedActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profilestatus.ProfileBlockedActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profilestatus.ProfileLikeReceivedActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profilestatus.ProfileRejectedActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".dialog.DialogWarningActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".dialog.DialogUdateFieldsActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".dialog.DialogReasonActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".dialog.DialogAddPhotoActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".dialog.DialogMessgeActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".dialog.DialogHobbiesSearchActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".home.HomeActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".home.SettingActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".hobbies.HobbiesInterestActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".hobbies.PhotoSliderActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".ChangePasswordActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".ChangeForgotPasswordActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".language.LanguateActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"
+            android:configChanges="locale|orientation|keyboardHidden"
+            android:noHistory="true"
+            android:launchMode="singleTask"/>
+        <activity android:name=".home.FilterHomeActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".chat.ChatActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".chat.ChatDetailsActivity"
+            android:parentActivityName=".chat.ChatActivity"/>
+        <activity android:name=".chat.MessageActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".packages.PackageActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".home.SecondHomeActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".home.ThirdHomeActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profile.ProfileActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".profile.EditProfileActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".notification.NotificationActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".home.FullScreenImageActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".dialog.DialogPlayVideoActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+
+
+        <service android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".home.MusicService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_Eui7bhSvVmFHCk" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_wedding_rings"
+            tools:replace="android:resource"
+            />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent"
+            tools:replace="android:resource"/>
+        <!--        <activity android:name=".MessagesActivity" />-->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+    </application>
+
+</manifest>

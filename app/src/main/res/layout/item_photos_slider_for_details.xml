@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width= "match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:layout_marginRight="@dimen/_5sdp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageView
+            android:id="@+id/imgSlide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/shape_corner_round_square"
+            android:scaleType="fitCenter"/>
+        <ImageView
+            android:id="@+id/ivPlayPause"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_play_circle_white"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:visibility="gone"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

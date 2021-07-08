@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/lightGrey"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.appcompat.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/white"
+        android:elevation="2dp"
+        android:titleMarginStart="25dp"
+        android:titleTextColor="@color/black">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/ivBackArrowimg"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:padding="7dp"
+                android:src="@drawable/ic_back"
+                android:visibility="visible" />
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/toolBarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ivBackArrowimg"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15sdp" />
+
+            <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_corner_round_square"
+                android:src="@drawable/shape_corner_round_square"
+                app:siShape="@drawable/shape_corner_round_square"
+                app:siSquare="true"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+<HorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="10dp"
+    android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <RadioGroup
+                android:id="@+id/radioGroup1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <com.prometteur.sathiya.utills.RadioButtonCustomFont
+                    android:id="@+id/tvProfileDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/basic"
+                    android:background="@drawable/bg_left_round_rectengle"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:textColor="@drawable/textcolor_likereceived_selected"
+                    android:paddingStart="@dimen/_14sdp"
+                    android:paddingEnd="@dimen/_14sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp" />
+                <com.prometteur.sathiya.utills.RadioButtonCustomFont
+                    android:id="@+id/tvAdditionalDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/additional"
+                    android:background="@drawable/bg_middle_rectengle"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textColor="@drawable/textcolor_likereceived_selected"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_12sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp" />
+                <com.prometteur.sathiya.utills.RadioButtonCustomFont
+                    android:id="@+id/tvOtherDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/other"
+                    android:background="@drawable/bg_middle_rectengle"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:textColor="@drawable/textcolor_likereceived_selected"
+                    android:paddingStart="@dimen/_14sdp"
+                    android:paddingEnd="@dimen/_14sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp" />
+
+                <com.prometteur.sathiya.utills.RadioButtonCustomFont
+                    android:id="@+id/tvPhotos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/photos"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/bg_right_round_rectengle"
+                    android:textColor="@drawable/textcolor_likereceived_selected"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_12sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:paddingTop="@dimen/_4sdp"
+                    />
+            </RadioGroup>
+        </LinearLayout>
+
+</HorizontalScrollView>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vpPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true"
+        />
+
+</LinearLayout>

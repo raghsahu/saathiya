@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+   <!-- <com.github.siyamed.shapeimageview.RoundedImageView
+        android:id="@+id/imgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:src="@drawable/shape_corner_round_square"
+        app:siRadius="@dimen/_12sdp"
+        />-->
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:background="@drawable/bg_white_round_conrner"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

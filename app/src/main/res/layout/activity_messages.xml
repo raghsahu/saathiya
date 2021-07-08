@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/backgroundLightGrey"
+    tools:context=".profilestatus.ProfileLikedActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="2dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-15dp"
+            android:background="@color/white"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/ivBackArrowimg"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/linProfile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivBackArrowimg"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civProfileImg"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:src="@drawable/shape_corner_round_square" />
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/tvProfileName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/_12sdp"
+                            android:paddingEnd="@dimen/_12sdp"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="bold" />
+
+                        <com.prometteur.sathiya.utills.TextViewCustomFont
+                            android:id="@+id/tvLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_1sdp"
+                            android:drawableLeft="@drawable/ic_place_black_24dp"
+                            android:drawablePadding="5dp"
+                            android:drawableTint="@color/colorDarkGray"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_12sdp"
+                            android:text=""
+                            android:gravity="center_vertical"
+                            android:textColor="@color/darkGray"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbar"
+        android:layout_above="@+id/linSendMsg"
+       >
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvChatUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+
+        />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <!--<include layout="@layout/activity_no_data"
+       android:id="@+id/includeEmpty"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"/>-->
+    <LinearLayout
+        android:id="@+id/linSendMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:padding="@dimen/_5sdp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="0.2"
+            android:background="@drawable/login_edt_rounded_white_background">
+            <ImageView
+                android:id="@+id/ivSmile"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_smile"
+                android:layout_gravity="center_vertical"
+                android:layout_toEndOf="@+id/edtMessage"
+                android:layout_marginLeft="@dimen/_5sdp"
+                />
+            <com.prometteur.sathiya.utills.CustomeEditText
+                android:id="@+id/edtMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:hint="Type a message"
+                android:maxLines="5"
+                android:layout_toEndOf="@+id/ivSmile"/>
+            <RelativeLayout
+                android:layout_width="@dimen/threezero"
+                android:layout_height="@dimen/threezero"
+                android:layout_margin="@dimen/_5sdp">
+            <ImageView
+                android:id="@+id/ivSend"
+                android:layout_width="@dimen/threezero"
+                android:layout_height="@dimen/threezero"
+                android:background="@drawable/bg_pink_rectengle"
+                android:padding="@dimen/_5sdp"
+
+                android:tint="@color/white"
+                android:src="@drawable/ic_send_button" />
+            <ProgressBar
+                android:id="@+id/progress_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/ivMic"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_blue_rectengle"
+            android:src="@drawable/ic_voice_rec"
+            android:padding="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_gravity="right|center_vertical"
+            />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="3dp"
+        android:translationZ="3dp">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/relImg"
+    android:layout_width="wrap_content"
+    android:layout_height="130dp">
+    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+        android:id="@+id/rivProfileImage"
+        android:layout_width="100dp"
+        android:layout_height="130dp"
+        android:cropToPadding="true"
+        android:src="@drawable/bg_corner_round_blackfill"
+        android:background="@drawable/placeholder_gray_corner"
+        app:siShape="@drawable/shape_left_corner_round_rectangle"
+        app:siSquare="false"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+        </RelativeLayout>
+  <!--  <com.github.siyamed.shapeimageview.RoundedImageView
+        android:id="@+id/rivSaloonImage"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:src="@drawable/placeholder_gray_corner"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:siBorderColor="@null"
+        app:siBorderWidth="0.2dp"
+        app:siRadius="10dp"
+        android:visibility="gone"
+        />-->
+
+  <!--  <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+        android:id="@+id/rivImageLayer"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/bg_light_black_shadow_effect_less_curved"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:siBorderColor="@null"
+        app:siBorderWidth="0dp"
+        app:siRadius="10dp"
+        android:visibility="gone"/>
+-->
+
+<LinearLayout
+    android:id="@+id/linMiddle"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:orientation="vertical"
+    android:layout_toEndOf="@+id/relImg">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="-1"
+        /> <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvRefNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/colorRedd"
+        android:textSize="14dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="-1"
+        />
+
+    </LinearLayout>
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvAgeHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/darkGray"
+        android:textSize="12dp"
+        android:layout_marginStart="10dp"
+        android:paddingEnd="90dp"
+        android:maxLines="1"
+        app:layout_constraintStart_toEndOf="@id/rivProfileImage"
+        app:layout_constraintTop_toBottomOf="@id/tvProfileName"
+        />
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvOccupationSal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/darkGray"
+        android:textSize="12dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="-1"
+
+        />
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/darkGray"
+        android:textSize="12dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="-1"
+
+        />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+android:paddingBottom="5dp"
+   >
+    <LinearLayout
+        android:id="@+id/linInterest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:src="@drawable/ic_heart_greybg"
+        android:layout_marginStart="10dp"
+        />
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/like"
+        android:gravity="center_vertical"
+        android:layout_gravity="bottom"
+        android:textColor="@color/darkGray"
+        android:textSize="12dp"
+        android:layout_marginStart="5dp"
+        android:layout_alignParentBottom="true"/>
+    </LinearLayout>
+</RelativeLayout>
+</LinearLayout>
+
+
+</RelativeLayout>
+</androidx.cardview.widget.CardView>
+</LinearLayout>

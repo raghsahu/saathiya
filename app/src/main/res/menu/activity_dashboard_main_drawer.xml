@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_edt_profile"
+            android:icon="@drawable/ic_menu_edt_prof"
+            android:title="@string/edit_profile" />
+        <!--<item
+            android:id="@+id/nav_liked_prof"
+            android:icon="@drawable/ic_menu_liked"
+            android:title="@string/liked_profile" />-->
+        <item
+            android:id="@+id/nav_liked_received_prof"
+            android:icon="@drawable/ic_menu_likes_received"
+            android:title="@string/like_received" />
+        <item
+            android:id="@+id/nav_visited"
+            android:icon="@drawable/ic_menu_visited"
+            android:title="@string/visited_users" />
+               <item
+            android:id="@+id/nav_hobies_interest"
+            android:icon="@drawable/ic_menu_edt_prof"
+            android:title="@string/hobbies_amp_interest" />
+        <item
+            android:id="@+id/nav_rejected"
+            android:icon="@drawable/ic_menu_reject_users"
+            android:title="@string/rejected_users" />
+        <item
+            android:id="@+id/nav_called_users"
+            android:icon="@drawable/ic_menu_called"
+            android:title="@string/called_users" />
+        <item
+            android:id="@+id/nav_messaged_users"
+            android:icon="@drawable/ic_menu_messaged"
+            android:title="@string/messaged_users" />
+        <item
+            android:id="@+id/nav_blocked_users"
+            android:icon="@drawable/ic_menu_blocked"
+            android:title="@string/blocked_users" />
+        <item
+            android:id="@+id/nav_package"
+            android:icon="@drawable/ic_menu_package"
+            android:title="@string/package1" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_menu_setting"
+            android:title="@string/setting" />
+<!--dummy-->
+
+        <item
+            android:id="@+id/nav_setting1"
+            android:title=""
+            android:enabled="false"/>
+    </group>
+
+</menu>

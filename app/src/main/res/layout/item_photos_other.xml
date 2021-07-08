@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width= "match_parent"
+    android:layout_height="@dimen/_220sdp"
+    android:layout_marginLeft="@dimen/_5sdp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardUseCompatPadding="true">
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/linShowPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+
+                <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                    android:id="@+id/rivProfileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/shape_corner_round_square"
+                    android:background="@drawable/shape_corner_round_square"
+                    app:siShape="@drawable/shape_corner_round_square"
+                    app:siSquare="false"
+                    android:scaleType="centerCrop"
+                     />
+                <ImageView
+                    android:id="@+id/imgHeart"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_heart"
+                    />
+                <LinearLayout
+                    android:id="@+id/lltext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:background="@color/transcolorOrange1">
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvProfilePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/_2sdp"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textColor="@color/white"/>
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+</androidx.cardview.widget.CardView>
