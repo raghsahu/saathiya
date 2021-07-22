@@ -27,7 +27,7 @@
     android:layout_height="100dp">
     <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
         android:id="@+id/rivProfileImage"
-        android:layout_width="90dp"
+        android:layout_width="80dp"
         android:layout_height="100dp"
         android:cropToPadding="true"
         app:siShape="@drawable/shape_left_corner_round_rectangle"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
             <com.prometteur.sathiya.utills.TextViewCustomFont
                 android:id="@+id/tvCity"
-                android:layout_width="80dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:text="Mumbai"
                 android:textColor="@color/white"

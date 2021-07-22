@@ -38,14 +38,23 @@
                 app:layout_constraintStart_toEndOf="@+id/ivBackArrowimg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
-
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                    android:id="@+id/civProfileImg"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@drawable/shape_corner_round_square"
+                    android:src="@drawable/shape_corner_round_square"
+                    app:siShape="@drawable/shape_corner_round_square"
+                    app:siSquare="false"
+                    android:scaleType="fitXY"
+                    android:layout_marginEnd="5dp" />
+              <!--  <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civProfileImg"
                     android:layout_width="@dimen/_35sdp"
                     android:layout_height="@dimen/_35sdp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
-                    android:src="@drawable/shape_corner_round_square" />
+                    android:src="@drawable/shape_corner_round_square" />-->
 
                 <LinearLayout
 

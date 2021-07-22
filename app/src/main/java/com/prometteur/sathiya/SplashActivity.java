@@ -1,7 +1,7 @@
 package com.prometteur.sathiya;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,6 +50,7 @@ import com.prometteur.sathiya.home.ThirdHomeActivity;
 import com.prometteur.sathiya.profile.EditProfileActivity;
 import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.LocaleUtils;
+import com.prometteur.sathiya.utills.NetworkConnection;
 
 import org.json.JSONObject;
 
@@ -70,6 +71,8 @@ import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class SplashActivity extends BaseActivity {
     Button btnLogin, btnSignUp;
@@ -111,7 +114,14 @@ public static TextView txt_language;
 
                 @Override
                 public void onFinish() {
-                    getCheckBasicDetails();
+                    if (NetworkConnection.hasConnection(SplashActivity.this)){
+                        getCheckBasicDetails();
+
+                    }else
+                    {
+                        AppConstants.CheckConnection(SplashActivity.this);
+                    }
+
                 }
             }.start();
 
@@ -248,11 +258,8 @@ public static TextView txt_language;
 
     private void getCheckBasicDetails()
     {
-        ProgressDialog progresDialog=new ProgressDialog(SplashActivity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
-       // progresDialog.show();
+        Dialog progresDialog= showProgress(SplashActivity.this);
+
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
         {
             @Override

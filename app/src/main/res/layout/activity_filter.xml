@@ -679,13 +679,6 @@
 </androidx.core.widget.NestedScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_height="wrap_content" />
 
 </RelativeLayout>
     <LinearLayout

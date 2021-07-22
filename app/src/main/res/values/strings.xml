@@ -222,7 +222,7 @@ When they install this app, you will get 10 calls in your account.
     <string name="membership_status">Membership Status -</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="liked_profile">Liked Profile</string>
-    <string name="likes_received">Likes Received</string>
+    <string name="likes_received">Likes \nReceived</string>
     <string name="hobbies_amp_interest"><![CDATA[Hobbies & Interest]]></string>
     <string name="visited_users">Visited Users</string>
     <string name="called_users">Called Users</string>
@@ -259,6 +259,7 @@ When they install this app, you will get 10 calls in your account.
     <string name="confirm_password"><font color='#707070'>Confirm Password</font><font color='@android:color/red'>*</font></string>
     <string name="like">Like</string>
     <string name="call">Call</string>
+    <string name="calls">Calls</string>
     <string name="chat">Chat</string>
     <string name="add_photo">Add Photo</string>
     <string name="hobby">Hobby</string>
@@ -369,8 +370,8 @@ When they install this app, you will get 10 calls in your account.
     <string name="this_member_has_blocked_you_for_message">This member has blocked you. You can\'t send message.</string>
     <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove this photo?</string>
     <string name="remove">Remove</string>
-    <string name="liked_profiles">Liked Profiles</string>
-    <string name="mutually_liked">Mutually Liked</string>
+    <string name="liked_profiles">Likes \nSent</string>
+    <string name="mutually_liked">Mutually \nLiked</string>
     <string name="you_rejected_by">You are rejected by</string>
     <string name="you_rejected">You rejected</string>
     <string name="rejected_users">Rejected Users</string>
@@ -397,4 +398,9 @@ When they install this app, you will get 10 calls in your account.
     <string name="please_select_specially_abled">Please select specially abled</string>
     <string name="please_select_diet">Please select diet</string>
     <string name="profile_video">Profile Video</string>
+    <string name="click_here">Click Here</string>
+    <string name="plans">Plans</string>
+    <string name="my_video">My Video</string>
+    <string name="send">Send</string>
+    <string name="balance">Balance</string>
 </resources>

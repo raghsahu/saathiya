@@ -1,7 +1,6 @@
 package com.prometteur.sathiya.hobbies;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -144,10 +143,6 @@ ActivityPhotoSliderBinding hobbiesInterestBinding;
 
     List<beanHobbyImage> arrHobby =new ArrayList<>();
     private void getHobbyImageList(String loginMatriId,String matri_id,String hoby_id,String km) {
-        /*final ProgressDialog progressDialogSendReq = new ProgressDialog(nActivity);
-        progressDialogSendReq.setCancelable(false);
-        progressDialogSendReq.setMessage(getString(R.string.Please_Wait));
-        progressDialogSendReq.setIndeterminate(true);*/
         Dialog progressDialogSendReq = showProgress(nActivity);
         progressDialogSendReq.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {

@@ -2,7 +2,7 @@ package com.prometteur.sathiya.dialog;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -84,6 +84,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 import static com.prometteur.sathiya.SplashActivity.strLang;
 import static com.prometteur.sathiya.profile.EditProfileActivity.viewPager;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class DialogUdateFieldsActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener{
    DialogUpdateFieldBinding educationDetailBinding,otherDetailsBinding;
@@ -1068,13 +1069,7 @@ public class DialogUdateFieldsActivity extends BaseActivity implements CompoundB
     }
 
 
-    private void getReligionRequest() {
-       /* progresDialog= new ProgressDialog(SignUpStep1Activity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
-        progresDialog.show();
-*/
+    private void getReligionRequest(){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -1191,12 +1186,7 @@ public class DialogUdateFieldsActivity extends BaseActivity implements CompoundB
 
 
     private void getCastRequest(String strReligion) {
-       /* progresDialog= new ProgressDialog(SignUpStep1Activity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
-        progresDialog.show();
-*/
+
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -1501,10 +1491,7 @@ public class DialogUdateFieldsActivity extends BaseActivity implements CompoundB
     }
 
     private void getMotherToungeRequest() {
-        progresDialog = new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog = showProgress(nActivity);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -1637,12 +1624,9 @@ public class DialogUdateFieldsActivity extends BaseActivity implements CompoundB
 
     }
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
     private void getUpdateSteps(String fieldToUpdate,String matri_id,String value) {
-        progresDialog = new ProgressDialog(DialogUdateFieldsActivity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog = showProgress(DialogUdateFieldsActivity.this);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -1751,10 +1735,7 @@ public class DialogUdateFieldsActivity extends BaseActivity implements CompoundB
     }
 
     private void getUpdateReligionDet(String fieldToUpdate,String matri_id) {
-        progresDialog = new ProgressDialog(DialogUdateFieldsActivity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog = showProgress(DialogUdateFieldsActivity.this);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -1862,10 +1843,7 @@ public class DialogUdateFieldsActivity extends BaseActivity implements CompoundB
 
 
     private void getSkipUpdate(String matri_id) {
-        progresDialog = new ProgressDialog(DialogUdateFieldsActivity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog = showProgress(DialogUdateFieldsActivity.this);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {

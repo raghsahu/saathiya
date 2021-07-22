@@ -2,7 +2,6 @@ package com.prometteur.sathiya.profilestatus;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -100,10 +99,6 @@ ActivityProfileLikedBinding profileLikedBinding;
     }
 
     private void getShortlistedProfileRequest(String strMatriId,String strGender) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -218,7 +213,7 @@ ActivityProfileLikedBinding profileLikedBinding;
                                         profileLikedBinding.rvLikedUsers.setAdapter(adapterBlockedUser);
                                     } else {
 
-                                        userLikedListAdapter=new UserLikedListAdapter(nActivity, arrShortListedUser,tokans);
+                                        userLikedListAdapter=new UserLikedListAdapter(nActivity, arrShortListedUser,tokans,null);
                                         profileLikedBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
                                     }
 

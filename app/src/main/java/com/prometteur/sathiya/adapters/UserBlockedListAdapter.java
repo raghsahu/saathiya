@@ -3,7 +3,6 @@ package com.prometteur.sathiya.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import com.prometteur.sathiya.databinding.ItemProfileBlockedUserBinding;
 import com.prometteur.sathiya.databinding.ItemProfileCalledUserBinding;
 import com.prometteur.sathiya.home.ThirdHomeActivity;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.NetworkConnection;
 import com.prometteur.sathiya.utills.OnLoadMoreListener;
 
 import org.json.JSONObject;
@@ -199,8 +199,12 @@ holder.likedUserBinding.tvUnblock.setOnClickListener(new View.OnClickListener() 
     @Override
     public void onClick(View view) {
 
+        if (NetworkConnection.hasConnection(nActivity)) {
+            addToBlockRequest(login_matri_id, singleUser.getMatri_id(), "1",position);
+        } else {
+            AppConstants.CheckConnection(nActivity);
+        }
 
-                    addToBlockRequest(login_matri_id, singleUser.getMatri_id(), "1",position);
 
     }
 });
@@ -257,10 +261,6 @@ holder.likedUserBinding.tvUnblock.setOnClickListener(new View.OnClickListener() 
 
 
     private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked,int position) {
-        /*ProgressDialog  progresDialog = new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

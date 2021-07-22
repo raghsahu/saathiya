@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="left"
+    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="left"
+    >
+
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvCalls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:text="0-0"
+        android:gravity="center"
+        android:layout_margin="@dimen/_3sdp"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:layout_weight="1"
+         />  <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+
+        android:gravity="center"
+        android:background="@color/black"
+         />
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:id="@+id/tvPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:text="0.00"
+        android:gravity="center"
+        android:layout_margin="@dimen/_3sdp"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:layout_weight="1"
+         />
+
+
+</LinearLayout>
+    <com.prometteur.sathiya.utills.TextViewCustomFont
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:gravity="center"
+        android:background="@color/black"
+        />
+</LinearLayout>

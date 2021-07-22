@@ -11,6 +11,15 @@
 
     <include layout="@layout/toolbar"
         android:id="@+id/toolBar"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/backgroundLightGrey"
+        tools:context=".packages.PackageActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -44,7 +53,7 @@
                 app:dsbv_infoTextColor="@android:color/white"
                 app:dsbv_infoBackgroundColor="@color/colorPrimary"
                 app:dsbv_infoRadius="5"
-                app:dsbv_max="200"
+                app:dsbv_max="300"
                 app:dsbv_progress="0"
                 app:dsbv_thumbDrawable="@drawable/ic_habbit"
                 app:dsbv_infoInitText="@string/init_info_calls"/>
@@ -66,6 +75,94 @@
                 android:layout_marginRight="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_8sdp"
                 />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvPlans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/plans"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:background="@color/lightgreen"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="left"
+                >
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="left"
+                    >
+
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:id="@+id/tvCalls"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_3sdp"
+                        android:paddingBottom="@dimen/_2sdp"
+                        android:text="Calls"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/_3sdp"
+                        android:textColor="@color/black"
+                        android:textSize="12dp"
+                        android:layout_weight="1"
+                        />  <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+
+                    android:gravity="center"
+                    android:background="@color/black"
+                    />
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_3sdp"
+                        android:paddingBottom="@dimen/_2sdp"
+                        android:text="Price (₹)"
+                        android:gravity="center"
+                        android:layout_margin="@dimen/_3sdp"
+                        android:textColor="@color/black"
+                        android:textSize="12dp"
+                        android:layout_weight="1"
+                        />
+
+
+                </LinearLayout>
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:gravity="center"
+                    android:background="@color/black"
+                    />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPlans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -138,7 +235,7 @@
                 android:layout_width="90dp"
                 android:layout_height="35dp"
                 android:layout_gravity="right"
-                android:text="Send"
+                android:text="@string/send"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="@dimen/_11sdp"
@@ -255,6 +352,6 @@
 
     </androidx.cardview.widget.CardView>
 
-
-
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
   </LinearLayout>

@@ -5,7 +5,6 @@ import com.prometteur.sathiya.BaseActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
@@ -20,8 +19,12 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.prometteur.sathiya.R;
 import com.prometteur.sathiya.SignUpStep1Activity;
+import com.prometteur.sathiya.adapters.PlansAdapter;
 import com.prometteur.sathiya.adapters.UserVisitedListAdapter;
 import com.prometteur.sathiya.beans.beanPackages;
 import com.prometteur.sathiya.beans.beanUserData;
@@ -68,7 +71,7 @@ public class PackageActivity extends BaseActivity implements PaymentResultWithDa
         packageBinding=ActivityPackageBinding.inflate(getLayoutInflater());
         setContentView(packageBinding.getRoot());
         packageBinding.toolBar.ivSearchIcon.setVisibility(View.GONE);
-        packageBinding.toolBar.toolBarTitle.setText("Package");
+        packageBinding.toolBar.toolBarTitle.setText(getString(R.string.package1));
         prefUpdate = PreferenceManager.getDefaultSharedPreferences(nActivity);
         matri_id = prefUpdate.getString("matri_id", "");
         strLang=prefUpdate.getString("selLang","English");
@@ -157,13 +160,17 @@ packageBinding.toolBar.ivBackArrowimg.setOnClickListener(new View.OnClickListene
                 if(!charSequence.toString().isEmpty()) {
                     int totCalls = 0;
                     try {
-                        totCalls = Integer.parseInt(packageBinding.tvPrice.getText().toString().replace(" calls",""));
+                        totCalls = currentCalls;
                     } catch (Exception e) {
                         totCalls = 0;
                         e.printStackTrace();
                     }
                     int enteredCalls = Integer.parseInt(charSequence.toString());
-                    packageBinding.tvBalanceCalls.setText("" + (totCalls - enteredCalls) + " Balance Calls");
+                    if(totCalls>=enteredCalls) {
+                        packageBinding.tvBalanceCalls.setText(getString(R.string.balance) + " - " + (totCalls - enteredCalls) + " " + getString(R.string.calls));
+                    }else{
+                        AppConstants.setToastStr(nActivity,getString(R.string.calls_not_available)+" "+currentCalls+" "+getString(R.string.so_enter_within_that));
+                    }
                 }
             }
 
@@ -197,6 +204,7 @@ packageBinding.toolBar.ivBackArrowimg.setOnClickListener(new View.OnClickListene
     }
 List<beanPackages> packages=new ArrayList<>();
     int currentCalls=0;
+    int endVal=300;
     private void getAllPackages() {
         /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
         progresDialog11.setCancelable(false);
@@ -290,15 +298,27 @@ List<beanPackages> packages=new ArrayList<>();
                                             resItem.getString("plan_call_limit"),
                                             resItem.getString("plan_call_rate")));
                                 }
+                                packageBinding.cvPlans.setVisibility(View.GONE);
+                                if(packages.size()>0){
+                                    packageBinding.cvPlans.setVisibility(View.VISIBLE);
+                                    LinearLayoutManager linearLayoutManager=new LinearLayoutManager(PackageActivity.this, RecyclerView.VERTICAL,false);
+                                    packageBinding.rvPlans.setLayoutManager(linearLayoutManager);
+                                    packageBinding.rvPlans.setAdapter(new PlansAdapter(PackageActivity.this, (ArrayList<beanPackages>) packages));
+                                }
 
                             }
 
+                            if(obj.getString("end_val")!=null && !obj.getString("end_val").equalsIgnoreCase("null"))
+                            {
+                                endVal=Integer.parseInt(obj.getString("end_val"));
+                            }
+                            packageBinding.dynamicSeekbar.setMax(endVal);
                             JSONObject currentPackage = obj.getJSONObject("current_package");
                             if(currentPackage!=null)
                             {
                                 currentCalls=Integer.parseInt(currentPackage.getString("calls"));
-                                packageBinding.tvPrice.setText(currentPackage.getString("calls")+" calls");
-                                packageBinding.tvBalanceCalls.setText(""+packageBinding.tvPrice.getText().toString()+" Balance Calls");
+                                packageBinding.tvPrice.setText(currentPackage.getString("calls")+" "+getString(R.string.calls));
+                                packageBinding.tvBalanceCalls.setText(getString(R.string.balance)+" - "+currentPackage.getString("calls")+" "+getString(R.string.calls));
                                 if(currentCalls>0){
                                     packageBinding.cvBorrowCalls.setVisibility(View.VISIBLE);
                                 }else
@@ -306,7 +326,6 @@ List<beanPackages> packages=new ArrayList<>();
                                     packageBinding.cvBorrowCalls.setVisibility(View.GONE);
                                 }
                             }
-
                         }else
                         {
                             AppConstants.setToastStr(nActivity,""+obj.getString("message"));

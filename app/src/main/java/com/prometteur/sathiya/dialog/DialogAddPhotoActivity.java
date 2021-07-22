@@ -3,7 +3,7 @@ package com.prometteur.sathiya.dialog;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -80,6 +80,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 
 import static com.prometteur.sathiya.SplashActivity.strLang;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class DialogAddPhotoActivity extends BaseActivity implements LocationListener {
    DialogAddPhotoBinding fieldBinding;
@@ -320,10 +321,7 @@ String strFilePath="",matri_id="";
 
         final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        final ProgressDialog progressDialogSendReq = new ProgressDialog(DialogAddPhotoActivity.this);
-        progressDialogSendReq.setCancelable(false);
-        progressDialogSendReq.setMessage(getResources().getString(R.string.Please_Wait));
-        progressDialogSendReq.setIndeterminate(true);
+        final Dialog progressDialogSendReq = showProgress(DialogAddPhotoActivity.this);
         progressDialogSendReq.show();
 
         RequestBody user_id = RequestBody.create(MediaType.parse("text/plain"), strUserId);

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,19 +16,29 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+      <!--  <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/icon_avata"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            app:civ_border_color="@color/colorPrimary"/>
-
+            app:civ_border_color="@color/colorPrimary"/>-->
+        <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+            android:id="@+id/icon_avata"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/shape_corner_round_square"
+            android:src="@drawable/shape_corner_round_square"
+            card_view:siShape="@drawable/shape_corner_round_square"
+            card_view:siSquare="false"
+            android:scaleType="fitXY"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_weight="5"
             android:orientation="vertical">
 

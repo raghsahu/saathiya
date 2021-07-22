@@ -106,12 +106,17 @@ public class AppConstants {
         client.post(AppConstants.MAIN_URL + "user_chat_notification.php", params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.e("NOTIFICATION__fail" + id, responseString);
+                try {
+                    Log.e("NOTIFICATION__fail" + id, responseString);
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+
             }
 
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Log.d("NOTIFICATION__" + id, responseString);
+                    Log.e("NOTIFICATION__" + id, responseString);
                 } catch (Exception e) {
                     e.getMessage();
                 }
@@ -225,7 +230,8 @@ public class AppConstants {
 
     public static void setToastStr(Activity context, String message) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast_design, (ViewGroup) context.findViewById(R.id.custom_toast_layout));
+        View layout = inflater.inflate(R.layout.custom_toast_design_pink_bg, (ViewGroup) context.findViewById(R.id.custom_toast_layout));
+       // View layout = inflater.inflate(R.layout.custom_toast_design, (ViewGroup) context.findViewById(R.id.custom_toast_layout));
 
         TextView tv = (TextView) layout.findViewById(R.id.txtToast);
         tv.setText(message);

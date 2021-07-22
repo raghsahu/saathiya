@@ -1,7 +1,6 @@
 package com.prometteur.sathiya.home;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +18,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+
+import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.prometteur.sathiya.BaseActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
@@ -198,7 +199,14 @@ homeBinding.ivNotification.setOnClickListener(new View.OnClickListener() {
 homeBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
     @Override
     public void onRefresh() {
-        getUserDataRequest(matri_id, gender);
+        if (NetworkConnection.hasConnection(nActivity)){
+            getUserDataRequest(matri_id, gender);
+
+        }else
+        {
+            AppConstants.CheckConnection(nActivity);
+        }
+
     }
 });
         setSearchView();
@@ -285,7 +293,7 @@ if(bundle!=null) {
     }
     private void getHeaderView() {
         View header = homeBinding.navView.getHeaderView(0);
-        CircleImageView civProfileImg = header.findViewById(R.id.civProfileImg);
+        PorterShapeImageView civProfileImg = header.findViewById(R.id.civProfileImg);
         ImageView ivClose = header.findViewById(R.id.ivClose);
         TextView tvProfileName = header.findViewById(R.id.tvProfileName);
         TextView tvId = header.findViewById(R.id.tvId);
@@ -295,18 +303,16 @@ if(bundle!=null) {
         tvId.setText("ID - #"+matri_id);
         if(call_package_status.equalsIgnoreCase("active")) {
             tvMembership.setText(getString(R.string.membership_status)+" "+getString(R.string.paid));
-            tvMembership.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(HomeActivity.this, PackageActivity.class));
-                }
-            });
         }else
         {
             tvMembership.setText(getString(R.string.membership_status)+" "+getString(R.string.unpaid));
         }
-
-
+        tvMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, PackageActivity.class));
+            }
+        });
         Glide.with(this).load(strUserImage).error(R.drawable.img_item).into(homeBinding.rivProfileImage);
         Glide.with(this).load(strUserImage).error(R.drawable.img_item).into(civProfileImg);
         ivClose.setOnClickListener(new View.OnClickListener() {
@@ -395,10 +401,6 @@ Log.i("chat login","Chat login");
     String fieldToUpdate;
     private void getUserDataRequest(String MatriId, String Gender) {
         final Dialog progresDialog11 = showProgress(nActivity);
-//        final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-       /* progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         if(!progresDialog11.isShowing())
         {
             progresDialog11.show();
@@ -579,7 +581,13 @@ Log.i("chat login","Chat login");
                         }
                         homeBinding.refresh.setRefreshing(false);
                     }else {
-                        getUserDataRequest(matri_id, gender);
+                        if (NetworkConnection.hasConnection(nActivity)){
+                            getUserDataRequest(matri_id, gender);
+
+                        }else
+                        {
+                            AppConstants.CheckConnection(nActivity);
+                        }
                     }
                     homeBinding.refresh.setRefreshing(false);
                     progresDialog11.dismiss();

@@ -11,17 +11,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
 import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.prometteur.sathiya.R;
-import com.prometteur.sathiya.chat.ChatActivity;
-import com.prometteur.sathiya.chat.MessageActivity;
 import com.prometteur.sathiya.home.HomeActivity;
-import com.prometteur.sathiya.home.SecondHomeActivity;
 import com.prometteur.sathiya.utills.AppConstants;
 
 import org.json.JSONObject;

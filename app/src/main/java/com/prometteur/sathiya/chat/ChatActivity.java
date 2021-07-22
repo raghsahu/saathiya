@@ -28,6 +28,8 @@ import com.prometteur.sathiya.utills.AppConstants;
 
 import java.util.ArrayList;
 
+import static com.prometteur.sathiya.SplashActivity.strLang;
+
 public class ChatActivity extends BaseActivity {
 
     ArrayList<OnlineUsersModel> list;
@@ -43,6 +45,7 @@ public class ChatActivity extends BaseActivity {
     static LinearLayout linSearch;
     static TextView tvTitle;
     static EditText edtSearch;
+    SharedPreferences prefUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,9 @@ public class ChatActivity extends BaseActivity {
 
         setContentView(chatsBinding.getRoot());
         list = new ArrayList<OnlineUsersModel>();
+        prefUpdate = PreferenceManager.getDefaultSharedPreferences(ChatActivity.this);
 
+AppConstants.UID=prefUpdate.getString("userId","");
         ivSearch=chatsBinding.ivSearch;
         linSearch=chatsBinding.linSearch;
         imgSearchBack=chatsBinding.imgSearchBack;
@@ -84,7 +89,6 @@ public class ChatActivity extends BaseActivity {
         initFirebase();
 
     }
-    SharedPreferences prefUpdate;
     private void initFirebase() {
         //Khoi tao thanh phan de dang nhap, dang ky
         mAuth = FirebaseAuth.getInstance();

@@ -23,6 +23,8 @@
 
     <application
         android:name=".MyApp"
+
+        
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -44,7 +46,7 @@
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.SathiyaNoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,7 +71,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/Login"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:resizeableActivity="true"
             android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"
             android:windowSoftInputMode="adjustResize" />
@@ -135,8 +137,6 @@
             android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
         <activity android:name=".chat.ChatDetailsActivity"
             android:parentActivityName=".chat.ChatActivity"/>
-        <activity android:name=".chat.MessageActivity"
-            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
         <activity android:name=".packages.PackageActivity"
             android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
         <activity android:name=".home.SecondHomeActivity"
@@ -150,6 +150,8 @@
         <activity android:name=".notification.NotificationActivity"
             android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
         <activity android:name=".home.FullScreenImageActivity"
+            android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
+        <activity android:name=".home.FullScreenSliderActivity"
             android:theme="@style/Theme.SathiyaNoActionBar.Fullscreen"/>
         <activity android:name=".dialog.DialogPlayVideoActivity"
             android:theme="@style/Theme.AppCompat.Dialog"/>

@@ -2,7 +2,6 @@ package com.prometteur.sathiya.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -75,7 +74,6 @@ public class EditOtherDetailsFragment extends Fragment implements CompoundButton
     ArrayList<beanMotherTongue> arrMotherTongue = new ArrayList<beanMotherTongue>();
     MotherTongueAdapter motherTongueAdapter = null;
     String matri_id = "";
-    ProgressDialog progresDialog;
     SharedPreferences prefUpdate;
     public EditOtherDetailsFragment() {
         // Required empty public constructor
@@ -312,7 +310,9 @@ public class EditOtherDetailsFragment extends Fragment implements CompoundButton
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                if(!otherDetailsBinding.cbAnyTime.isChecked()){
                 callTime=callStartTime+"-"+callEndTime;
+                }
 
             }
 
@@ -334,6 +334,8 @@ public class EditOtherDetailsFragment extends Fragment implements CompoundButton
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if(b) {
             callTime = "Any Time";
+            otherDetailsBinding.rangebarCallTiming.setRangePinsByValue(1,24);
+            otherDetailsBinding.tvShowTiming.setText("");
             otherDetailsBinding.rangebarCallTiming.setEnabled(false);
         }else
         {
@@ -415,10 +417,10 @@ otherDetailsBinding.includeSlide.rvGeneralView.setLayoutManager(new LinearLayout
     }
 
     private void getMotherToungeRequest() {
-        progresDialog = new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
+        Dialog  progresDialog = showProgress(getActivity());
+        /*progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -739,6 +741,9 @@ otherDetailsBinding.includeSlide.rvGeneralView.setLayoutManager(new LinearLayout
                 if(resItem.getString("time_to_call")!=null && !resItem.getString("time_to_call").isEmpty() && !resItem.getString("time_to_call").equalsIgnoreCase("Not Available")) {
                     if (resItem.getString("time_to_call").equalsIgnoreCase("Any Time")) {
                                             /*otherDetailsBinding.cbAnyTime.setOnCheckedChangeListener(null);*/
+                        otherDetailsBinding.rangebarCallTiming.setTickStart(1);
+                        otherDetailsBinding.rangebarCallTiming.setTickEnd(24);
+                        otherDetailsBinding.tvShowTiming.setText("");
                                             otherDetailsBinding.cbAnyTime.setChecked(true);
 //                        otherDetailsBinding.cbAnyTime.performClick();
                         // otherDetailsBinding.cbAnyTime.setOnCheckedChangeListener(EditOtherDetailsFragment.this);
@@ -769,10 +774,10 @@ otherDetailsBinding.includeSlide.rvGeneralView.setLayoutManager(new LinearLayout
 
     private void getUpdateSteps(String MaritalStatus, String MotherTongueId, String ManglikStatus, String SpeciallyAbled
             , String ParentMobile, String ShadiBget, String CallTiming, String matri_id,String DealMaker,String Diet) {
-        progresDialog = new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
+        Dialog  progresDialog = showProgress(getActivity());
+        /*progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {

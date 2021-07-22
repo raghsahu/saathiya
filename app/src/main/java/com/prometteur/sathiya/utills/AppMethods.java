@@ -68,7 +68,13 @@ public class AppMethods
 
     public static Dialog showProgress(Context context) {
         // custom dialog
-        dialog1 = new Dialog(context);
+       dialog1=null;
+            dialog1 = new Dialog(context);
+
+        if(dialog1.isShowing())
+        {
+            dialog1.dismiss();
+        }
         dialog1.setCancelable(false);
         dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog1.setContentView(R.layout.dialog_progress);

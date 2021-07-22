@@ -1,7 +1,7 @@
 package com.prometteur.sathiya.fragments;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,6 +70,7 @@ import retrofit2.Call;
 import static android.app.Activity.RESULT_OK;
 import static com.prometteur.sathiya.profile.EditProfileActivity.tvPhoto;
 import static com.prometteur.sathiya.profile.EditProfileActivity.viewPager;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 
 public class EditPhotosFragment extends Fragment {
@@ -85,7 +86,6 @@ public class EditPhotosFragment extends Fragment {
     private PhotosAdapter adapterPhotos;
     private ArrayList<beanPhotos> arrPhotosList;
     SharedPreferences prefUpdate;
-    ProgressDialog progresDialog;
     String matri_id = "",gender="";
     ImageView imgBussiness;
     String PhotoId = "";
@@ -171,7 +171,7 @@ public class EditPhotosFragment extends Fragment {
                             CropImage.activity()
                                     .setAllowRotation(false)
                                     .setAllowFlipping(false)
-                                    .setAspectRatio(500, 600)
+                                    .setAspectRatio(400, 800)
                                     .setGuidelines(CropImageView.Guidelines.ON)
                                     .start(getActivity(),EditPhotosFragment.this);
                         }
@@ -461,10 +461,7 @@ public class EditPhotosFragment extends Fragment {
 
         final ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        final ProgressDialog progressDialogSendReq = new ProgressDialog(getActivity());
-        progressDialogSendReq.setCancelable(false);
-        progressDialogSendReq.setMessage(getResources().getString(R.string.Please_Wait));
-        progressDialogSendReq.setIndeterminate(true);
+        final Dialog progressDialogSendReq = showProgress(getActivity());
         progressDialogSendReq.show();
 
         RequestBody user_id = RequestBody.create(MediaType.parse("text/plain"), strUserId);

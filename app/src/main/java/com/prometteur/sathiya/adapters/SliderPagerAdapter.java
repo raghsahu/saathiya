@@ -2,7 +2,7 @@ package com.prometteur.sathiya.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -43,6 +43,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class SliderPagerAdapter extends PagerAdapter {
 private LayoutInflater layoutInflater;
@@ -112,13 +113,10 @@ private LayoutInflater layoutInflater;
     }
 
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
     private void setLike(String login_matri_id, beanHobbyImage beanHobby, ImageView imgHeart)
     {
-        progresDialog= new ProgressDialog(activity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(activity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog=showProgress(activity);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>

@@ -3,6 +3,7 @@ package com.prometteur.sathiya.home;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.prometteur.sathiya.BaseActivity;
 import androidx.core.view.GravityCompat;
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +49,6 @@ import com.prometteur.sathiya.profile.ProfileActivity;
 import com.prometteur.sathiya.profilestatus.ProfileBlockedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileCalledActivity;
 import com.prometteur.sathiya.profilestatus.ProfileLikeReceivedActivity;
-import com.prometteur.sathiya.profilestatus.ProfileLikedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileRejectedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileVisitedActivity;
 import com.prometteur.sathiya.translateapi.Http;
@@ -105,7 +105,7 @@ public class SecondHomeActivity extends BaseActivity implements NavigationView.O
     public static ImageView ivNotification;
     public static boolean activityRunning=false;
     public static MainViewModel mMainViewModel;
-    public static CountDownTimer countDownTimer;
+    public static List<CountDownTimer> countDownTimer=new ArrayList<>();
     //replace yourActivity.this with your own activity or if you declared a context you can write context.getSystemService(Context.VIBRATOR_SERVICE);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +229,7 @@ public class SecondHomeActivity extends BaseActivity implements NavigationView.O
 
     private void getHeaderView() {
         View header = homeBinding.navView.getHeaderView(0);
-        CircleImageView civProfileImg = header.findViewById(R.id.civProfileImg);
+        PorterShapeImageView civProfileImg = header.findViewById(R.id.civProfileImg);
         ImageView ivClose = header.findViewById(R.id.ivClose);
         TextView tvProfileName = header.findViewById(R.id.tvProfileName);
         TextView tvId = header.findViewById(R.id.tvId);
@@ -242,17 +242,16 @@ public class SecondHomeActivity extends BaseActivity implements NavigationView.O
 
         if(call_package_status.equalsIgnoreCase("active")) {
             tvMembership.setText(getString(R.string.membership_status)+" "+getString(R.string.paid));
-            tvMembership.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(SecondHomeActivity.this, PackageActivity.class));
-                }
-            });
         }else
         {
             tvMembership.setText(getString(R.string.membership_status)+" "+getString(R.string.unpaid));
         }
-
+        tvMembership.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SecondHomeActivity.this, PackageActivity.class));
+            }
+        });
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -356,7 +355,13 @@ Direction direction;
     public void onCardSwiped(Direction direction) {
        this.direction=direction;
         if(countDownTimer!=null) {
-            countDownTimer.cancel();
+            if(countDownTimer.size()>0) {
+                for(int i=0;i<countDownTimer.size();i++) {
+                    if(countDownTimer.get(i)!=null) {
+                        countDownTimer.get(i).cancel();
+                    }
+                }
+            }
         }
        if(isListener){
         //Toast.makeText(nActivity,"onCardSwiped "+direction.toString(),Toast.LENGTH_SHORT).show();
@@ -484,12 +489,11 @@ Direction direction;
     SharedPreferences prefUpdate;
     String UserId = "", matri_id = "", gender = "",username="",strUserImage="",call_package_status="";
     private void getUserDataRequest(String MatriId, String Gender) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
+
         final Dialog progresDialog11 = showProgress(nActivity);
-        progresDialog11.show();
+        if(!progresDialog11.isShowing()) {
+            progresDialog11.show();
+        }
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -747,6 +751,11 @@ Direction direction;
         try {
             activityRunning = false;
             mMainViewModel.pause();
+            if (MusicService.mPlayer == null) {
+                MusicService.mPlayer = new MediaPlayer();
+            }
+            MusicService.mPlayer.pause();
+           // stopService(new Intent(nActivity, MusicService.class));
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -1047,13 +1056,27 @@ Direction direction;
 
     }
 
-
     @Override
     protected void onDestroy() {
         activityRunning = false;
+        if (MusicService.mPlayer == null) {
+            MusicService.mPlayer = new MediaPlayer();
+        }
+        try {
+            MusicService.mPlayer.stop();
+        }catch (Exception e){e.printStackTrace();}
+
+        stopService(new Intent(nActivity, MusicService.class));
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mMainViewModel.dispose();
         if(countDownTimer!=null) {
-            countDownTimer.cancel();
+            if(countDownTimer.size()>0) {
+                for(int i=0;i<countDownTimer.size();i++) {
+                    if(countDownTimer.get(i)!=null) {
+                        countDownTimer.get(i).cancel();
+                    }
+                }
+            }
         }
         super.onDestroy();
     }
@@ -1064,7 +1087,13 @@ Direction direction;
         activityRunning = false;
         mMainViewModel.dispose();
         if(countDownTimer!=null) {
-            countDownTimer.cancel();
+            if(countDownTimer.size()>0) {
+                for(int i=0;i<countDownTimer.size();i++) {
+                    if(countDownTimer.get(i)!=null) {
+                        countDownTimer.get(i).cancel();
+                    }
+                }
+            }
         }
         super.onStop();
     }

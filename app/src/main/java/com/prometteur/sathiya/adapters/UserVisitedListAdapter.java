@@ -3,7 +3,6 @@ package com.prometteur.sathiya.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -316,10 +315,6 @@ public class UserVisitedListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     String eiId="";
     private void sendInterestRequest(String login_matri_id, String strMatriId, String isFavorite,ViewHolder holder,int pos)
     {
-        /*ProgressDialog progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

@@ -1,7 +1,7 @@
 package com.prometteur.sathiya;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +47,7 @@ import com.prometteur.sathiya.fragments.FragmentOtpVerificationBottomSheetDialog
 import com.prometteur.sathiya.fragments.FragmentSelectlanguageBottomSheetDialog;
 import com.prometteur.sathiya.model.chatmodel.User;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.NetworkConnection;
 import com.prometteur.sathiya.utills.SharedPreferenceHelper;
 import org.json.JSONObject;
 
@@ -74,6 +75,7 @@ import static com.prometteur.sathiya.fragments.FragmentOtpVerificationBottomShee
 import static com.prometteur.sathiya.utills.AppConstants.isValidPassword;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 //import Adepters.CasteAdapter;
 //import Adepters.CountryAdapter;
@@ -212,8 +214,15 @@ public static String strPassword=null,strUsername=null;
                     String ConPassword=signupStep.edtConPassword.getText().toString();
 
                     if(Password.equalsIgnoreCase(ConPassword)) {
-                        getRegistationSteps(AppConstants.CountryCodeName,
-                                MobileNo, EmailId, Password,FirstName,LastName,Gender);
+                        if (NetworkConnection.hasConnection(SignUpStep1Activity.this)){
+                            getRegistationSteps(AppConstants.CountryCodeName,
+                                    MobileNo, EmailId, Password,FirstName,LastName,Gender);
+
+                        }else
+                        {
+                            AppConstants.CheckConnection(SignUpStep1Activity.this);
+                        }
+
                     }else
                     {
                         AppConstants.setToastStr(SignUpStep1Activity.this,getString(R.string.password_not_matched));
@@ -393,14 +402,11 @@ public static String strPassword=null,strUsername=null;
 
 
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
     private void getRegistationSteps(String CountryCode, String MobileNo, String EmailId
             ,String Password,String FirstName, String LastName,String Gender
     ) {
-        progresDialog= new ProgressDialog(SignUpStep1Activity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog= showProgress(SignUpStep1Activity.this);
         progresDialog.show();
 
 
@@ -516,6 +522,7 @@ public static String strPassword=null,strUsername=null;
                         editor.putString("CountryId", AppConstants.CountryId);
                         editor.putString("CountryName", AppConstants.CountryName);
                         editor.putString("CountryCode", AppConstants.CountryCodeName);
+                        editor.putString("mobile", MobileNo);
                         editor.putString("signup_step", "1");
                         editor.putString("user_id_r", responseObj.getString("user_id"));
                         editor.putString(AppConstants.EMAIL_ID, signupStep.edtEmailId.getText().toString());

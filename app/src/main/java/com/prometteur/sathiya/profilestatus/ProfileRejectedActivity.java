@@ -1,7 +1,6 @@
 package com.prometteur.sathiya.profilestatus;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -90,7 +89,11 @@ ActivityProfileRejectedBinding profileLikedBinding;
 
                 PageType="5";
                 arrShortListedUser=new ArrayList<>();
-                getShortlistedProfileRequest(matri_id);
+        if (NetworkConnection.hasConnection(nActivity)) {
+            getShortlistedProfileRequest(matri_id);
+        } else {
+            AppConstants.CheckConnection(nActivity);
+        }
 
     }
 
@@ -134,7 +137,7 @@ ActivityProfileRejectedBinding profileLikedBinding;
             }
         }
         profileLikedBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
-        userLikedRecListAdapter=new LikeReceivedListAdapter(nActivity, false, null,PageType);
+        userLikedRecListAdapter=new LikeReceivedListAdapter(nActivity, false, null,PageType,null);
         profileLikedBinding.rvLikedUsers.setAdapter(userLikedRecListAdapter);
         userLikedRecListAdapter.setDataChange(consolidatedList);
 
@@ -143,10 +146,6 @@ ActivityProfileRejectedBinding profileLikedBinding;
 
 
     private void getShortlistedProfileRequest(String strMatriId) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {

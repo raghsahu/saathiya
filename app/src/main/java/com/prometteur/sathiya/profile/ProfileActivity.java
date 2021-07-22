@@ -214,15 +214,16 @@ public class ProfileActivity extends BaseActivity {
                                 profileBinding.tvUserId.setText("#" + resItem.getString("matri_id"));
                                 if (call_package_status.equalsIgnoreCase("active")) {
                                     profileBinding.tvMembership.setText(getString(R.string.paid));
-                                    profileBinding.linMembership.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            startActivity(new Intent(ProfileActivity.this, PackageActivity.class));
-                                        }
-                                    });
+
                                 } else {
                                     profileBinding.tvMembership.setText(getString(R.string.unpaid));
                                 }
+                                profileBinding.linMembership.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        startActivity(new Intent(ProfileActivity.this, PackageActivity.class));
+                                    }
+                                });
                                 Glide.with(nActivity).load(resItem.getString("photo1")).placeholder(R.drawable.bg_circle_placeholder_blackfill).error(R.drawable.bg_circle_placeholder_blackfill).into(profileBinding.ciProfilePic);
                                 /*setUpHotelDetailsFragment*/
                                 hotelDetailsTabAdapter.addFragment(new UserBasicInfoFragment(), "");

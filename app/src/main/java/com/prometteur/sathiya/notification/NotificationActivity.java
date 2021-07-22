@@ -2,6 +2,7 @@ package com.prometteur.sathiya.notification;
 
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,9 +30,11 @@ import com.prometteur.sathiya.beans.beanNotification;
 import com.prometteur.sathiya.home.HomeActivity;
 import com.prometteur.sathiya.home.SecondHomeActivity;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.NetworkConnection;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -39,6 +42,7 @@ import java.util.Iterator;
 import cz.msebera.android.httpclient.Header;
 
 import static com.prometteur.sathiya.utills.AppConstants.isNotification;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,6 +78,15 @@ public class NotificationActivity extends BaseActivity {
         textviewHeaderText = (TextView) findViewById(R.id.textviewHeaderText);
         textviewSignUp = (TextView) findViewById(R.id.textviewSignUp);
 
+        try {
+            Field f = refresh.getClass().getDeclaredField("mCircleView");
+            f.setAccessible(true);
+            ImageView img = (ImageView)f.get(refresh);
+            img.setAlpha(0.0f);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,8 +96,13 @@ public class NotificationActivity extends BaseActivity {
 
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             public void onRefresh() {
+                if (NetworkConnection.hasConnection(nActivity)){
+                    CallAllnotification();
+                }else
+                {
+                    AppConstants.CheckConnection(nActivity);
+                }
 
-                CallAllnotification();
 
             }
         });
@@ -104,7 +122,13 @@ public class NotificationActivity extends BaseActivity {
         @Override
         protected void onResume () {
             super.onResume();
-            CallAllnotification();
+            if (NetworkConnection.hasConnection(nActivity)){
+                CallAllnotification();
+            }else
+            {
+                AppConstants.CheckConnection(nActivity);
+            }
+
         }
 
         @Override
@@ -118,7 +142,9 @@ public class NotificationActivity extends BaseActivity {
         }
 
         public void CallAllnotification () {
-            refresh.setRefreshing(true);
+            //refresh.setRefreshing(true);
+            Dialog dialog=showProgress(NotificationActivity.this);
+            dialog.show();
             notification_models = new ArrayList<>();
             AsyncHttpClient client = new AsyncHttpClient();
             RequestParams params = new RequestParams();
@@ -129,11 +155,12 @@ public class NotificationActivity extends BaseActivity {
             Log.e("",""+prefUpdate.getString("gender", ""));
             client.post(AppConstants.MAIN_URL + "app_notification.php", params, new TextHttpResponseHandler() {
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    dialog.dismiss();
                 }
 
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    refresh.setRefreshing(false);
-
+                    //refresh.setRefreshing(false);
+                    dialog.dismiss();
                     try {
                         JSONObject obj = new JSONObject(responseString);
 
@@ -185,12 +212,13 @@ public class NotificationActivity extends BaseActivity {
                             }
                         } else {
                             refresh.setRefreshing(false);
+                            dialog.dismiss();
                             Log.e("respone", status + "");
                             textEmptyView.setVisibility(View.VISIBLE);
                         }
                     } catch (Exception t) {
-                        refresh.setRefreshing(false);
-
+                        //refresh.setRefreshing(false);
+                        dialog.dismiss();
                         Log.d("ERRRR", t.toString());
                     }
                 }
@@ -229,7 +257,12 @@ public class NotificationActivity extends BaseActivity {
                                 rv_notification.setVisibility(View.GONE);
                                 rv_notification.setAdapter(null);
                                 textEmptyView.setVisibility(View.VISIBLE);
-                                CallAllnotification();
+                                if (NetworkConnection.hasConnection(nActivity)){
+                                    CallAllnotification();
+                                }else
+                                {
+                                    AppConstants.CheckConnection(nActivity);
+                                }
                             }
                             refresh.setRefreshing(false);
                         } else {

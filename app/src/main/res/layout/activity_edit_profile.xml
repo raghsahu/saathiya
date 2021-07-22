@@ -44,12 +44,13 @@
 
             <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
                 android:id="@+id/rivProfileImage"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/shape_corner_round_square"
                 android:src="@drawable/shape_corner_round_square"
                 app:siShape="@drawable/shape_corner_round_square"
-                app:siSquare="true"
+                app:siSquare="false"
+                android:scaleType="fitXY"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true" />

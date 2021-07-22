@@ -2,7 +2,7 @@ package com.prometteur.sathiya.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,13 +49,14 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 import static com.prometteur.sathiya.profile.EditProfileActivity.rivProfileImage;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHolder> {
 
     public Activity activity;
     ArrayList<beanPhotos> arrPopularJobList;
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
     SharedPreferences prefUpdate;
     String matri_id="";
     String strFilePath="";
@@ -320,10 +321,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.MyViewHold
 
     private void RemovePhoto(String MatriId, String strIndex, final String position)
     {
-        progresDialog =new ProgressDialog(activity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(activity.getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog =showProgress(activity);
         progresDialog.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
         {

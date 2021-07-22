@@ -104,12 +104,13 @@
                         </RelativeLayout>
                         <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
                             android:id="@+id/rivProfileImage"
-                            android:layout_width="@dimen/_35sdp"
+                            android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_35sdp"
-                            app:siSquare="true"
+                            app:siSquare="false"
                             app:siShape="@drawable/shape_corner_round_square"
                             android:src="@drawable/shape_corner_round_square"
                             android:background="@drawable/shape_corner_round_square"
+                            android:scaleType="fitXY"
                             />
                     </LinearLayout>
                     <LinearLayout

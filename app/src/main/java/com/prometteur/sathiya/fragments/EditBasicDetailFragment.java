@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -98,7 +97,6 @@ public class EditBasicDetailFragment extends Fragment {
     public static final Integer RecordAudioRequestCode = 1;
     static FragmentEditBasicDetailBinding detailBinding;
     String matri_id = "";
-    ProgressDialog progresDialog;
     SharedPreferences prefUpdate;
     ArrayList<beanState> arrState = new ArrayList<beanState>();
     StateAdapter stateAdapter = null;
@@ -153,10 +151,10 @@ public class EditBasicDetailFragment extends Fragment {
                 if (detailBinding.edtFullName.getText().toString().trim().equalsIgnoreCase("")) {
                     detailBinding.edtFullName.requestFocus();
                     AppConstants.setToastStr(getActivity(), getString(R.string.please_enter_firstname_lastname));
-                } /*else if (Email.isEmpty() || !checkEmail(Email)) { //on client demand
+                } else if (!Email.isEmpty() && !checkEmail(Email)) { //on client demand
                     detailBinding.edtEmail.requestFocus();
                     detailBinding.edtEmail.setError(getResources().getString(R.string.Please_enter_valid_email_address));
-                }*/ else if (detailBinding.edtMobileNum.getText().toString().equalsIgnoreCase("")) {
+                } else if (detailBinding.edtMobileNum.getText().toString().equalsIgnoreCase("")) {
                     detailBinding.edtMobileNum.requestFocus();
                     AppConstants.setToastStr(getActivity(), getResources().getString(R.string.please_enter_mobile_no));
                 } else if (detailBinding.edtMobileNum.getText().toString().length() != 10) {
@@ -475,10 +473,6 @@ public class EditBasicDetailFragment extends Fragment {
     }
     int heightFt=0,heightInch=0;
     private void getViewProfileRequest(String strMatriId) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(getActivity());
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         final Dialog progresDialog11 = showProgress(getActivity());
         progresDialog11.show();
 
@@ -956,10 +950,10 @@ public class EditBasicDetailFragment extends Fragment {
     private void getUpdateSteps(String Email, String Firstname, String LastName, String Birthdate
             , String Gender, String City, String State,
                                 String Height, String MobileNo, String matri_id, String HeightInch, String ProfileText) {
-        progresDialog = new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
+      Dialog  progresDialog = showProgress(getActivity());
+        /*progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {

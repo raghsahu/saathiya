@@ -18,6 +18,9 @@ import com.prometteur.sathiya.utills.AppConstants;
 
 import org.json.JSONException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import static com.prometteur.sathiya.profile.ProfileActivity.resItem;
 
 
@@ -121,7 +124,20 @@ FragmentUserBasicInfoBinding profileBinding;
                     if (resItem.getString("time_to_call").equalsIgnoreCase("Not Available")) {
                         profileBinding.tvUserCallTime.setText(getString(R.string.all_time));
                     } else {
-                        profileBinding.tvUserCallTime.setText(resItem.getString("time_to_call") + " hrs");
+                        String[] timeArr=resItem.getString("time_to_call").split("-");
+                        if(timeArr.length>0){
+                            SimpleDateFormat sdfSource=new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat sdf=new SimpleDateFormat("hh:mm aa");
+                            try {
+
+                                profileBinding.tvUserCallTime.setText(""+sdf.format(sdfSource.parse(timeArr[0] + ":00").getTime()) + " - " + sdf.format(sdfSource.parse(timeArr[1] + ":00").getTime()));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                        }else {
+                            profileBinding.tvUserCallTime.setText(resItem.getString("time_to_call"));
+                        }
                     }
                 }
             }

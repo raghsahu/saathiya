@@ -3,7 +3,6 @@ package com.prometteur.sathiya.language;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,8 +62,6 @@ import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class LanguateActivity extends BaseActivity {
 
-
-    //ProgressDialog progresDialog;
 ActivityLanguageBinding languageBinding;
 BaseActivity nActivity=this;
     ArrayList<beanLanguage> langList;
@@ -190,10 +187,6 @@ BaseActivity nActivity=this;
 
     private void getLanguageList()
     {
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
@@ -308,10 +301,6 @@ BaseActivity nActivity=this;
     }
 private void getUpdateLanguage()
     {
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>

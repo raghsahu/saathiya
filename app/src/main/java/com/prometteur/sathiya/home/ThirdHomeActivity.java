@@ -4,7 +4,6 @@ import com.prometteur.sathiya.BaseActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,31 +15,20 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.prometteur.sathiya.R;
-import com.prometteur.sathiya.adapters.SliderPagerAdapter;
 import com.prometteur.sathiya.adapters.SliderPhotoPagerAdapter;
 import com.prometteur.sathiya.beans.beanHobbyImage;
 import com.prometteur.sathiya.chat.ChatActivity;
 import com.prometteur.sathiya.chat.FriendsFragment;
-import com.prometteur.sathiya.chat.MessageActivity;
 import com.prometteur.sathiya.databinding.ActivityThirdHomeBinding;
 import com.prometteur.sathiya.hobbies.HobbiesInterestActivity;
 import com.prometteur.sathiya.profile.ProfileActivity;
 import com.prometteur.sathiya.utills.AppConstants;
-import com.prometteur.sathiya.utills.CircleTransform;
 import com.prometteur.sathiya.utills.NetworkConnection;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -52,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.ClientProtocolException;
@@ -79,13 +66,12 @@ BaseActivity nActivity=ThirdHomeActivity.this;
     public static String matri_id, login_matri_id, gender, is_shortlist, strUserImage,username;
     SharedPreferences prefUpdate;
 
-    String mobileNo = "",  country_code ="", firebase_email="";
+    String mobileNo = "",userMobileNo="",  country_code ="", firebase_email="";
     String Maritalstatus = "";
     String is_interest="",RequestType="";
     String tokans ="";
     String Photo_Pass= "";
-    String is_blocked;
-    //ProgressDialog progresDialog;
+    String is_blocked,genderOther="";
     FriendsFragment.FragFriendClickFloatButton  onClickFloatButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +92,7 @@ BaseActivity nActivity=ThirdHomeActivity.this;
         gender = prefUpdate.getString("gender", "");
         username = prefUpdate.getString("username", "");
         strLang = prefUpdate.getString("selLang", "");
+        userMobileNo = prefUpdate.getString("mobile", "");
 if(getIntent().getStringExtra("getListType")!=null)
 {
     if(getIntent().getStringExtra("getListType").equalsIgnoreCase("call") || getIntent().getStringExtra("getListType").equalsIgnoreCase("msg")) {
@@ -278,10 +265,6 @@ if(getIntent().getStringExtra("getListType")!=null)
     public void getMemberProfile(String strLoginMatriId, String strMatriId) {
         thirdHomeBinding.progressBar1.setVisibility(View.VISIBLE);
         final Dialog progresDialog = showProgress(nActivity);
-       /* progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -364,7 +347,7 @@ if(getIntent().getStringExtra("getListType")!=null)
 
                                 String key = resIter.next();
                                 JSONObject resItem = responseData.getJSONObject(key);
-ProfileActivity.resItem=responseData.getJSONObject(key);
+                                ProfileActivity.resItem=responseData.getJSONObject(key);
                                 String matri_id = resItem.getString("matri_id");
                                 String email = resItem.getString("email");
                                 firebase_email = resItem.getString("firebase_email");
@@ -375,6 +358,7 @@ ProfileActivity.resItem=responseData.getJSONObject(key);
                                 country_code = resItem.getString("country_code");
                                 String subcaste = resItem.getString("subcaste");
                                 String gender = resItem.getString("gender");
+                                genderOther=gender;
                                 String birthdate = resItem.getString("birthdate");
 
                                 tokans = resItem.getString("tokan");
@@ -562,10 +546,6 @@ init();
 
 
     private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked) {
-        /*progresDialog = new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -683,10 +663,6 @@ init();
     private void sendInterestRequest(String login_matri_id, String strMatriId, String isFavorite)
     {
         this.isFavorite=isFavorite;
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -822,10 +798,6 @@ init();
 
     private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite)
     {
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -957,10 +929,7 @@ init();
     }
 
     private void setContact(String strLoginMatriId,String matriId,String userMobile) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
+
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -982,10 +951,14 @@ init();
                 MatriIdPair = new BasicNameValuePair("matri_id", matriId);
 
                 BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("login_matri_id", strLoginMatriId);
+                BasicNameValuePair LoginSelectedUserPair = new BasicNameValuePair("other_user_mb", userMobile); //selected user
+                BasicNameValuePair LoginUserPair = new BasicNameValuePair("user_mob", userMobileNo);//loginUser
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(MatriIdPair);
                 nameValuePairList.add(LoginMatriIdPair);
+                nameValuePairList.add(LoginSelectedUserPair);
+                nameValuePairList.add(LoginUserPair);
 
                 try {
                     UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
@@ -1035,9 +1008,9 @@ init();
                         String status = obj.getString("status");
 
                         if (status.equalsIgnoreCase("1")) {
-                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            /*Intent callIntent = new Intent(Intent.ACTION_CALL);
                             callIntent.setData(Uri.parse("tel:"+userMobile));//change the number
-                            nActivity.startActivity(callIntent);
+                            nActivity.startActivity(callIntent);*/
                             AppConstants.setToastStrPinkBg(nActivity,""+obj.getString("message"));
                         }else
                         {
@@ -1073,7 +1046,7 @@ init();
     List<beanHobbyImage> arrPhotos=new ArrayList<>();
     private void init() {
 
-        sliderPagerAdapter = new SliderPhotoPagerAdapter(nActivity, arrPhotos);
+        sliderPagerAdapter = new SliderPhotoPagerAdapter(nActivity, arrPhotos,genderOther);
         thirdHomeBinding.vpSlider.setAdapter(sliderPagerAdapter);
 
         thirdHomeBinding.vpSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

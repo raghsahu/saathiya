@@ -3,7 +3,6 @@ package com.prometteur.sathiya.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,6 +44,7 @@ import com.prometteur.sathiya.model.HistoryDataModelObject;
 import com.prometteur.sathiya.model.ListObject;
 import com.prometteur.sathiya.model.UserDataObject;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.NetworkConnection;
 import com.prometteur.sathiya.utills.OnLoadMoreListener;
 
 import org.json.JSONObject;
@@ -117,7 +117,12 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
 holder.photosBinding.imgHeart.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
-        setLike(matri_id,singleUser.getHobbyImageModel(),holder);
+        if (NetworkConnection.hasConnection(nActivity)) {
+            setLike(matri_id,singleUser.getHobbyImageModel(),holder);
+        } else {
+            AppConstants.CheckConnection(nActivity);
+        }
+
     }
 });
 
@@ -238,14 +243,8 @@ break;
         }
     }
 
-
-    //ProgressDialog progresDialog;
     private void setLike(String login_matri_id, beanHobbyImage beanHobby, final ViewHolder holder)
     {
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

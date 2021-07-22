@@ -1,7 +1,7 @@
 package com.prometteur.sathiya.chat;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -53,6 +54,7 @@ import com.prometteur.sathiya.beans.beanUserData;
 import com.prometteur.sathiya.fcm.ServiceUtils;
 import com.prometteur.sathiya.model.chatmodel.Friend;
 import com.prometteur.sathiya.model.chatmodel.ListFriend;
+import com.prometteur.sathiya.model.chatmodel.Message;
 import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.FriendDB;
 
@@ -63,8 +65,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -94,6 +99,7 @@ import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
 import static com.prometteur.sathiya.utills.AppConstants.vibe;
 import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
 import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
 
 public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -107,7 +113,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     String matriId="";
     SharedPreferences prefUpdate;
     public FragFriendClickFloatButton onClickFloatButton;
-    ProgressDialog dialogFindAllFriend;
+    Dialog dialogFindAllFriend;
     String friendEmail;
     private RecyclerView recyclerListFrends;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -148,6 +154,14 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         if (dataListFriend == null) {
             dataListFriend = FriendDB.getInstance(getContext()).getListFriend();
             if (dataListFriend.getListFriend().size() > 0) {
+                Collections.sort(dataListFriend.getListFriend(), new Comparator() {
+                    @Override
+                    public int compare(Object o1, Object o2) {
+                        Friend p1 = (Friend) o1;
+                        Friend p2 = (Friend) o2;
+                        return p1.timestamp<(p2.timestamp)?0:1;
+                    }
+                });
                 listFriendID = new ArrayList<>();
                 listFriendEmails = new ArrayList<>();
                 arrShortListedUser = new ArrayList<>();
@@ -166,9 +180,17 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerListFrends.setLayoutManager(linearLayoutManager);
         mSwipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        try {
+            Field f = mSwipeRefreshLayout.getClass().getDeclaredField("mCircleView");
+            f.setAccessible(true);
+            ImageView img = (ImageView)f.get(mSwipeRefreshLayout);
+            img.setAlpha(0.0f);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         adapter = new ListFriendsAdapter(getContext(), dataListFriend, this,arrShortListedUser);
         recyclerListFrends.setAdapter(adapter);
-        dialogFindAllFriend = new ProgressDialog(getContext());
+        dialogFindAllFriend = showProgress(context);
      /*   if (listFriendID == null) {
             listFriendID = new ArrayList<>();
             dialogFindAllFriend.setMessage(getString(R.string.getting_all_friends));
@@ -264,11 +286,12 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 listFriendID = new ArrayList<>();
                 // adapter.notifyDataSetChanged();
                 FriendDB.getInstance(getContext()).dropDB();
-                dialogFindAllFriend.setMessage(getString(R.string.getting_all_friends));
-                dialogFindAllFriend.show();
+//                dialogFindAllFriend.setMessage(getString(R.string.getting_all_friends));
+                //.show();
                 getListFriendUId();
             } else {
-                mSwipeRefreshLayout.setRefreshing(true);
+                //mSwipeRefreshLayout.setRefreshing(true);
+                dialogFindAllFriend.show();
                 listFriendID.clear();
                 dataListFriend.getListFriend().clear();
                 // adapter.notifyDataSetChanged();
@@ -315,9 +338,17 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (dataSnapshot.getValue() != null) {
                     HashMap mapRecord = (HashMap) dataSnapshot.getValue();
                     Iterator listKey = mapRecord.keySet().iterator();
-                    while (listKey.hasNext()) {
-                        String key = listKey.next().toString();
-                        listFriendID.add(mapRecord.get(key).toString());
+                    if(listFriendEmails!=null) {
+                        if (listFriendEmails.size() < mapRecord.size()) {
+                            while (listKey.hasNext()) {
+                                String key = listKey.next().toString();
+                                listFriendID.add(mapRecord.get(key).toString());
+                            }
+                        } else {
+                            getListFriendUId();
+                        }
+                    }else{
+                        getListFriendUId();
                     }
                     listFriendEmails=new ArrayList<>();
                     getAllFriendInfo(0,FriendsFragment.this);
@@ -332,6 +363,12 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.e("Dberror",databaseError.getDetails());
+                if (dialogFindAllFriend != null) {
+                    dialogFindAllFriend.dismiss();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    AppConstants.setToastStr((Activity) context,getString(R.string.messaged_users_not_found));
+                }
             }
         });
     }
@@ -340,7 +377,21 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
      * Truy cap bang user lay thong tin id nguoi dung
      */
     private void getAllFriendInfo(final int index,FriendsFragment fragment) {
-        if (index == listFriendID.size()) {
+        if (index == listFriendID.size() && listFriendID.size()!=0) {
+
+            Collections.sort(dataListFriend.getListFriend(), new Comparator() {
+                @Override
+                public int compare(Object o1, Object o2) {
+                    Friend p1 = (Friend) o1;
+                    Friend p2 = (Friend) o2;
+                    return p1.timestamp<(p2.timestamp)?1:-1;
+                }
+            });
+            listFriendEmails=new ArrayList<>();
+            for (Friend friend :dataListFriend.getListFriend()) {
+                listFriendEmails.add(friend.email);
+            }
+
             //save list friend
             getUserDetailsByEmails(matriId,TextUtils.join(",",listFriendEmails),fragment);
 //            adapter.notifyDataSetChanged();
@@ -362,6 +413,12 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             user.email = (String) mapUserInfo.get("email");
                             user.avata = (String) mapUserInfo.get("avata");
                             user.id = id;
+                            try{
+                                HashMap messageMap = (HashMap) mapUserInfo.get("message");
+                            user.message.timestamp =(long) messageMap.get("timestamp");
+                            user.message.text =(String) messageMap.get("text");
+                            user.timestamp = user.message.timestamp;
+                        }catch(Exception e){e.printStackTrace();}
                             user.idRoom = id.compareTo(AppConstants.UID) > 0 ? (AppConstants.UID + id).hashCode() + "" : "" + (id + AppConstants.UID).hashCode();
                             dataListFriend.getListFriend().add(user);
                             FriendDB.getInstance(getContext()).addFriend(user);
@@ -381,7 +438,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public static class FragFriendClickFloatButton implements View.OnClickListener {
         Context context;
-        ProgressDialog dialogWait;
+        Dialog dialogWait;
         private FriendsFragment fragment;
 
         public FragFriendClickFloatButton() {
@@ -389,7 +446,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         public FragFriendClickFloatButton getInstance(Context context) {
             this.context = context;
-            dialogWait = new ProgressDialog(context);
+            dialogWait = showProgress(context);
             fragment = new FriendsFragment();
             return this;
         }
@@ -429,9 +486,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
          * @param email
          */
         public void findIDEmail(String email, Context context, FriendsFragment fragment) {
-            /*dialogWait = new ProgressDialog(context);
-            dialogWait.setCancelable(false);
-            dialogWait.show();*/
+
             FirebaseDatabase.getInstance().getReference().child("user").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -450,6 +505,12 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             user.email = (String) userMap.get("email");
                             user.avata = (String) userMap.get("avata");
                             user.id = id;
+                            try{
+                                HashMap messageMap = (HashMap) userMap.get("message");
+                                user.message.timestamp =(long) messageMap.get("timestamp");
+                                user.message.text =(String) messageMap.get("text");
+                                user.timestamp = user.message.timestamp;
+                            }catch(Exception e){e.printStackTrace();}
                             user.idRoom = id.compareTo(AppConstants.UID) > 0 ? (AppConstants.UID + id).hashCode() + "" : "" + (id + AppConstants.UID).hashCode();
                             checkBeforAddFriend(id, user, context, fragment);
                         }
@@ -573,10 +634,8 @@ Context context;
     }
 
     private void getUserDetailsByEmails(String login_matri_id, String strEmails, FriendsFragment fragment) {
-        ProgressDialog  progresDialog = new ProgressDialog(context);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+
+        Dialog progresDialog=showProgress(context);
         try{
         if(!progresDialog.isShowing()) {
             progresDialog.show();
@@ -730,7 +789,7 @@ Context context;
         public static Map<String, ChildEventListener> mapChildListener;
         public static Map<String, ChildEventListener> mapChildListenerOnline;
         public static Map<String, Boolean> mapMark;
-        ProgressDialog dialogWaitDeleting;
+        Dialog dialogWaitDeleting;
         private ListFriend listFriend;
         private Context context;
         private FriendsFragment fragment;
@@ -751,7 +810,7 @@ String matriId="";
             mapChildListenerOnline = new HashMap<>();
             mapQueryOnline = new HashMap<>();
             this.fragment = fragment;
-            dialogWaitDeleting = new ProgressDialog(context);
+            dialogWaitDeleting = showProgress(context);
             prefUpdate= PreferenceManager.getDefaultSharedPreferences(context);
             matriId=prefUpdate.getString("matri_id","");
         }
@@ -925,24 +984,34 @@ String matriId="";
                     mapMark.put(id, true);
                 }
             }
-            if (listFriend.getListFriend().get(position).avata.equals(AppConstants.STR_DEFAULT_BASE64)) {
-                if(arrShortListedUser.size()==0) {
+            try {
+                if (listFriend.getListFriend().get(position).avata.equals(AppConstants.STR_DEFAULT_BASE64)) {
+                    if (arrShortListedUser.size() == 0) {
+                        ((ItemFriendViewHolder) holder).avata.setImageResource(R.drawable.ic_person_avatar);
+                    } else {
+                        try {
+                            Glide.with(context).load(arrShortListedUser.get(position).getUser_profile_picture()).placeholder(R.drawable.ic_person_avatar).error(R.drawable.ic_person_avatar).into(((ItemFriendViewHolder) holder).avata);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    if (arrShortListedUser.size() == 0) {
+                        byte[] decodedString = Base64.decode(listFriend.getListFriend().get(position).avata, Base64.DEFAULT);
+                        Bitmap src = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        ((ItemFriendViewHolder) holder).avata.setImageBitmap(src);
+                    } else {
+                        try {
+                            Glide.with(context).load(arrShortListedUser.get(position).getUser_profile_picture()).placeholder(R.drawable.ic_person_avatar).error(R.drawable.ic_person_avatar).into(((ItemFriendViewHolder) holder).avata);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }catch (Exception e)
+            {
+                e.printStackTrace();
                 ((ItemFriendViewHolder) holder).avata.setImageResource(R.drawable.ic_person_avatar);
-                }else {
-                    try{
-                    Glide.with(context).load(arrShortListedUser.get(position).getUser_profile_picture()).placeholder(R.drawable.ic_person_avatar).error(R.drawable.ic_person_avatar).into(((ItemFriendViewHolder) holder).avata);
-                }catch (Exception e){e.printStackTrace();}
-                }
-            } else {
-                if(arrShortListedUser.size()==0) {
-                byte[] decodedString = Base64.decode(listFriend.getListFriend().get(position).avata, Base64.DEFAULT);
-                Bitmap src = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                ((ItemFriendViewHolder) holder).avata.setImageBitmap(src);
-                }else {
-                    try{
-                    Glide.with(context).load(arrShortListedUser.get(position).getUser_profile_picture()).placeholder(R.drawable.ic_person_avatar).error(R.drawable.ic_person_avatar).into(((ItemFriendViewHolder) holder).avata);
-                }catch (Exception e){e.printStackTrace();}
-                }
             }
             try {
                 if (arrShortListedUser.size() != 0) {
@@ -1069,11 +1138,11 @@ String matriId="";
                 mapQueryOnline.get(id).addChildEventListener(mapChildListenerOnline.get(id));
             }
 
-            if (listFriend.getListFriend().get(position).status.isOnline) {
-                ((ItemFriendViewHolder) holder).avata.setBorderWidth(10);
+          /*  if (listFriend.getListFriend().get(position).status.isOnline) {
+                ((ItemFriendViewHolder) holder).avata.setbo(10);
             } else {
                 ((ItemFriendViewHolder) holder).avata.setBorderWidth(0);
-            }
+            }*/
         }
 
         @Override
@@ -1182,7 +1251,7 @@ String matriId="";
 
 
         class ItemFriendViewHolder extends RecyclerView.ViewHolder {
-            public CircleImageView avata;
+            public PorterShapeImageView avata;
             public TextView txtName, txtTime, txtMessage;
             private Context context;
             LinearLayout linBlock,linInterest;
@@ -1191,7 +1260,7 @@ String matriId="";
             String RequestType;
             ItemFriendViewHolder(Context context, View itemView) {
                 super(itemView);
-                avata = (CircleImageView) itemView.findViewById(R.id.icon_avata);
+                avata =  itemView.findViewById(R.id.icon_avata);
                 txtName = (TextView) itemView.findViewById(R.id.txtName);
                 txtTime = (TextView) itemView.findViewById(R.id.txtTime);
                 txtMessage = (TextView) itemView.findViewById(R.id.txtMessage);
@@ -1228,10 +1297,10 @@ String matriId="";
 
 
         private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked,int position,String idFriendRemoval) {
-            ProgressDialog  progresDialog = new ProgressDialog(context);
-            progresDialog.setCancelable(false);
+            Dialog  progresDialog = showProgress(context);
+           /* progresDialog.setCancelable(false);
             progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
-            progresDialog.setIndeterminate(true);
+            progresDialog.setIndeterminate(true);*/
             progresDialog.show();
 
             class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -1353,13 +1422,13 @@ String matriId="";
 
 
 
-        ProgressDialog progresDialog;
+        Dialog progresDialog;
         private void sendInterestRequest(String login_matri_id, String strMatriId, final String isFavorite, final int pos, final ItemFriendViewHolder holder)
         {
-            progresDialog= new ProgressDialog(context);
-            progresDialog.setCancelable(false);
+            progresDialog= showProgress(context);
+            /*progresDialog.setCancelable(false);
             progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
-            progresDialog.setIndeterminate(true);
+            progresDialog.setIndeterminate(true);*/
             progresDialog.show();
 
             class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
@@ -1492,10 +1561,10 @@ String matriId="";
 
         private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite, final int pos, ItemFriendViewHolder holder)
         {
-            progresDialog= new ProgressDialog(context);
-            progresDialog.setCancelable(false);
+            progresDialog= showProgress(context);
+            /*progresDialog.setCancelable(false);
             progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
-            progresDialog.setIndeterminate(true);
+            progresDialog.setIndeterminate(true);*/
             progresDialog.show();
 
             class SendPostReqAsyncTask extends AsyncTask<String, Void, String>

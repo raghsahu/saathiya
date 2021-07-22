@@ -2,7 +2,6 @@ package com.prometteur.sathiya.home;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -776,7 +775,8 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
 
     private void getSavedSearchResultList(String strMatriId)
     {
-        filterBinding.progressBar1.setVisibility(View.VISIBLE);
+        Dialog progressBar1=showProgress(FilterHomeActivity.this);
+        progressBar1.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
         {
             @Override
@@ -955,14 +955,14 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
                         AlertDialog alert = builder.create();
                         alert.show();*/
                     }
-                    filterBinding.progressBar1.setVisibility(View.GONE);
+                    progressBar1.dismiss();
                     filterBinding.refresh.setRefreshing(false);
                 } catch (Exception t)
                 {
-                    filterBinding.progressBar1.setVisibility(View.GONE);
+                    progressBar1.dismiss();
                     filterBinding.refresh.setRefreshing(false);
                 }
-                filterBinding.progressBar1.setVisibility(View.GONE);
+                progressBar1.dismiss();
                 filterBinding.refresh.setRefreshing(false);
 
             }
@@ -1025,12 +1025,6 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
 
 
     private void getReligionRequest() {
-       /* progresDialog= new ProgressDialog(SignUpStep1Activity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
-        progresDialog.show();
-*/
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -1147,12 +1141,7 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
 
 
     private void getCastRequest(String strReligion) {
-       /* progresDialog= new ProgressDialog(SignUpStep1Activity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
-        progresDialog.show();
-*/
+
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -1806,12 +1795,8 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
         });
 
     }
-    //ProgressDialog progresDialog;
+
     private void getMotherToungeRequest() {
-        /*progresDialog = new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -1948,7 +1933,8 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
                                    String ReligionId, String CasteId, String CountryId, String StateId,
                                   String CityId, String HighestEducationId, String AnnualIncome,
                                   String login_matriId, String MotherToungID, String Diet,String Manglik) {
-        filterBinding.progressBar1.setVisibility(View.VISIBLE);
+        Dialog progressBar1=showProgress(FilterHomeActivity.this);
+        progressBar1.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -2093,12 +2079,12 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
                     startActivity(newIntent);
                     finish();
 
-                    filterBinding.progressBar1.setVisibility(View.GONE);
+                    progressBar1.dismiss();
                 } catch (Exception t) {
                     Log.e("extfngjn", t.getMessage());
-                    filterBinding.progressBar1.setVisibility(View.GONE);
+                    progressBar1.dismiss();
                 }
-                filterBinding.progressBar1.setVisibility(View.GONE);
+                progressBar1.dismiss();
 
             }
         }
@@ -2115,10 +2101,6 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
 
     private void getDeleteRequest(String strSSId)
     {
-        /*progresDialog= new ProgressDialog(this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

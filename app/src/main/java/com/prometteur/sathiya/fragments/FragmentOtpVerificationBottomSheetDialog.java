@@ -1,7 +1,7 @@
 package com.prometteur.sathiya.fragments;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,6 +56,8 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import in.aabhasjindal.otptextview.OTPListener;
 import in.aabhasjindal.otptextview.OtpTextView;
+
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class FragmentOtpVerificationBottomSheetDialog extends BottomSheetDialogFragment {
     TextView tvResend,tvOtp;
@@ -137,13 +139,10 @@ public class FragmentOtpVerificationBottomSheetDialog extends BottomSheetDialogF
         return v;
     }
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
     private void VeryfyOTPRequest(String user_id,final String strOTP)
     {
-        progresDialog= new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog= showProgress(getActivity());
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
@@ -266,10 +265,7 @@ public class FragmentOtpVerificationBottomSheetDialog extends BottomSheetDialogF
 
     private void reSendOTPRequest(String user_id)
     {
-        progresDialog= new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog= showProgress(getActivity());
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>

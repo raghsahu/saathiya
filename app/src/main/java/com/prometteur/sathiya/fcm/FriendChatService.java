@@ -30,6 +30,8 @@ import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.FriendDB;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +59,15 @@ public class FriendChatService extends Service {
         mapQuery = new HashMap<>();
         mapChildEventListenerMap = new HashMap<>();
         listFriend = FriendDB.getInstance(this).getListFriend();
-        listKey = new ArrayList<>();
+        Collections.sort(listFriend.getListFriend(), new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                Friend p1 = (Friend) o1;
+                Friend p2 = (Friend) o2;
+                return p1.timestamp<(p2.timestamp)?0:1;
+            }
+        });
+        listKey = new ArrayList<>();//9850654516
         mapBitmap = new HashMap<>();
         updateOnline = new CountDownTimer(System.currentTimeMillis(), AppConstants.TIME_TO_REFRESH) {
             @Override

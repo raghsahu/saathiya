@@ -6,6 +6,7 @@ public class User {
     public String name;
     public String email;
     public String avata;
+    public long timestamp=0;
     public Status status;
     public Message message;
 
@@ -20,4 +21,6 @@ public class User {
         message.text = "";
         message.timestamp = 0;
     }
+
+
 }

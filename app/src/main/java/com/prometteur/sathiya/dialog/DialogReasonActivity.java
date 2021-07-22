@@ -2,7 +2,6 @@ package com.prometteur.sathiya.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -102,10 +101,6 @@ BaseActivity nActivity=DialogReasonActivity.this;
 
 
     private void setDeactivateAccount(String userId,String reason) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         final Dialog progresDialog11 = showProgress(nActivity);
         if(progresDialog11!=null && !progresDialog11.isShowing()) {
             progresDialog11.show();

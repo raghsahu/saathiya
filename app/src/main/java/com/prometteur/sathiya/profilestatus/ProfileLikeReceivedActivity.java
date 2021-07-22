@@ -1,7 +1,6 @@
 package com.prometteur.sathiya.profilestatus;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,16 +8,16 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
-import com.prometteur.sathiya.BaseActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.prometteur.sathiya.BaseActivity;
 import com.prometteur.sathiya.R;
 import com.prometteur.sathiya.adapters.LikeReceivedListAdapter;
 import com.prometteur.sathiya.adapters.UserBlockedListAdapter;
 import com.prometteur.sathiya.adapters.UserLikedListAdapter;
 import com.prometteur.sathiya.beans.beanUserData;
-import com.prometteur.sathiya.databinding.ActivityProfileBlockedBinding;
 import com.prometteur.sathiya.databinding.ActivityProfileLikeReceivedBinding;
+import com.prometteur.sathiya.listeners.OnClickOnItemListener;
 import com.prometteur.sathiya.model.DateObject;
 import com.prometteur.sathiya.model.HistoryDataModelObject;
 import com.prometteur.sathiya.model.ListObject;
@@ -26,7 +25,6 @@ import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.DateParser;
 import com.prometteur.sathiya.utills.NetworkConnection;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,23 +53,23 @@ import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 //import android.support.v7.app.BaseActivity;
 
-public class ProfileLikeReceivedActivity extends BaseActivity {
+public class ProfileLikeReceivedActivity extends BaseActivity implements OnClickOnItemListener {
 
-     LinearLayoutManager linearLayoutManager;
+    LinearLayoutManager linearLayoutManager;
     LikeReceivedListAdapter userLikedRecListAdapter;
     UserLikedListAdapter userLikedListAdapter;
-    private ArrayList<beanUserData> arrShortListedUser;
     ArrayList<String> tokans;
     String PageType = "";
     SharedPreferences prefUpdate;
-    String matri_id = "",gender="";
+    String matri_id = "", gender = "";
+    BaseActivity nActivity = ProfileLikeReceivedActivity.this;
+    ActivityProfileLikeReceivedBinding profileLikedBinding;
+    private ArrayList<beanUserData> arrShortListedUser;
 
-    BaseActivity nActivity= ProfileLikeReceivedActivity.this;
-ActivityProfileLikeReceivedBinding profileLikedBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        profileLikedBinding=ActivityProfileLikeReceivedBinding.inflate(getLayoutInflater());
+        profileLikedBinding = ActivityProfileLikeReceivedBinding.inflate(getLayoutInflater());
 
         setContentView(profileLikedBinding.getRoot());
 
@@ -88,33 +86,48 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
             }
         });
 
-        linearLayoutManager=new LinearLayoutManager(nActivity);
-        PageType="1";
+        linearLayoutManager = new LinearLayoutManager(nActivity);
+        PageType = "1";
         profileLikedBinding.tvWaitingForResponse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PageType="1";
-                arrShortListedUser=new ArrayList<>();
-                getShortlistedProfileRequest(matri_id);
+                PageType = "1";
+                arrShortListedUser = new ArrayList<>();
+                if (NetworkConnection.hasConnection(nActivity)) {
+                    getShortlistedProfileRequest(matri_id);
+
+                } else {
+                    AppConstants.CheckConnection(nActivity);
+                }
             }
         });
         profileLikedBinding.tvLikedUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                arrShortListedUser=new ArrayList<>();
+                arrShortListedUser = new ArrayList<>();
                 PageType = "0";
-                linearLayoutManager=new LinearLayoutManager(nActivity);
+                linearLayoutManager = new LinearLayoutManager(nActivity);
                 // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);
                 profileLikedBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
-                getShortlistedProfileRequest(matri_id,gender);
+                if (NetworkConnection.hasConnection(nActivity)) {
+                    getShortlistedProfileRequest(matri_id, gender);
+                } else {
+                    AppConstants.CheckConnection(nActivity);
+                }
+
             }
         });
         profileLikedBinding.tvAccepted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PageType="2";
-                arrShortListedUser=new ArrayList<>();
-                getShortlistedProfileRequest(matri_id);
+                PageType = "2";
+                arrShortListedUser = new ArrayList<>();
+
+                if (NetworkConnection.hasConnection(nActivity)) {
+                    getShortlistedProfileRequest(matri_id);
+                } else {
+                    AppConstants.CheckConnection(nActivity);
+                }
             }
         });
         /*profileLikedBinding.tvRejected.setOnClickListener(new View.OnClickListener() {  //commented due to separate rejected screen
@@ -128,7 +141,6 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
 
 
         // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);
-
 
 
     }
@@ -171,7 +183,7 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
             }
         }
         profileLikedBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
-        userLikedRecListAdapter=new LikeReceivedListAdapter(nActivity, false, null,PageType);
+        userLikedRecListAdapter = new LikeReceivedListAdapter(nActivity, false, null, PageType,ProfileLikeReceivedActivity.this);
         profileLikedBinding.rvLikedUsers.setAdapter(userLikedRecListAdapter);
         userLikedRecListAdapter.setDataChange(consolidatedList);
 
@@ -180,10 +192,7 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
 
 
     private void getShortlistedProfileRequest(String strMatriId) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
+
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -215,19 +224,16 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
                 HttpPost httpPost = new HttpPost(URL);
 
                 BasicNameValuePair MatriIdPair = null;
-                BasicNameValuePair GenderPair=null;
+                BasicNameValuePair GenderPair = null;
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
-                if(PageType.equalsIgnoreCase("1"))
-                {
+                if (PageType.equalsIgnoreCase("1")) {
                     MatriIdPair = new BasicNameValuePair("matri_id", paramsMatriId);
-                     GenderPair = new BasicNameValuePair("gender", gender);
+                    GenderPair = new BasicNameValuePair("gender", gender);
                     nameValuePairList.add(GenderPair);
-                }else if(PageType.equalsIgnoreCase("2"))
-                {
+                } else if (PageType.equalsIgnoreCase("2")) {
                     MatriIdPair = new BasicNameValuePair("receiver_id", paramsMatriId);
-                }else
-                {
+                } else {
                     MatriIdPair = new BasicNameValuePair("matri_id", paramsMatriId);
                 }
 
@@ -278,7 +284,7 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
                 tokans = new ArrayList<>();
                 tokans.clear();
                 try {
-                    if (result!=null) {
+                    if (result != null) {
                         JSONObject obj = new JSONObject(result);
 
                         String status = obj.getString("status");
@@ -289,54 +295,52 @@ ActivityProfileLikeReceivedBinding profileLikedBinding;
 
                             if (responseData.has("1")) {
                                 Iterator<String> resIter = responseData.keys();
-List<String> keyList=new ArrayList<>();
-try {
-    while (resIter.hasNext()) {
-        keyList.add(resIter.next());
-    }
-}catch (Exception e)
-{
-    e.printStackTrace();
-}
-try {
-    for (int i = 0; i < keyList.size(); i++) {
-        JSONObject resItem = responseData.getJSONObject(keyList.get(i));
+                                List<String> keyList = new ArrayList<>();
+                                try {
+                                    while (resIter.hasNext()) {
+                                        keyList.add(resIter.next());
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    for (int i = 0; i < keyList.size(); i++) {
+                                        JSONObject resItem = responseData.getJSONObject(keyList.get(i));
 
-        String user_id = resItem.getString("user_id");
-        String matri_id1 = resItem.getString("matri_id");
-        String eiId = resItem.getString("ei_id");
-        String gender1 = resItem.getString("gender");
-        String username = resItem.getString("username");
-        String city_name ="";
-        if (PageType.equalsIgnoreCase("2")) {
-            if(resItem.getString("city_name")!=null && !resItem.getString("city_name").equalsIgnoreCase("null")) {
-                city_name = resItem.getString("city_name");
-            }
-        }else{
-            if(resItem.getString("city")!=null && !resItem.getString("city").equalsIgnoreCase("null")) {
-                city_name = resItem.getString("city");
-            }
-        }
-        String user_profile_picture = resItem.getString("user_profile_picture");
-        String is_blocked = resItem.getString("is_blocked");
-        String eiSentDate = resItem.getString("ei_sent_date");
-        String height = resItem.getString("height");
+                                        String user_id = resItem.getString("user_id");
+                                        String matri_id1 = resItem.getString("matri_id");
+                                        String eiId = resItem.getString("ei_id");
+                                        String gender1 = resItem.getString("gender");
+                                        String username = resItem.getString("username");
+                                        String city_name = "";
+                                        if (PageType.equalsIgnoreCase("2")) {
+                                            if (resItem.getString("city_name") != null && !resItem.getString("city_name").equalsIgnoreCase("null")) {
+                                                city_name = resItem.getString("city_name");
+                                            }
+                                        } else {
+                                            if (resItem.getString("city") != null && !resItem.getString("city").equalsIgnoreCase("null")) {
+                                                city_name = resItem.getString("city");
+                                            }
+                                        }
+                                        String user_profile_picture = resItem.getString("user_profile_picture");
+                                        String is_blocked = resItem.getString("is_blocked");
+                                        String eiSentDate = resItem.getString("ei_sent_date");
+                                        String height = resItem.getString("height");
 
-        String rejectedStatus="";
-        if(PageType.equalsIgnoreCase("5")) {
-             rejectedStatus = resItem.getString("rejected_status");  //for rejected section only
-        }
+                                        String rejectedStatus = "";
+                                        if (PageType.equalsIgnoreCase("5")) {
+                                            rejectedStatus = resItem.getString("rejected_status");  //for rejected section only
+                                        }
 
-        tokans.add(resItem.getString("tokan"));
-        beanUserData beanUserData=new beanUserData(user_id, matri_id1, username, eiSentDate, "", height, "", city_name, "", "", "", "",
-                "", gender1, "", is_blocked, "", user_profile_picture, eiId,"");
-        beanUserData.setRejectedStatus(rejectedStatus);
-        arrShortListedUser.add(beanUserData);
-    }
-}catch (Exception e)
-{
-    e.printStackTrace();
-}
+                                        tokans.add(resItem.getString("tokan"));
+                                        beanUserData beanUserData = new beanUserData(user_id, matri_id1, username, eiSentDate, "", height, "", city_name, "", "", "", "",
+                                                "", gender1, "", is_blocked, "", user_profile_picture, eiId, "");
+                                        beanUserData.setRejectedStatus(rejectedStatus);
+                                        arrShortListedUser.add(beanUserData);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 if (arrShortListedUser.size() > 0) {
                                     profileLikedBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                                     profileLikedBinding.tvEmptyMsg.setVisibility(View.GONE);
@@ -360,8 +364,14 @@ try {
                             profileLikedBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                         }
                         progresDialog11.dismiss();
-                    }else {
-                        getShortlistedProfileRequest(matri_id);
+                    } else {
+                        if (NetworkConnection.hasConnection(nActivity)) {
+                            getShortlistedProfileRequest(matri_id);
+
+                        } else {
+                            AppConstants.CheckConnection(nActivity);
+                        }
+
                     }
                 } catch (Exception t) {
                     profileLikedBinding.rvLikedUsers.setVisibility(View.GONE);
@@ -376,11 +386,8 @@ try {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(strMatriId);
     }
-    private void getShortlistedProfileRequest(String strMatriId,String strGender) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
+
+    private void getShortlistedProfileRequest(String strMatriId, String strGender) {
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -464,7 +471,7 @@ try {
                 tokans = new ArrayList<>();
                 tokans.clear();
                 try {
-                    if (result!=null) {
+                    if (result != null) {
                         JSONObject obj = new JSONObject(result);
 
                         String status = obj.getString("status");
@@ -474,56 +481,56 @@ try {
                             JSONObject responseData = obj.getJSONObject("responseData");
 
                             //if (responseData.has("1")) {
-                                Iterator<String> resIter = responseData.keys();
-                                List<String> keyList=new ArrayList<>();
+                            Iterator<String> resIter = responseData.keys();
+                            List<String> keyList = new ArrayList<>();
 
-                                while (resIter.hasNext()) {
-                                    // keyList.add(resIter.next());
-
-
-                                    JSONObject resItem = responseData.getJSONObject(resIter.next());
-
-                                    String user_id = resItem.getString("user_id");
-                                    String matri_id1 = resItem.getString("matri_id");
-                                    String eiId = resItem.getString("ei_id");
-                                    String gender1 = resItem.getString("gender");
-                                    String username = resItem.getString("username");
-                                    String city_name = resItem.getString("city");
-                                    String user_profile_picture = resItem.getString("user_profile_picture");
-                                    String is_blocked = resItem.getString("is_blocked");
+                            while (resIter.hasNext()) {
+                                // keyList.add(resIter.next());
 
 
+                                JSONObject resItem = responseData.getJSONObject(resIter.next());
 
-                                    tokans.add(resItem.getString("tokan"));
-                                    arrShortListedUser.add(new beanUserData(user_id, matri_id1, username, "", "", "", "", city_name, "", "", "", "",
-                                            "", gender1, "", is_blocked, "", user_profile_picture,eiId,""));
-                                }
+                                String user_id = resItem.getString("user_id");
+                                String matri_id1 = resItem.getString("matri_id");
+                                String eiId = resItem.getString("ei_id");
+                                String gender1 = resItem.getString("gender");
+                                String username = resItem.getString("username");
+                                String city_name = resItem.getString("city");
+                                String user_profile_picture = resItem.getString("user_profile_picture");
+                                String is_blocked = resItem.getString("is_blocked");
 
-                                if (arrShortListedUser.size() > 0) {
-                                    profileLikedBinding.rvLikedUsers.setVisibility(View.VISIBLE);
-                                    profileLikedBinding.tvEmptyMsg.setVisibility(View.GONE);
 
-                                    if (PageType.equalsIgnoreCase("2")) {
-                                        UserBlockedListAdapter adapterBlockedUser = new UserBlockedListAdapter(nActivity, arrShortListedUser, profileLikedBinding.rvLikedUsers);
-                                        profileLikedBinding.rvLikedUsers.setAdapter(adapterBlockedUser);
-                                    } else {
+                                tokans.add(resItem.getString("tokan"));
+                                arrShortListedUser.add(new beanUserData(user_id, matri_id1, username, "", "", "", "", city_name, "", "", "", "",
+                                        "", gender1, "", is_blocked, "", user_profile_picture, eiId, ""));
+                            }
 
-                                        userLikedListAdapter=new UserLikedListAdapter(nActivity, arrShortListedUser,tokans);
-                                        profileLikedBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
-                                    }
+                            if (arrShortListedUser.size() > 0) {
+                                profileLikedBinding.rvLikedUsers.setVisibility(View.VISIBLE);
+                                profileLikedBinding.tvEmptyMsg.setVisibility(View.GONE);
 
+                                if (PageType.equalsIgnoreCase("2")) {
+                                    UserBlockedListAdapter adapterBlockedUser = new UserBlockedListAdapter(nActivity, arrShortListedUser, profileLikedBinding.rvLikedUsers);
+                                    profileLikedBinding.rvLikedUsers.setAdapter(adapterBlockedUser);
                                 } else {
-                                    profileLikedBinding.rvLikedUsers.setVisibility(View.GONE);
-                                    profileLikedBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
+
+                                    userLikedListAdapter = new UserLikedListAdapter(nActivity, arrShortListedUser, tokans,ProfileLikeReceivedActivity.this);
+                                    profileLikedBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
                                 }
-                           // }
+
+                            } else {
+                                profileLikedBinding.rvLikedUsers.setVisibility(View.GONE);
+                                profileLikedBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
+                            }
+                            // }
                         } else {
                             profileLikedBinding.rvLikedUsers.setVisibility(View.GONE);
                             profileLikedBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                         }
                         progresDialog11.dismiss();
-                    }else {
-                        getShortlistedProfileRequest(matri_id,gender);
+                    } else {
+
+                        getShortlistedProfileRequest(matri_id, gender);
                     }
                 } catch (Exception t) {
                     profileLikedBinding.rvLikedUsers.setVisibility(View.GONE);
@@ -536,14 +543,10 @@ try {
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(strMatriId,strGender);
+        sendPostReqAsyncTask.execute(strMatriId, strGender);
     }
 
     private void getLikedCounts(String strMatriId) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -605,34 +608,33 @@ try {
                 tokans = new ArrayList<>();
                 tokans.clear();
                 try {
-                    if (result!=null) {
+                    if (result != null) {
                         JSONObject obj = new JSONObject(result);
 
                         String status = obj.getString("status");
 
                         if (status.equalsIgnoreCase("1")) {
 
-                                int mutually_liked = obj.getInt("mutually_liked");
-                                int liked_profiles = obj.getInt("liked_profiles");
-                                int likes_received = obj.getInt("likes_received");
+                            int mutually_liked = obj.getInt("mutually_liked");
+                            int liked_profiles = obj.getInt("liked_profiles");
+                            int likes_received = obj.getInt("likes_received");
 
-                                if(mutually_liked!=0)
-                                {
-                                    profileLikedBinding.tvAccepted.setText(getString(R.string.mutually_liked)+"("+mutually_liked+")");
-                                }if(liked_profiles!=0)
-                                {
-                                    profileLikedBinding.tvLikedUsers.setText(getString(R.string.liked_profiles)+"("+liked_profiles+")");
-                                }if(likes_received!=0)
-                                {
-                                    profileLikedBinding.tvWaitingForResponse.setText(getString(R.string.likes_received)+"("+likes_received+")");
-                                }
-
-
+                            if (mutually_liked != 0) {
+                                profileLikedBinding.tvAccepted.setText(getString(R.string.mutually_liked) + "(" + mutually_liked + ")");
+                            }
+                            if (liked_profiles != 0) {
+                                profileLikedBinding.tvLikedUsers.setText(getString(R.string.liked_profiles) + "(" + liked_profiles + ")");
+                            }
+                            if (likes_received != 0) {
+                                profileLikedBinding.tvWaitingForResponse.setText(getString(R.string.likes_received) + "(" + likes_received + ")");
                             }
 
+
                         }
-                        progresDialog11.dismiss();
-                    } catch (JSONException e) {
+
+                    }
+                    progresDialog11.dismiss();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 progresDialog11.dismiss();
@@ -642,25 +644,39 @@ try {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(strMatriId);
     }
+
     @Override
     public void onResume() {
         super.onResume();
         if (NetworkConnection.hasConnection(nActivity)) {
-            try{
+            try {
                 getLikedCounts(matri_id);
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            if(PageType.equalsIgnoreCase("0")) {
+            if (PageType.equalsIgnoreCase("0")) {
 
-                getShortlistedProfileRequest(matri_id,gender);
-            }else {
+                getShortlistedProfileRequest(matri_id, gender);
+            } else {
                 getShortlistedProfileRequest(matri_id);
             }
         } else {
             AppConstants.CheckConnection(nActivity);
         }
     }
+
+    @Override
+    public void onItemClick() {
+        if (NetworkConnection.hasConnection(nActivity)) {
+            try {
+                getLikedCounts(matri_id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            AppConstants.CheckConnection(nActivity);
+        }
+    }
+
 
 }

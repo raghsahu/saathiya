@@ -1,6 +1,6 @@
 package com.prometteur.sathiya.fragments;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -47,6 +47,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import static com.prometteur.sathiya.SplashActivity.strLang;
 import static com.prometteur.sathiya.SplashActivity.strLangCode;
 import static com.prometteur.sathiya.SplashActivity.txt_language;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class FragmentSelectlanguageBottomSheetDialog extends BottomSheetDialogFragment {
     AdapterLanguages adapterLanguages;
@@ -155,14 +156,11 @@ getLanguageList();
         return adapterLanguages;
     }
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
 
     private void getLanguageList()
     {
-        progresDialog= new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getActivity().getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog= showProgress(getActivity());
         progresDialog.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
         {

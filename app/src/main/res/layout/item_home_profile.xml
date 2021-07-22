@@ -16,7 +16,7 @@
         android:background="@drawable/bg_pink_card"
         app:siShape="@drawable/bg_pink_card"
         app:siSquare="false"
-        android:scaleType="centerInside"
+        android:scaleType="fitXY"
         />
     <!--<com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/rivProfileImage"

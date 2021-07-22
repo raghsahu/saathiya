@@ -372,4 +372,10 @@ When they install this app, you will get 10 calls in your account.
     <string name="please_select_diet">Please select diet</string>
     <string name="you_are_all_caught_for_now">You are all cought for now</string>
     <string name="profile_video">Profile Video</string>
+    <string name="click_here">Click Here</string>
+    <string name="plans">Plans</string>
+    <string name="my_video">My Video</string>
+    <string name="send">Send</string>
+    <string name="balance">Balance</string>
+    <string name="calls">Calls</string>
 </resources>

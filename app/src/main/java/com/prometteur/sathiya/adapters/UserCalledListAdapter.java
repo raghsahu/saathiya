@@ -2,7 +2,7 @@ package com.prometteur.sathiya.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +57,7 @@ import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
 import static com.prometteur.sathiya.utills.AppConstants.vibe;
 import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
 import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
 
 public class UserCalledListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -309,10 +310,7 @@ holder.likedUserBinding.tvRefNo.setText("#"+homeResultList.get(position).getMatr
 
 
     private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked,int position) {
-        ProgressDialog progresDialog = new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -432,10 +430,7 @@ holder.likedUserBinding.tvRefNo.setText("#"+homeResultList.get(position).getMatr
     String eiId="";
     private void sendInterestRequest(String login_matri_id, String strMatriId, String isFavorite,ViewHolder holder,int pos)
     {
-        ProgressDialog progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        Dialog progresDialog=showProgress(nActivity);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
@@ -559,10 +554,7 @@ holder.likedUserBinding.tvRefNo.setText("#"+homeResultList.get(position).getMatr
 
     private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite,ViewHolder holder,int pos)
     {
-        ProgressDialog progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        Dialog progresDialog= showProgress(nActivity);
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>

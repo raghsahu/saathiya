@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="5dp">
-
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+        android:id="@+id/imageView3"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@drawable/shape_corner_round_square"
+        android:src="@drawable/shape_corner_round_square"
+        card_view:siShape="@drawable/shape_corner_round_square"
+        card_view:siSquare="false"
+        android:scaleType="fitXY"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"/>
+   <!-- <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView3"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -15,7 +27,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
-        android:src="@drawable/ic_person_avatar" />
+        android:src="@drawable/ic_person_avatar" />-->
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

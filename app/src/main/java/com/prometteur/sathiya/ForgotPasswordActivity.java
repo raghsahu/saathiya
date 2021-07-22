@@ -1,7 +1,7 @@
 package com.prometteur.sathiya;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +47,7 @@ import com.prometteur.sathiya.utills.AppConstants;
 import static com.prometteur.sathiya.SplashActivity.strLang;
 import static com.prometteur.sathiya.fragments.FragmentOtpVerificationBottomSheetDialog.fromPage;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class ForgotPasswordActivity extends BaseActivity {
     LinearLayout llBack;
@@ -56,7 +57,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     EditText edtEmailId;
 
 
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,10 +246,10 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     private void sendOTPRequest(String mobNo)
     {
-        progresDialog= new ProgressDialog(ForgotPasswordActivity.this);
-        progresDialog.setCancelable(false);
+        progresDialog= showProgress(ForgotPasswordActivity.this);
+       /* progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>

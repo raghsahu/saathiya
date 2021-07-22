@@ -1,7 +1,7 @@
 package com.prometteur.sathiya.fragments;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -69,6 +69,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 import static com.prometteur.sathiya.SplashActivity.strLang;
 import static com.prometteur.sathiya.profile.EditProfileActivity.viewPager;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 
 public class EditEducationDetailFragment extends Fragment {
@@ -175,6 +176,8 @@ FragmentEditEducationDetailBinding educationDetailBinding;
                 educationDetailBinding.includeSlide.linAdditionalDegree.setVisibility(View.GONE);
                 educationDetailBinding.includeSlide.linOccupation.setVisibility(View.GONE);
                 educationDetailBinding.includeSlide.linGeneralView.setVisibility(View.GONE);
+                educationDetailBinding.edtCaste.setText("");
+                educationDetailBinding.edtSubCaste.setText("");
                 if (NetworkConnection.hasConnection(getActivity())) {
                     getReligionRequest();
                     getReligions();
@@ -198,6 +201,7 @@ FragmentEditEducationDetailBinding educationDetailBinding;
                 }
                 educationDetailBinding.edtCaste.setError(null);
                 educationDetailBinding.includeSlide.edtSearchCaste.setText("");
+                educationDetailBinding.edtSubCaste.setText("");
                 if (arrCaste.size() > 0) {
 
                 } else {
@@ -932,12 +936,6 @@ Context context=null;
 
 
     private void getReligionRequest() {
-       /* progresDialog= new ProgressDialog(SignUpStep1Activity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
-        progresDialog.show();
-*/
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
             protected String doInBackground(String... params) {
@@ -1281,13 +1279,12 @@ Context context=null;
 
 
 
-    ProgressDialog progresDialog;
     public void updateEducation(String MatriId, String educationID, String AditionalDegreeID, String OccupationID, String EmployeedIn
             , String AnnualIncome,String ReligionId,String CasteId,String SubCasteId) {
-        progresDialog = new ProgressDialog(getActivity());
-        progresDialog.setCancelable(false);
+        Dialog  progresDialog = showProgress(getActivity());
+        /*progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {

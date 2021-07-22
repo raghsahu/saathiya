@@ -3,7 +3,6 @@ package com.prometteur.sathiya.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -298,13 +297,8 @@ if(singleUser.getUsername()!=null && !singleUser.getUsername().equalsIgnoreCase(
 
     }
 
-    //ProgressDialog progresDialog;
     private void sendInterestRequest(String login_matri_id, String strMatriId, final String isFavorite, final int pos, final ViewHolder holder)
     {
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -437,10 +431,6 @@ if(singleUser.getUsername()!=null && !singleUser.getUsername().equalsIgnoreCase(
 
     private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite, final int pos,ViewHolder holder)
     {
-        /*progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

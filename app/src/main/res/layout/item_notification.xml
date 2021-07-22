@@ -33,12 +33,13 @@
 
                 <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
                     android:id="@+id/imgReciverProfile"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:layout_gravity="left|center"
                     android:src="@drawable/shape_corner_round_square"
                     app:siShape="@drawable/shape_corner_round_square"
-                    app:siSquare="true" />
+                    app:siSquare="false"
+                    android:scaleType="fitXY"/>
 
 
             </LinearLayout>

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.prometteur.sathiya.BaseActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,7 +93,7 @@ public class ChatDetailsActivity extends BaseActivity implements View.OnClickLis
     SharedPreferences prefUpdate;
     beanPhotos profileOthers;
     public static String strEmailOthers;
-CircleImageView civProfileImg;
+PorterShapeImageView civProfileImg;
 String isBlocked="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +221,8 @@ String isBlocked="";
                     newMessage.type = "text";
                     newMessage.timestamp = System.currentTimeMillis();
                     FirebaseDatabase.getInstance().getReference().child("message/" + roomId).push().setValue(newMessage);
+                    FirebaseDatabase.getInstance().getReference().child("user/"+idFriend.get(0)+"/message").setValue(newMessage);
+                    FirebaseDatabase.getInstance().getReference().child("user/"+AppConstants.UID+"/message").setValue(newMessage);
                     sendNotification(newMessage.text, idFriend.get(0).toString());
                 }
             }else
@@ -385,26 +388,26 @@ if(profileOthers!=null) {
     class ItemMessageUserHolder extends RecyclerView.ViewHolder {
         public TextView txtContent;
         public TextView textTimeStampUser;
-        public CircleImageView avata;
+        public PorterShapeImageView avata;
 
         public ItemMessageUserHolder(View itemView) {
             super(itemView);
             txtContent = (TextView) itemView.findViewById(R.id.textContentUser);
             textTimeStampUser = (TextView) itemView.findViewById(R.id.textTimeStampUser);
-            avata = (CircleImageView) itemView.findViewById(R.id.imageView2);
+            avata =  itemView.findViewById(R.id.imageView2);
         }
     }
 
     class ItemMessageFriendHolder extends RecyclerView.ViewHolder {
         public TextView txtContent;
         public TextView textTimeStamp;
-        public CircleImageView avata;
+        public PorterShapeImageView avata;
 
         public ItemMessageFriendHolder(View itemView) {
             super(itemView);
             txtContent = (TextView) itemView.findViewById(R.id.textContentFriend);
             textTimeStamp = (TextView) itemView.findViewById(R.id.textTimeStamp);
-            avata = (CircleImageView) itemView.findViewById(R.id.imageView3);
+            avata =  itemView.findViewById(R.id.imageView3);
         }
     }
 

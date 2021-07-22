@@ -3,7 +3,6 @@ package com.prometteur.sathiya.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,11 +22,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,8 +45,8 @@ import com.prometteur.sathiya.databinding.ItemHomeProfileBinding;
 import com.prometteur.sathiya.home.MusicService;
 import com.prometteur.sathiya.home.ThirdHomeActivity;
 import com.prometteur.sathiya.translateapi.Http;
-import com.prometteur.sathiya.translateapi.MainViewModel;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.NetworkConnection;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
@@ -64,8 +63,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -76,8 +73,6 @@ import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import darren.googlecloudtts.GoogleCloudTTS;
-import darren.googlecloudtts.GoogleCloudTTSFactory;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -86,11 +81,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import static com.prometteur.sathiya.SplashActivity.strLang;
 import static com.prometteur.sathiya.SplashActivity.strLangCode;
 import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
+import static com.prometteur.sathiya.home.MusicService.mPlayer;
 import static com.prometteur.sathiya.home.SecondHomeActivity.activityRunning;
 import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimer;
 import static com.prometteur.sathiya.home.SecondHomeActivity.isSwiped;
 import static com.prometteur.sathiya.home.SecondHomeActivity.mMainViewModel;
-import static com.prometteur.sathiya.profile.ProfileActivity.resItem;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
 import static com.prometteur.sathiya.utills.AppConstants.vibe;
 import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
@@ -108,13 +103,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     ArrayList<String> tokans;
     CardStackView cardStackView;
     String RequestType;
-    String matri_id = "";
+    String matri_id = "",userMobileNo="";
     SharedPreferences prefUpdate;
     CardStackLayoutManager manager;
     FriendsFragment.FragFriendClickFloatButton onClickFloatButton;
-    //ProgressDialog progresDialog;
-    private OnNotifyDataSetChanged onNotifyDataSetChanged;
     long milliLeft = 0;
+    private OnNotifyDataSetChanged onNotifyDataSetChanged;
 
     public CardStackAdapter(Activity nActivity, List<beanUserData> mDataList, CardStackView cardStackView, ArrayList<String> tokans, CardStackLayoutManager manager, OnNotifyDataSetChanged onNotifyDataSetChanged) {
         this.nContext = nActivity;
@@ -130,6 +124,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         prefUpdate = PreferenceManager.getDefaultSharedPreferences(nActivity);
         strLang = prefUpdate.getString("selLang", "English");
         strLangCode = prefUpdate.getString("selLangCode", "en");
+        userMobileNo = prefUpdate.getString("mobile", "");
         activityRunning = true;
     }
 
@@ -177,7 +172,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.profileBinding.civCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    setContact(matri_id, singleUser.getMatri_id(), singleUser.getUserMobile());
+                    if (NetworkConnection.hasConnection(nActivity)) {
+                        setContact(matri_id, singleUser.getMatri_id(), singleUser.getUserMobile());
+                    } else {
+                        AppConstants.CheckConnection(nActivity);
+                    }
+
                 }
             });
             if (singleUser.getUsername() != null && !singleUser.getUsername().equalsIgnoreCase("null")) {
@@ -262,7 +262,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     AppConstants.msg_express_intress + " " + singleUser.getMatri_id(),
                                     AppConstants.msg_send_reminder_title, AppConstants.express_intress_id);
                             vibe.vibrate(vibrateSmall);
-                            sendInterestRequestRemind(matri_id, singleUser.getMatri_id(), singleUser.getIs_favourite(), position, "adapter");
+                            if (NetworkConnection.hasConnection(nActivity)) {
+                                sendInterestRequestRemind(matri_id, singleUser.getMatri_id(), singleUser.getIs_favourite(), position, "adapter");
+                            } else {
+                                AppConstants.CheckConnection(nActivity);
+                            }
+
                         }
                     }
                 }
@@ -308,12 +313,18 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
 
 
-                if(singleUser.getGender()!=null && singleUser.getGender().equalsIgnoreCase("Male")) {
-                    holder.profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + nContext.getPackageName() + "/" + R.raw.video));
-                }else{
-                    holder.profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + nContext.getPackageName() + "/" + R.raw.video_female));
-                }
+            if (singleUser.getGender() != null && singleUser.getGender().equalsIgnoreCase("Male")) {
+                holder.profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + nContext.getPackageName() + "/" + R.raw.video_male));
+            } else {
+                holder.profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + nContext.getPackageName() + "/" + R.raw.video_female));
+            }
 
+            holder.profileBinding.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.setScreenOnWhilePlaying(true);
+                }
+            });
             holder.profileBinding.videoView.setVisibility(View.GONE);
             holder.profileBinding.tvDetail.setVisibility(View.GONE);
             holder.stringData = new ArrayList<>();
@@ -346,7 +357,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View view) {
                     try {
-                        getViewVideo(singleUser.getMatri_id());
+                        if (NetworkConnection.hasConnection(nActivity)) {
+                            getViewVideo(singleUser.getMatri_id());
+                        } else {
+                            AppConstants.CheckConnection(nActivity);
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -367,6 +383,10 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             .into(holder.profileBinding.rivProfileImage);
 
                     if (holder.paused) {
+                        nActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        if (mPlayer != null) {
+                            mPlayer.pause();
+                        }
                         holder.paused = false;
                         holder.profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
                         holder.profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
@@ -388,15 +408,25 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         showHideView(holder, holder.paused);
                     } else {
                         holder.paused = true;
+                        nActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-                        if (holder.current == 0) {
+
+                        //if(!mPlayer.isPlaying()) {
+
+                        // }
+                        if (holder.current == 0 || holder.current == 21) {
                             // holder.loadjpgs();
                             if (!holder.repeat) {
                                 holder.repeat = true;
-                              //  nContext.startService(new Intent(nContext, MusicService.class));
+                                nContext.startService(new Intent(nContext, MusicService.class));
                             }
                         }
-
+                        if (mPlayer == null) {
+                            mPlayer = new MediaPlayer();
+                        }
+                        try {
+                            mPlayer.start();
+                        }catch (Exception e){e.printStackTrace();}
                         holder.profileBinding.ivPlayPause.setImageResource(R.drawable.ic_pause_circle_white);
                         holder.profileBinding.ivPlayPause.setVisibility(View.GONE);
 
@@ -404,11 +434,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((Animatable) holder.drawable).start();
                         }
 
-
-                        if (!holder.profileBinding.videoView.isPlaying()) {
-                            holder.profileBinding.videoView.start();
-                        }
-
+try {
+    if (!holder.profileBinding.videoView.isPlaying()) {
+        holder.profileBinding.videoView.start();
+    }
+}catch (Exception e)
+{e.printStackTrace();}
 
                         if (holder.current != 0 && holder.imageIndex != holder.imguris.size()) {
                             //holder.loadjpgs();
@@ -420,7 +451,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (holder.current == 21) {
                             holder.current = 0;
                         }
-                        setViews(holder.stringData, holder, holder.current,singleUser);
+                        setViews(holder.stringData, holder, holder.current, singleUser);
                     }
 
 
@@ -432,15 +463,16 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     if (holder.mute) {
                         holder.mute = false;
                         holder.profileBinding.ivVolume.setImageResource(R.drawable.ic_nosound_icon);
-                        AudioManager mAlramMAnager = (AudioManager)nActivity.getSystemService(Context.AUDIO_SERVICE);
+                        AudioManager mAlramMAnager = (AudioManager) nActivity.getSystemService(Context.AUDIO_SERVICE);
+                        MusicService.mPlayer.setVolume(0, 0);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                           // mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_MUTE, 0);
+                            // mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_MUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_MUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_MUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_MUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_MUTE, 0);
                         } else {
-                           // mAlramMAnager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
+                            // mAlramMAnager.setStreamMute(AudioManager.STREAM_NOTIFICATION, true);
                             mAlramMAnager.setStreamMute(AudioManager.STREAM_ALARM, true);
                             mAlramMAnager.setStreamMute(AudioManager.STREAM_MUSIC, true);
                             mAlramMAnager.setStreamMute(AudioManager.STREAM_RING, true);
@@ -449,15 +481,16 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     } else {
                         holder.profileBinding.ivVolume.setImageResource(R.drawable.ic_volume_up);
                         holder.mute = true;
-                        AudioManager mAlramMAnager = (AudioManager)nActivity.getSystemService(Context.AUDIO_SERVICE);
+                        AudioManager mAlramMAnager = (AudioManager) nActivity.getSystemService(Context.AUDIO_SERVICE);
+                        MusicService.mPlayer.setVolume(0.05f, 0.05f);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                           // mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0);
+                            // mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_UNMUTE, 0);
-                            mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE,0);
+                            mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_UNMUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_SYSTEM, AudioManager.ADJUST_UNMUTE, 0);
                         } else {
-                           // mAlramMAnager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
+                            // mAlramMAnager.setStreamMute(AudioManager.STREAM_NOTIFICATION, false);
                             mAlramMAnager.setStreamMute(AudioManager.STREAM_ALARM, false);
                             mAlramMAnager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                             mAlramMAnager.setStreamMute(AudioManager.STREAM_RING, false);
@@ -474,11 +507,11 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    private void setViews(final ArrayList<String> arraylist, ViewHolder holder, int pos,beanUserData userData) {
+    private void setViews(final ArrayList<String> arraylist, ViewHolder holder, int pos, beanUserData userData) {
         holder.profileBinding.tvDetail.setVisibility(View.VISIBLE);
         holder.profileBinding.videoView.setVisibility(View.VISIBLE);
         ArrayList<Long> longArrayList = new ArrayList<>();
-        longArrayList.add(3000L);//holder.stringData.add("Blank");
+       /* longArrayList.add(3000L);//holder.stringData.add("Blank");
         longArrayList.add(3000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
         longArrayList.add(3000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
@@ -498,6 +531,28 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
         longArrayList.add(2000L);//holder.stringData.add("Lekin khushiya bonus mein");
         longArrayList.add(2000L);//holder.stringData.add("What I am looking for?");
+        longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");*/
+
+        longArrayList.add(3000L);//holder.stringData.add("Blank");
+        longArrayList.add(4000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
+        longArrayList.add(4000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
+        longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
+        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        longArrayList.add(7000L);//holder.stringData.add("Meri umar 38 saal hai");
+        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
+        longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+        longArrayList.add(4000L);//holder.stringData.add("Mein shakahari hoon");
+        longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
+        longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
+        longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+        longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
+        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
+        longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+        longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
+        longArrayList.add(3000L);//holder.stringData.add("Lekin khushiya bonus mein");
+        longArrayList.add(3000L);//holder.stringData.add("What I am looking for?");
         longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
         final int[] poss = {pos};
         /*if(milliLeft>0)
@@ -505,9 +560,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
            longArrayList.set(poss[0],milliLeft);
             milliLeft=0;
         }*/
-        if(activityRunning) {
-            countDownTimer = holder.countDownTimer;
-            if(longArrayList.size()>0) {
+        if (activityRunning) {
+            if (longArrayList.size() > 0) {
                 holder.countDownTimer = new CountDownTimer(longArrayList.get(poss[0]), 1000) {
                     @Override
                     public void onTick(long l) {
@@ -542,6 +596,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 holder.loadjpgs();
                             } else {
                                 holder.profileBinding.recycler.setVisibility(View.GONE);
+                                if (MusicService.mPlayer == null) {
+                                    MusicService.mPlayer = new MediaPlayer();
+                                }
+                                MusicService.mPlayer.stop();
+                                nActivity.stopService(new Intent(nActivity, MusicService.class));
+                                holder.repeat=false;
                             }
                             Glide.with(nActivity)
                                     .asBitmap()
@@ -570,8 +630,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
                     }
                 }.start();
+                countDownTimer.add(holder.countDownTimer);
             }
-        }else{
+        } else {
             holder.countDownTimer.cancel();
         }
     }
@@ -856,10 +917,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void setContact(String strLoginMatriId, String matriId, String userMobile) {
-        /*final ProgressDialog progresDialog11 = new ProgressDialog(nActivity);
-        progresDialog11.setCancelable(false);
-        progresDialog11.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog11.setIndeterminate(true);*/
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -881,10 +938,14 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 MatriIdPair = new BasicNameValuePair("matri_id", matriId);
 
                 BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("login_matri_id", strLoginMatriId);
+                BasicNameValuePair LoginSelectedUserPair = new BasicNameValuePair("other_user_mb", userMobile); //selected user
+                BasicNameValuePair LoginUserPair = new BasicNameValuePair("user_mob", userMobileNo);//loginUser
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(MatriIdPair);
                 nameValuePairList.add(LoginMatriIdPair);
+                nameValuePairList.add(LoginSelectedUserPair);
+                nameValuePairList.add(LoginUserPair);
 
                 try {
                     UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
@@ -935,9 +996,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                         if (status.equalsIgnoreCase("1")) {
 
-                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                           /* Intent callIntent = new Intent(Intent.ACTION_CALL);
                             callIntent.setData(Uri.parse("tel:" + userMobile));//change the number
-                            nActivity.startActivity(callIntent);
+                            nActivity.startActivity(callIntent);*/
                             AppConstants.setToastStr(nActivity, "" + obj.getString("message"));
                         } else {
                             AppConstants.setToastStr(nActivity, "" + obj.getString("message"));
@@ -1080,7 +1141,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         boolean repeat = false;
         Handler handler2 = new Handler();
         CountDownTimer countDownTimer;
-        boolean voiceCall=true;
+        boolean voiceCall = true;
         Runnable runnable2 = new Runnable() {
             @Override
             public void run() {
@@ -1100,7 +1161,14 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     profileBinding.tvDetail.setVisibility(View.VISIBLE);
                     profileBinding.recycler.setVisibility(View.GONE);
                     profileBinding.videoView.setVisibility(View.VISIBLE);
-
+                    if (MusicService.mPlayer == null) {
+                        MusicService.mPlayer = new MediaPlayer();
+                    }
+                    try {
+                        MusicService.mPlayer.stop();
+                    }catch (Exception e){e.printStackTrace();}
+                    nActivity.stopService(new Intent(nActivity, MusicService.class));
+                    repeat=false;
                 }
             }
         };
@@ -1138,15 +1206,19 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
-        private void translateText(String input,String gender) {
-            if(strLangCode.equalsIgnoreCase("en")){
+        private void translateText(String input, String gender) {
+            if (strLangCode.equalsIgnoreCase("en")) {
                 profileBinding.tvDetail.setText(input);
                 // txt_hindi.animateText(transObject2.getString("translatedText"));
                 if (voiceCall) {
                     voiceCall = false;
-                    speakOut(input, gender);
+                    if (NetworkConnection.hasConnection(nActivity)) {
+                        speakOut(input, gender);
+                    } else {
+                        // AppConstants.CheckConnection(nActivity);
+                    }
                 }
-            }else {
+            } else {
                 Http.post(input, "en", strLangCode, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -1163,7 +1235,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 // txt_hindi.animateText(transObject2.getString("translatedText"));
                                 if (voiceCall) {
                                     voiceCall = false;
-                                    speakOut(transObject2.getString("translatedText"), gender);
+                                    if (NetworkConnection.hasConnection(nActivity)) {
+                                        speakOut(transObject2.getString("translatedText"), gender);
+                                    } else {
+                                        //AppConstants.CheckConnection(nActivity);
+                                    }
+
                                 }
                             }
 
@@ -1179,53 +1256,51 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
 
+        private void speakOut(String text, String gender) {
+            mMainViewModel.speak(text)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(t -> initTTSVoice(gender))
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
+                        }
 
-    private void speakOut(String text,String gender) {
-        mMainViewModel.speak(text)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(t -> initTTSVoice(gender))
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                        @Override
+                        public void onComplete() {
+                            // makeToast("Speak success", false);
+                            // mHandler.removeCallbacks(characterAdder);
+                            // mHandler.postDelayed(characterAdder, text.length() * 500);
 
-                    }
+                        }
 
-                    @Override
-                    public void onComplete() {
-                        // makeToast("Speak success", false);
-                        // mHandler.removeCallbacks(characterAdder);
-                        // mHandler.postDelayed(characterAdder, text.length() * 500);
-
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        setToastStr(nActivity, "" + e.getMessage());
-                        //makeToast("Speak failed " + e.getMessage(), true);
-                        Log.e("speak_failed ", "Speak failed", e);
-                    }
-                });
-    }
-
-    private void initTTSVoice(String gender) {
-        //https://cloud.google.com/text-to-speech/docs/voices
-
-        //India Hindi voice
-        String languageCode = "hi-IN";
-        String voiceName;
-        if (gender.equalsIgnoreCase("male")) {
-            voiceName = "hi-IN-Standard-B";
-        } else {
-            voiceName = "hi-IN-Standard-A";
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                            setToastStr(nActivity, "" + e.getMessage());
+                            //makeToast("Speak failed " + e.getMessage(), true);
+                            Log.e("speak_failed ", "Speak failed", e);
+                        }
+                    });
         }
 
-        float pitch = ((float) (0)); //between -20.0 to 20.0
-        float speakRate = ((float) (75 + 25) / 100);//75
+        private void initTTSVoice(String gender) {
+            //https://cloud.google.com/text-to-speech/docs/voices
+
+            //India Hindi voice
+            String languageCode = "hi-IN";
+            String voiceName;
+            if (gender.equalsIgnoreCase("male")) {
+                voiceName = "hi-IN-Standard-B";
+            } else {
+                voiceName = "hi-IN-Standard-A";
+            }
+
+            float pitch = ((float) (0)); //between -20.0 to 20.0
+            float speakRate = ((float) (75 + 25) / 100);//75
 
 
-        mMainViewModel.initTTSVoice(languageCode, voiceName, pitch, speakRate);
+            mMainViewModel.initTTSVoice(languageCode, voiceName, pitch, speakRate);
+        }
     }
-}
 }

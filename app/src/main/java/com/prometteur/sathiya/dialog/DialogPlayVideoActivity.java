@@ -2,7 +2,6 @@ package com.prometteur.sathiya.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -40,6 +40,7 @@ import com.prometteur.sathiya.home.MusicService;
 import com.prometteur.sathiya.translateapi.Http;
 import com.prometteur.sathiya.translateapi.MainViewModel;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.NetworkConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,6 +70,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static com.prometteur.sathiya.SplashActivity.strLangCode;
+import static com.prometteur.sathiya.home.MusicService.mPlayer;
 import static com.prometteur.sathiya.home.SecondHomeActivity.activityRunning;
 import static com.prometteur.sathiya.home.SecondHomeActivity.mMainViewModel;
 import static com.prometteur.sathiya.profile.ProfileActivity.resItem;
@@ -105,15 +107,25 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         mMainViewModel = new MainViewModel(nActivity.getApplication(), googleCloudTTS);
 
         try {
-            if(resItem.getString("gender")!=null && resItem.getString("gender").equalsIgnoreCase("Male")) {
-                profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video));
+            if(resItem.getString("gender")!=null){
                 gender=resItem.getString("gender");
+            }
+            if(gender.equalsIgnoreCase("Male")) {
+                profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video_male));
             }else{
                 profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.video_female));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        profileBinding.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setScreenOnWhilePlaying(true);
+            }
+        });
+
         stringData = new ArrayList<>();
 
         //ArrayList<String> fillerTextList=new ArrayList<>();
@@ -169,6 +181,10 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
 
                 if (paused) {
+                    if (mPlayer != null) {
+                        mPlayer.pause();
+                    }
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     paused = false;
                     profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
                     profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
@@ -189,14 +205,20 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
                    // showHideView(holder, paused);
                 } else {
                     paused = true;
-
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     if (current == 0) {
                         // loadjpgs();
                         if (!repeat) {
                             repeat = true;
+                            startService(new Intent(DialogPlayVideoActivity.this, MusicService.class));
                         }
                     }
-
+                    if (mPlayer == null) {
+                        mPlayer = new MediaPlayer();
+                    }
+                    try {
+                        mPlayer.start();
+                    }catch (Exception e){e.printStackTrace();}
                     profileBinding.ivPlayPause.setImageResource(R.drawable.ic_pause_circle_white);
                     profileBinding.ivPlayPause.setVisibility(View.GONE);
 
@@ -228,6 +250,11 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
                 if(countDownTimer!=null) {
                     countDownTimer.cancel();
                 }
+                if (MusicService.mPlayer == null) {
+                    MusicService.mPlayer = new MediaPlayer();
+                }
+                MusicService.mPlayer.stop();
+                stopService(new Intent(nActivity, MusicService.class));
                 finish();
             }
         });
@@ -238,27 +265,27 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         profileBinding.tvDetail.setVisibility(View.VISIBLE);
         profileBinding.videoView.setVisibility(View.VISIBLE);
         ArrayList<Long> longArrayList=new ArrayList<>();
-        longArrayList.add(3000L);//stringData.add("Blank");
-        longArrayList.add(3000L);//stringData.add("Mera naam Sumit Dhara hai");
-        longArrayList.add(3000L);//stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
-        longArrayList.add(4000L);//stringData.add("Mien orisa ka rahne wala hoon");
-        longArrayList.add(3000L);//stringData.add("Blank");
-        longArrayList.add(10000L);//stringData.add("Meri umar 38 saal hai");
-        longArrayList.add(2000L);//stringData.add("Blank");
-        longArrayList.add(4000L);//stringData.add("Mera kad 5 ft 10 inch hai");
-        longArrayList.add(3000L);//stringData.add("Par koshish karunga tumhare liye tare tod laaun");
-        longArrayList.add(2000L);//stringData.add("Mein shakahari hoon");
-        longArrayList.add(4000L);//stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
-        longArrayList.add(5000L);//stringData.add("Mere ghar pe Hindi boli jaati h");
-        longArrayList.add(2000L);//stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
-        longArrayList.add(3000L);//stringData.add("Mien 12th tak pada hoon");
-        longArrayList.add(2000L);//stringData.add("Blank");
-        longArrayList.add(6000L);//stringData.add("Mein plumber hoon");
-        longArrayList.add(4000L);//stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
-        longArrayList.add(5000L);//stringData.add("Meri maasik aay 10 haazaar hai");
-        longArrayList.add(2000L);//stringData.add("Lekin khushiya bonus mein");
-        longArrayList.add(2000L);//stringData.add("What I am looking for?");
-        longArrayList.add(4000L);//stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
+        longArrayList.add(3000L);//holder.stringData.add("Blank");
+        longArrayList.add(4000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
+        longArrayList.add(4000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
+        longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
+        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        longArrayList.add(7000L);//holder.stringData.add("Meri umar 38 saal hai");
+        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
+        longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+        longArrayList.add(4000L);//holder.stringData.add("Mein shakahari hoon");
+        longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
+        longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
+        longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+        longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
+        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
+        longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+        longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
+        longArrayList.add(3000L);//holder.stringData.add("Lekin khushiya bonus mein");
+        longArrayList.add(3000L);//holder.stringData.add("What I am looking for?");
+        longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
         final int[] poss = {pos};
         /*if(milliLeft>0)
         {
@@ -306,6 +333,12 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
                     profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
                     paused = false;
                     profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
+                    if (MusicService.mPlayer == null) {
+                        MusicService.mPlayer = new MediaPlayer();
+                    }
+                    MusicService.mPlayer.stop();
+                    stopService(new Intent(nActivity, MusicService.class));
+                    repeat=false;
                     /*if(imguris.size()==0) {
 
 
@@ -326,7 +359,12 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
             // txt_hindi.animateText(transObject2.getString("translatedText"));
             if (voiceCall) {
                 voiceCall = false;
-                speakOut(input, gender);
+                if (NetworkConnection.hasConnection(nActivity)) {
+                    speakOut(input, gender);
+                } else {
+                   // AppConstants.CheckConnection(nActivity);
+                }
+
             }
         }else {
             Http.post(input, "en", strLangCode, new JsonHttpResponseHandler() {
@@ -345,7 +383,12 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
                             // txt_hindi.animateText(transObject2.getString("translatedText"));
                             if (voiceCall) {
                                 voiceCall = false;
-                                speakOut(transObject2.getString("translatedText"), gender);
+                                if (NetworkConnection.hasConnection(nActivity)) {
+                                    speakOut(transObject2.getString("translatedText"), gender);
+                                } else {
+                                    //AppConstants.CheckConnection(nActivity);
+                                }
+
                             }
                         }
 
@@ -430,16 +473,31 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         {
             e.printStackTrace();
         }
+        if (MusicService.mPlayer == null) {
+            MusicService.mPlayer = new MediaPlayer();
+        }
+        try {
+            MusicService.mPlayer.stop();
+        }catch (Exception e){e.printStackTrace();}
+        stopService(new Intent(nActivity, MusicService.class));
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         activityRunning = false;
         mMainViewModel.dispose();
         if(countDownTimer!=null) {
             countDownTimer.cancel();
         }
+        if (MusicService.mPlayer == null) {
+            MusicService.mPlayer = new MediaPlayer();
+        }
+        try {
+            MusicService.mPlayer.stop();
+        }catch (Exception e){e.printStackTrace();}
+        stopService(new Intent(nActivity, MusicService.class));
         super.onDestroy();
     }
 
@@ -449,6 +507,13 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         activityRunning = false;
         mMainViewModel.dispose();
         super.onStop();
+        if (MusicService.mPlayer == null) {
+            MusicService.mPlayer = new MediaPlayer();
+        }
+        try {
+            MusicService.mPlayer.stop();
+        }catch (Exception e){e.printStackTrace();}
+        stopService(new Intent(nActivity, MusicService.class));
     }
 
 

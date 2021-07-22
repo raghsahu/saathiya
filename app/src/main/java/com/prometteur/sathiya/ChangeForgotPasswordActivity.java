@@ -2,7 +2,6 @@ package com.prometteur.sathiya;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,8 +50,6 @@ import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class ChangeForgotPasswordActivity extends BaseActivity {
 
-
-    //ProgressDialog progresDialog;
     ActivityChangeForgotPasswordBinding passwordBinding;
 BaseActivity nActivity=this;
     SharedPreferences prefUpdate;
@@ -111,10 +108,6 @@ BaseActivity nActivity=this;
 
 
     private void getChangePasswordRequest(String newPass) {
-        /*progresDialog = new ProgressDialog(ChangeForgotPasswordActivity.this);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

@@ -3,7 +3,6 @@ package com.prometteur.sathiya.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import com.prometteur.sathiya.beans.beanUserData;
 import com.prometteur.sathiya.databinding.ItemProfileLikedUserBinding;
 import com.prometteur.sathiya.home.SecondHomeActivity;
 import com.prometteur.sathiya.home.ThirdHomeActivity;
+import com.prometteur.sathiya.listeners.OnClickOnItemListener;
 import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.OnLoadMoreListener;
 
@@ -71,11 +71,13 @@ public class UserLikedListAdapter extends RecyclerView.Adapter<RecyclerView.View
     List<String> tokans;
     SharedPreferences prefUpdate;
     String matri_id="";
-    public UserLikedListAdapter(Activity nActivity, List<beanUserData> homeResultList, List<String> tokans) {
+    OnClickOnItemListener itemListener;
+    public UserLikedListAdapter(Activity nActivity, List<beanUserData> homeResultList, List<String> tokans,OnClickOnItemListener itemListener) {
         this.nContext = nActivity;
         this.nActivity = nActivity;
         this.homeResultList = homeResultList;
         this.tokans = tokans;
+        this.itemListener = itemListener;
         prefUpdate= PreferenceManager.getDefaultSharedPreferences(nActivity);
         matri_id=prefUpdate.getString("matri_id","");
     }
@@ -257,10 +259,6 @@ public class UserLikedListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite, final int pos, ViewHolder holder)
     {
-        /*ProgressDialog progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -345,6 +343,7 @@ public class UserLikedListAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                        holder.likedUserBinding.ivLike.setImageResource(R.drawable.ic_heart_greybg);
                         String message=obj.getString("message").toString().trim();
                         setToastStrPinkBg(nActivity, ""+message);
+                        itemListener.onItemClick();
                         homeResultList.remove(pos);
                         notifyDataSetChanged();
                         /*if(isFavorite.equalsIgnoreCase("1")) {
@@ -393,10 +392,7 @@ public class UserLikedListAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked,int position) {
-      /*  ProgressDialog  progresDialog = new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
+
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
@@ -513,10 +509,6 @@ public class UserLikedListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public void sendInterestReject(beanUserData singleUser,final int pos)
     {
-        /*ProgressDialog progresDialog= new ProgressDialog(nActivity);
-        progresDialog.setCancelable(false);
-        progresDialog.setMessage(nActivity.getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);*/
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 

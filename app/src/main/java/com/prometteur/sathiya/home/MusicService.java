@@ -183,6 +183,8 @@ public class MusicService extends MediaBrowserServiceCompat  {
     private void initPlayer() {
         //if (mPlayer == null) {
             mPlayer = new MediaPlayer();
+            mPlayer.setLooping(true);
+            mPlayer.setVolume(0.05f, 0.05f);
             handlePrepare();
             handlePlay();
 //            mPlayer.setShouldAutoPlay(false);
@@ -285,7 +287,8 @@ public class MusicService extends MediaBrowserServiceCompat  {
             Random random=new Random();
             int number = random.nextInt(3);
 
-            mPlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + audArr[number]));
+            mPlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.audio));
+//            mPlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + audArr[number]));
             mPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();

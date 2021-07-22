@@ -62,7 +62,8 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    android:layout_gravity="center_horizontal">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -71,52 +72,58 @@
 
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp">
+
     <RadioGroup
         android:id="@+id/radioGroup1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-android:elevation="10dp"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
-    <com.prometteur.sathiya.utills.RadioButtonCustomFont
-        android:id="@+id/tvWaitingForResponse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/likes_received"
-        android:background="@drawable/bg_left_round_rectengle"
-        android:button="@null"
-        android:checked="true"
-        android:textColor="@drawable/textcolor_likereceived_selected"
-        android:paddingStart="@dimen/_12sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_4sdp"
-        android:paddingTop="@dimen/_4sdp" />
-    <com.prometteur.sathiya.utills.RadioButtonCustomFont
-        android:id="@+id/tvLikedUsers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/liked_profiles"
-        android:button="@null"
-        android:background="@drawable/bg_middle_rectengle"
-        android:textColor="@drawable/textcolor_likereceived_selected"
-        android:paddingStart="@dimen/_12sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_4sdp"
-        android:paddingTop="@dimen/_4sdp" />
         <com.prometteur.sathiya.utills.RadioButtonCustomFont
-        android:id="@+id/tvAccepted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mutually_liked"
-        android:button="@null"
-        android:background="@drawable/bg_right_round_rectengle"
-        android:textColor="@drawable/textcolor_likereceived_selected"
-        android:paddingStart="@dimen/_12sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_4sdp"
-        android:paddingTop="@dimen/_4sdp" />
-   <!-- <com.prometteur.sathiya.utills.RadioButtonCustomFont
+            android:id="@+id/tvWaitingForResponse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_left_round_rectengle"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center_horizontal"
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            android:text="@string/likes_received"
+            android:textColor="@drawable/textcolor_likereceived_selected" />
+
+        <com.prometteur.sathiya.utills.RadioButtonCustomFont
+            android:id="@+id/tvLikedUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_middle_rectengle"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            android:text="@string/liked_profiles"
+            android:textColor="@drawable/textcolor_likereceived_selected" />
+
+        <com.prometteur.sathiya.utills.RadioButtonCustomFont
+            android:id="@+id/tvAccepted"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_right_round_rectengle"
+            android:button="@null"
+            android:gravity="center_horizontal"
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingEnd="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_4sdp"
+            android:text="@string/mutually_liked"
+            android:textColor="@drawable/textcolor_likereceived_selected" />
+        <!-- <com.prometteur.sathiya.utills.RadioButtonCustomFont
         android:id="@+id/tvRejected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

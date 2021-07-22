@@ -3,7 +3,7 @@ package com.prometteur.sathiya;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,6 +77,7 @@ import com.prometteur.sathiya.utills.RequestPermissionHandler;
 import com.prometteur.sathiya.utills.SharedPreferenceHelper;
 
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 
 public class LoginActivity extends BaseActivity
@@ -89,7 +90,7 @@ public class LoginActivity extends BaseActivity
     TextView txtForgotPass,tvRegister;
 LinearLayout linBack;
     SharedPreferences prefUpdate;
-    ProgressDialog progresDialog;
+    Dialog progresDialog;
     private FirebaseAuth mAuth;
     RequestPermissionHandler requestPermissionHandler;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -328,10 +329,10 @@ LinearLayout linBack;
 
     private void sendLoginRequest(String strUsername, String strPassword)
     {
-        progresDialog=new ProgressDialog(LoginActivity.this);
-        progresDialog.setCancelable(false);
+        progresDialog=showProgress(LoginActivity.this);
+      /*  progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
         {
@@ -429,6 +430,7 @@ LinearLayout linBack;
                         editor.putString("matri_id",responseData.getString("matri_id"));
                         editor.putString("username",responseData.getString("username"));
                         editor.putString("gender",responseData.getString("gender"));
+                        editor.putString("mobile", responseData.getString("phone"));
                         editor.putString("paid_status",responseData.getString("membership_status"));
                         editor.putString("call_package_status",responseData.getString("call_package_status"));
                         editor.putString("city_name","");//responseData.getString("city_name"));
@@ -568,10 +570,10 @@ LinearLayout linBack;
 
     private void getCheckBasicDetails(String matriId)
     {
-        ProgressDialog progresDialog=new ProgressDialog(LoginActivity.this);
-        progresDialog.setCancelable(false);
+        Dialog progresDialog=showProgress(LoginActivity.this);
+        /*progresDialog.setCancelable(false);
         progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
-        progresDialog.setIndeterminate(true);
+        progresDialog.setIndeterminate(true);*/
         progresDialog.show();
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
         {
