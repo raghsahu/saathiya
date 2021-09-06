@@ -783,7 +783,7 @@
             <com.prometteur.sathiya.utills.TextViewCustomFont
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/marital_status"
+                android:text="@string/manglik_status"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 android:layout_weight="0.9"

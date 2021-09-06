@@ -41,6 +41,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.prometteur.sathiya.ForgotPasswordActivity;
+import com.prometteur.sathiya.OtpVerificationActivity;
 import com.prometteur.sathiya.R;
 import com.prometteur.sathiya.SignUpStep1Activity;
 import com.prometteur.sathiya.SplashActivity;
@@ -82,6 +84,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 import static com.prometteur.sathiya.SplashActivity.strLang;
+import static com.prometteur.sathiya.fragments.FragmentOtpVerificationBottomSheetDialog.fromPage;
 import static com.prometteur.sathiya.profile.EditProfileActivity.pageType;
 import static com.prometteur.sathiya.profile.EditProfileActivity.rivProfileImage;
 import static com.prometteur.sathiya.profile.EditProfileActivity.viewPager;
@@ -104,6 +107,7 @@ public class EditBasicDetailFragment extends Fragment {
     CityAdapter cityAdapter = null;
     String Height = "0", HeightInch = "0";
     String description = "";
+    String preMobileNo="";
     DatePickerDialog.OnDateSetListener pickerListener;
     private SpeechRecognizer speechRecognizer;
 
@@ -150,7 +154,10 @@ public class EditBasicDetailFragment extends Fragment {
 
                 if (detailBinding.edtFullName.getText().toString().trim().equalsIgnoreCase("")) {
                     detailBinding.edtFullName.requestFocus();
-                    AppConstants.setToastStr(getActivity(), getString(R.string.please_enter_firstname_lastname));
+                    AppConstants.setToastStr(getActivity(), getString(R.string.please_enter_firstname));
+                } else if (detailBinding.edtLastName.getText().toString().trim().equalsIgnoreCase("")) {
+                    detailBinding.edtLastName.requestFocus();
+                    AppConstants.setToastStr(getActivity(), getString(R.string.please_enter_lastname));
                 } else if (!Email.isEmpty() && !checkEmail(Email)) { //on client demand
                     detailBinding.edtEmail.requestFocus();
                     detailBinding.edtEmail.setError(getResources().getString(R.string.Please_enter_valid_email_address));
@@ -181,16 +188,15 @@ public class EditBasicDetailFragment extends Fragment {
                     detailBinding.edtDealMaker.requestFocus();
                     AppConstants.setToastStr(getActivity(), getResources().getString(R.string.please_enter_prime_quality));
                 }*/ else {
-                    String FirstName = detailBinding.edtFullName.getText().toString().split(" ")[0];
-                    String LastName = "";
-                    try {
-                        LastName = detailBinding.edtFullName.getText().toString().split(" ")[1];
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    getUpdateSteps(Email, FirstName, LastName, Birthdate,
-                            Gender, AppConstants.CityId, AppConstants.StateId, Height,
-                            MobileNo, matri_id, HeightInch, ProfileText);
+                    String FirstName = detailBinding.edtFullName.getText().toString();
+                    String LastName = detailBinding.edtLastName.getText().toString();
+if(!MobileNo.equalsIgnoreCase(preMobileNo)){
+    sendOTPRequest(MobileNo);
+}else {
+    getUpdateSteps(Email, FirstName, LastName, Birthdate,
+            Gender, AppConstants.CityId, AppConstants.StateId, Height,
+            MobileNo, matri_id, HeightInch, ProfileText);
+}
                 }
             }
         });
@@ -367,6 +373,24 @@ public class EditBasicDetailFragment extends Fragment {
             }
         });
         initSpeechToText();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==1010){
+            String Email = detailBinding.edtEmail.getText().toString();
+            String Birthdate = detailBinding.edtDOB.getText().toString();
+            String Gender = detailBinding.edtGender.getText().toString();
+            String MobileNo = detailBinding.edtMobileNum.getText().toString();
+            String ProfileText = detailBinding.edtDescription.getText().toString().trim();
+            String FirstName = detailBinding.edtFullName.getText().toString();
+            String LastName = detailBinding.edtLastName.getText().toString();
+
+            getUpdateSteps(Email, FirstName, LastName, Birthdate,
+                    Gender, AppConstants.CityId, AppConstants.StateId, Height,
+                    MobileNo, matri_id, HeightInch, ProfileText);
+        }
     }
 
     private void initSpeechToText() {
@@ -560,11 +584,11 @@ public class EditBasicDetailFragment extends Fragment {
 
                                 String FName = resItem.getString("firstname");
                                 String LName = resItem.getString("lastname");
-                                //String[] name_array = LFName.split(" ");
                                 if (!FName.isEmpty()) {
-                                    detailBinding.edtFullName.setText((FName + " " + LName).trim());
+                                    detailBinding.edtFullName.setText((FName).trim());
+                                } if (!LName.isEmpty()) {
+                                    detailBinding.edtLastName.setText((LName).trim());
                                 }
-                                //edtLastName.setText(name_array[1]);
 
 
                                 detailBinding.edtEmail.setText(resItem.getString("email"));
@@ -572,6 +596,7 @@ public class EditBasicDetailFragment extends Fragment {
                                 String strGender = resItem.getString("gender");
                                 detailBinding.edtGender.setText("" + resItem.getString("gender"));
                                 AppConstants.MotherTongueId = resItem.getString("m_tongue_id");
+                                preMobileNo=resItem.getString("mobile");
                                 detailBinding.edtMobileNum.setText(resItem.getString("mobile"));
 
                                 detailBinding.edtState.setText(resItem.getString("state_name"));
@@ -995,7 +1020,7 @@ public class EditBasicDetailFragment extends Fragment {
                 BasicNameValuePair Height = new BasicNameValuePair("height", paramHeight);
                 BasicNameValuePair HeightInch = new BasicNameValuePair("height_inch", paramHeightInch);
                 BasicNameValuePair ProfileText = new BasicNameValuePair("profile_text", paramProfileText);
-
+                BasicNameValuePair languagePAir = new BasicNameValuePair("language", strLang);
 
                 List<NameValuePair> nameValuePairList = new ArrayList<>();
                 nameValuePairList.add(Email);
@@ -1010,6 +1035,7 @@ public class EditBasicDetailFragment extends Fragment {
                 nameValuePairList.add(MatriIdPAir);
                 nameValuePairList.add(HeightInch);
                 nameValuePairList.add(ProfileText);
+                nameValuePairList.add(languagePAir);
 
 
                 try {
@@ -1067,11 +1093,17 @@ public class EditBasicDetailFragment extends Fragment {
                             SharedPreferences.Editor editor=prefUpdate.edit();
                             editor.putString("username",Firstname+" "+LastName);
                             editor.putString("gender",Gender);
+                            editor.putString("mobile", MobileNo);
                             editor.apply();
                             Intent intLogin = new Intent(getActivity(), HomeActivity.class);
                             startActivity(intLogin);
                             getActivity().finishAffinity();
                         }else {
+                            SharedPreferences.Editor editor=prefUpdate.edit();
+                            editor.putString("username",Firstname+" "+LastName);
+                            editor.putString("gender",Gender);
+                            editor.putString("mobile", MobileNo);
+                            editor.apply();
                             viewPager.setCurrentItem(1);
                         }
                         /*Intent intLogin = new Intent(getActivity(), MenuProfileEdit.class);
@@ -1134,5 +1166,135 @@ public class EditBasicDetailFragment extends Fragment {
             }
         }
 
+    }
+
+    private void sendOTPRequest(String mobNo)
+    {
+        Dialog progresDialog= showProgress(getActivity());
+       /* progresDialog.setCancelable(false);
+        progresDialog.setMessage(getResources().getString(R.string.Please_Wait));
+        progresDialog.setIndeterminate(true);*/
+        progresDialog.show();
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
+        {
+            @Override
+            protected String doInBackground(String... params)
+            {
+                String paramUserId= params[0];
+                //  String paramOtp= params[1];
+
+                HttpClient httpClient = new DefaultHttpClient();
+
+                String URL= AppConstants.MAIN_URL +"get_otp.php";
+                Log.e("URL", "== "+URL);
+
+                HttpPost httpPost = new HttpPost(URL);
+                BasicNameValuePair UserIdPAir = new BasicNameValuePair("mobile", paramUserId);
+                BasicNameValuePair MatriIdPair = new BasicNameValuePair("matri_id", matri_id);
+                BasicNameValuePair languagePAir = new BasicNameValuePair("language", strLang);
+
+                List<NameValuePair> nameValuePairList = new ArrayList<>();
+                nameValuePairList.add(UserIdPAir);
+                nameValuePairList.add(MatriIdPair);
+                nameValuePairList.add(languagePAir);
+
+                try
+                {
+                    UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
+                    httpPost.setEntity(urlEncodedFormEntity);
+                    try
+                    {
+                        HttpResponse httpResponse = httpClient.execute(httpPost);
+                        InputStream inputStream = httpResponse.getEntity().getContent();
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String bufferedStrChunk = null;
+                        while((bufferedStrChunk = bufferedReader.readLine()) != null)
+                        {
+                            stringBuilder.append(bufferedStrChunk);
+                        }
+
+                        return stringBuilder.toString();
+
+                    } catch (ClientProtocolException cpe) {
+                        System.out.println("Firstption caz of HttpResponese :" + cpe);
+                        cpe.printStackTrace();
+                    } catch (IOException ioe)
+                    {
+                        System.out.println("Secondption caz of HttpResponse :" + ioe);
+                        ioe.printStackTrace();
+                    }
+
+                } catch (Exception uee)
+                {
+                    System.out.println("Anption given because of UrlEncodedFormEntity argument :" + uee);
+                    uee.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String Ressponce)
+            {
+                super.onPostExecute(Ressponce);
+                progresDialog.dismiss();
+                Log.e("--resend_otp --", "=="+Ressponce);
+
+                try {
+                    JSONObject responseObj = new JSONObject(Ressponce);
+                    // JSONObject responseData = responseObj.getJSONObject("responseData");
+
+                    String status=responseObj.getString("status");
+
+                    if (status.equalsIgnoreCase("1"))
+                    {
+                        String otp=responseObj.getString("otp");
+                        //edtOTP.setText(""+otp);
+                        SharedPreferences.Editor editor=prefUpdate.edit();
+                        editor.putString("otp",""+otp);
+                        editor.putString("mobileNo",""+mobNo);
+                        editor.apply();
+                        fromPage="editBasic";
+                        startActivityForResult(new Intent(getActivity(), OtpVerificationActivity.class),1010);
+                        String message=responseObj.getString("message");
+                        AppConstants.setToastStrPinkBg(getActivity(),message);
+                        //  Toast.makeText(ForgotPasswordActivity.this,""+message,Toast.LENGTH_LONG).show();
+                       /* isFinish = false;
+                        startCounter();*/
+
+                    }else
+                    {
+                        String msgError=responseObj.getString("message");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage(""+msgError).setCancelable(false).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int id)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+
+                    responseObj = null;
+
+                } catch (Exception e)
+                {
+
+                } finally
+                {
+
+                }
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(mobNo);
     }
 }

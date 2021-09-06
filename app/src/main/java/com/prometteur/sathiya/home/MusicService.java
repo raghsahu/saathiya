@@ -164,6 +164,7 @@ public class MusicService extends MediaBrowserServiceCompat  {
 //        mMediaNotificationManager.stopNotification();
         mSession.release();
         mPlayer.release();
+        mPlayer=null;
         stopForeground(true);
 
     }

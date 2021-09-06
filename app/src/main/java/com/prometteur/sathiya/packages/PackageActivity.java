@@ -149,7 +149,7 @@ packageBinding.toolBar.ivBackArrowimg.setOnClickListener(new View.OnClickListene
                 }*/
             }
         });
-        packageBinding.edtNoOfCalls.addTextChangedListener(new TextWatcher() {
+       /* packageBinding.edtNoOfCalls.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -171,6 +171,8 @@ packageBinding.toolBar.ivBackArrowimg.setOnClickListener(new View.OnClickListene
                     }else{
                         AppConstants.setToastStr(nActivity,getString(R.string.calls_not_available)+" "+currentCalls+" "+getString(R.string.so_enter_within_that));
                     }
+                }else {
+                    packageBinding.tvBalanceCalls.setText(getString(R.string.balance) + " - " + (currentCalls) + " " + getString(R.string.calls));
                 }
             }
 
@@ -178,7 +180,7 @@ packageBinding.toolBar.ivBackArrowimg.setOnClickListener(new View.OnClickListene
             public void afterTextChanged(Editable editable) {
 
             }
-        });
+        });*/
         packageBinding.sendCalls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -598,11 +600,11 @@ Log.e("Payment",""+paymentData+" S "+s);
                         String status = obj.getString("status");
 
                         if (status.equalsIgnoreCase("1")) {
-
-                            packageBinding.edtMobileNo.setText("");
-                            packageBinding.edtNoOfCalls.setText("");
                             AppConstants.setToastStr(nActivity,""+obj.getString("message"));
                             packageBinding.tvPrice.setText((currentCalls-Integer.parseInt(packageBinding.edtNoOfCalls.getText().toString()))+" calls");
+                            packageBinding.tvBalanceCalls.setText(getString(R.string.balance)+" - "+(currentCalls-Integer.parseInt(packageBinding.edtNoOfCalls.getText().toString()))+" "+getString(R.string.calls));
+                            packageBinding.edtMobileNo.setText("");
+                            packageBinding.edtNoOfCalls.setText("");
                         }else
                         {
                             AppConstants.setToastStr(nActivity,""+obj.getString("message"));
@@ -613,7 +615,7 @@ Log.e("Payment",""+paymentData+" S "+s);
                     Log.d("ERRRR", t.toString());
                     progresDialog11.dismiss();
                 }
-                progresDialog11.dismiss();
+                progresDialog11.dismiss();  //9373015391
             }
         }
 

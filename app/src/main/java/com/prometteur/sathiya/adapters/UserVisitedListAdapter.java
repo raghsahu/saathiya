@@ -211,7 +211,7 @@ public class UserVisitedListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         {
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1"))
                         {
-                            String msgBlock = "This member has blocked you. You can't express your interest.";
+                            String msgBlock = "This member is blocked. You can't express your interest.";
                             String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
@@ -234,7 +234,7 @@ public class UserVisitedListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         {
                             if (singleUser.getIs_blocked().equalsIgnoreCase("1"))
                             {
-                                String msgBlock = "This member has blocked you. You can't express your interest.";
+                                String msgBlock = "This member is blocked. You can't express your interest.";
                                 String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);

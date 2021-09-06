@@ -24,39 +24,47 @@
         <RelativeLayout
             android:id="@+id/relImg"
     android:layout_width="wrap_content"
-    android:layout_height="100dp">
-    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
-        android:id="@+id/rivProfileImage"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        android:cropToPadding="true"
-        app:siShape="@drawable/shape_left_corner_round_rectangle"
-        android:src="@drawable/placeholder_gray_corner"
-        android:background="@drawable/placeholder_gray_corner"
-        app:siSquare="false"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    android:layout_height="130dp">
+
+            <!--<com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="80dp"
+                android:layout_height="100dp"
+                android:background="@drawable/placeholder_gray_corner"
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/placeholder_gray_corner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:siShape="@drawable/shape_left_corner_round_rectangle"
+                app:siSquare="false" />-->
+            <com.prometteur.sathiya.utills.ImageScaleView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="110dp"
+                android:layout_height="130dp"
+                android:scaleType="matrix"
+                android:src="@drawable/placeholder_gray_corner"
+                app:matrixType="top_center" />
+
             <com.prometteur.sathiya.utills.TextViewCustomFont
                 android:id="@+id/tvCity"
-                android:layout_width="70dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Mumbai"
-                android:textColor="@color/white"
-                android:background="@drawable/bg_rounds_transparent"
-                android:textSize="12dp"
-               android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
-                android:singleLine="true"
+                android:background="@drawable/bg_rounds_transparent"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:marqueeRepeatLimit="-1"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                />
+                android:paddingLeft="10dp"
+                android:paddingTop="2dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="2dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="12dp" />
         </RelativeLayout>
   <!--  <com.github.siyamed.shapeimageview.RoundedImageView
         android:id="@+id/rivSaloonImage"
@@ -89,23 +97,25 @@
 <LinearLayout
     android:id="@+id/linMiddle"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="130dp"
     android:orientation="vertical"
     android:layout_toEndOf="@+id/relImg">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginRight="50dp">
     <com.prometteur.sathiya.utills.TextViewCustomFont
         android:id="@+id/tvProfileName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="@color/black"
+        android:layout_weight="1"
         android:textSize="13dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:singleLine="true"
+        android:maxLines="2"
         android:ellipsize="marquee"
         android:marqueeRepeatLimit="-1"
         /> <com.prometteur.sathiya.utills.TextViewCustomFont

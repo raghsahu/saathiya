@@ -22,7 +22,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-15dp"
+            android:layout_marginStart="-15dp"
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +36,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:padding="5dp"
                     android:src="@drawable/ic_back"
-                    android:tint="@color/black"
+                    app:tint="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,12 +60,10 @@
 <HorizontalScrollView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
     android:scrollbars="none"
-    android:layout_gravity="center_horizontal">
+    android:layout_gravity="center">
 <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
@@ -75,7 +73,7 @@
 
     <RadioGroup
         android:id="@+id/radioGroup1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="10dp"
         android:gravity="center"
@@ -103,7 +101,7 @@
             android:background="@drawable/bg_middle_rectengle"
             android:button="@null"
             android:gravity="center_horizontal"
-            android:paddingStart="@dimen/_15sdp"
+            android:paddingStart="@dimen/_10sdp"
             android:paddingTop="@dimen/_4sdp"
             android:paddingEnd="@dimen/_15sdp"
             android:paddingBottom="@dimen/_4sdp"
@@ -117,9 +115,9 @@
             android:background="@drawable/bg_right_round_rectengle"
             android:button="@null"
             android:gravity="center_horizontal"
-            android:paddingStart="@dimen/_15sdp"
+            android:paddingStart="@dimen/_10sdp"
             android:paddingTop="@dimen/_4sdp"
-            android:paddingEnd="@dimen/_15sdp"
+            android:paddingEnd="@dimen/_10sdp"
             android:paddingBottom="@dimen/_4sdp"
             android:text="@string/mutually_liked"
             android:textColor="@drawable/textcolor_likereceived_selected" />

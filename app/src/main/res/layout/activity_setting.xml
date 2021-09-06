@@ -36,7 +36,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:padding="5dp"
                     android:src="@drawable/ic_back"
-                    android:tint="@color/black"
+                    app:tint="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -113,17 +113,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|right"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:paddingTop="5dp"
         android:elevation="10dp">
         <Button
-            android:id="@+id/btnDeactAccount"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="right"
+            android:background="@drawable/bg_gray_rounded_rectengle"
+            android:text="@string/delete_account"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:visibility="visible"
+            android:gravity="center"/>
+        <Button
+            android:id="@+id/btnDeactAccount"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/bg_gray_rounded_rectengle"
             android:text="@string/deactivate_account"
             android:textAllCaps="false"

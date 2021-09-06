@@ -109,7 +109,9 @@ public class GoogleCloudTTS implements AutoCloseable {
         String url = "data:audio/mp3;base64," + base64EncodedString;
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setDataSource(url);
-        mMediaPlayer.prepare();
+        if(mMediaPlayer!=null) {
+            mMediaPlayer.prepare();
+        }
         mMediaPlayer.start();
     }
 

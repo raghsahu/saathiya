@@ -138,6 +138,9 @@ String searchId="0";
         filterBinding.ivBackArrowimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent newIntent = new Intent(nActivity, HomeActivity.class);
+                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(newIntent);
                 onBackPressed();
                 finish();
             }
@@ -668,6 +671,15 @@ if(!IncomeF.isEmpty() && !IncomeT.isEmpty())
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent newIntent = new Intent(nActivity, HomeActivity.class);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(newIntent);
+        finish();
     }
 
     public void VisibleSlidingDrower() {

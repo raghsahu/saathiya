@@ -52,11 +52,13 @@ import com.prometteur.sathiya.adapters.UserHomeListAdapter;
 import com.prometteur.sathiya.beans.beanEducation;
 import com.prometteur.sathiya.beans.beanUserData;
 import com.prometteur.sathiya.fcm.ServiceUtils;
+import com.prometteur.sathiya.home.ThirdHomeActivity;
 import com.prometteur.sathiya.model.chatmodel.Friend;
 import com.prometteur.sathiya.model.chatmodel.ListFriend;
 import com.prometteur.sathiya.model.chatmodel.Message;
 import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.FriendDB;
+import com.prometteur.sathiya.utills.ImageScaleView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -110,7 +112,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static ListFriend dataListFriend = null;
     private static ArrayList<String> listFriendID = null;
     private static ArrayList<String> listFriendEmails = null;
-    String matriId="";
+    String matriId = "";
     SharedPreferences prefUpdate;
     public FragFriendClickFloatButton onClickFloatButton;
     Dialog dialogFindAllFriend;
@@ -120,7 +122,8 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private CountDownTimer detectFriendOnline;
     private BroadcastReceiver deleteFriendReceiver;
     private static ArrayList<beanUserData> arrShortListedUser;
-    public static boolean openChatOnce=false;
+    public static boolean openChatOnce = false;
+
     public FriendsFragment() {
         onClickFloatButton = new FragFriendClickFloatButton();
     }
@@ -133,8 +136,8 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        prefUpdate= PreferenceManager.getDefaultSharedPreferences(context);
-        matriId=prefUpdate.getString("matri_id","");
+        prefUpdate = PreferenceManager.getDefaultSharedPreferences(context);
+        matriId = prefUpdate.getString("matri_id", "");
         detectFriendOnline = new CountDownTimer(System.currentTimeMillis(), AppConstants.TIME_TO_REFRESH) {
             @Override
             public void onTick(long l) {
@@ -159,7 +162,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     public int compare(Object o1, Object o2) {
                         Friend p1 = (Friend) o1;
                         Friend p2 = (Friend) o2;
-                        return p1.timestamp<(p2.timestamp)?0:1;
+                        return p1.timestamp < (p2.timestamp) ? 0 : 1;
                     }
                 });
                 listFriendID = new ArrayList<>();
@@ -168,7 +171,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 for (Friend friend : dataListFriend.getListFriend()) {
                     listFriendID.add(friend.id);
                     listFriendEmails.add(friend.email);
-                   // arrShortListedUser.add(new beanUserData());
+                    // arrShortListedUser.add(new beanUserData());
                 }
                 detectFriendOnline.start();
 
@@ -183,12 +186,12 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         try {
             Field f = mSwipeRefreshLayout.getClass().getDeclaredField("mCircleView");
             f.setAccessible(true);
-            ImageView img = (ImageView)f.get(mSwipeRefreshLayout);
+            ImageView img = (ImageView) f.get(mSwipeRefreshLayout);
             img.setAlpha(0.0f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        adapter = new ListFriendsAdapter(getContext(), dataListFriend, this,arrShortListedUser);
+        adapter = new ListFriendsAdapter(getContext(), dataListFriend, this, arrShortListedUser);
         recyclerListFrends.setAdapter(adapter);
         dialogFindAllFriend = showProgress(context);
      /*   if (listFriendID == null) {
@@ -216,8 +219,6 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         IntentFilter intentFilter = new IntentFilter(ACTION_DELETE_FRIEND);
         getContext().registerReceiver(deleteFriendReceiver, intentFilter);
-
-
 
 
         ivSearch.setOnClickListener(new View.OnClickListener() {
@@ -273,15 +274,14 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onResume() {
         super.onResume();
 
-        if(!openChatOnce) {
+        if (!openChatOnce) {
             if (getArguments() != null) {
-                    if (getArguments().getString("friendEmail") != null) {
-                        friendEmail = getArguments().getString("friendEmail");
-                        onClickFloatButton.findIDEmail(friendEmail, getContext(), this);
-                    }
+                if (getArguments().getString("friendEmail") != null) {
+                    friendEmail = getArguments().getString("friendEmail");
+                    onClickFloatButton.findIDEmail(friendEmail, getContext(), this);
+                }
             }
-        }else
-        {
+        } else {
             if (listFriendID == null) {
                 listFriendID = new ArrayList<>();
                 // adapter.notifyDataSetChanged();
@@ -319,9 +319,13 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        listFriendID.clear();
-        dataListFriend.getListFriend().clear();
-      //  adapter.notifyDataSetChanged();
+        if (listFriendID != null) {
+            listFriendID.clear();
+        }
+        if (dataListFriend.getListFriend() != null) {
+            dataListFriend.getListFriend().clear();
+        }
+        //  adapter.notifyDataSetChanged();
         FriendDB.getInstance(getContext()).dropDB();
         detectFriendOnline.cancel();
         getListFriendUId();
@@ -338,36 +342,38 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (dataSnapshot.getValue() != null) {
                     HashMap mapRecord = (HashMap) dataSnapshot.getValue();
                     Iterator listKey = mapRecord.keySet().iterator();
-                    if(listFriendEmails!=null) {
+                    if (listFriendEmails != null) {
                         if (listFriendEmails.size() < mapRecord.size()) {
                             while (listKey.hasNext()) {
                                 String key = listKey.next().toString();
-                                listFriendID.add(mapRecord.get(key).toString());
+                                if (!listFriendID.contains(mapRecord.get(key).toString())) {
+                                    listFriendID.add(mapRecord.get(key).toString());
+                                }
                             }
                         } else {
                             getListFriendUId();
                         }
-                    }else{
+                    } else {
                         getListFriendUId();
                     }
-                    listFriendEmails=new ArrayList<>();
-                    getAllFriendInfo(0,FriendsFragment.this);
+                    listFriendEmails = new ArrayList<>();
+                    getAllFriendInfo(0, FriendsFragment.this);
                 } else {
                     if (dialogFindAllFriend != null) {
                         dialogFindAllFriend.dismiss();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        AppConstants.setToastStr((Activity) context,getString(R.string.messaged_users_not_found));
+                        AppConstants.setToastStr((Activity) context, getString(R.string.messaged_users_not_found));
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("Dberror",databaseError.getDetails());
+                Log.e("Dberror", databaseError.getDetails());
                 if (dialogFindAllFriend != null) {
                     dialogFindAllFriend.dismiss();
                     mSwipeRefreshLayout.setRefreshing(false);
-                    AppConstants.setToastStr((Activity) context,getString(R.string.messaged_users_not_found));
+                    AppConstants.setToastStr((Activity) context, getString(R.string.messaged_users_not_found));
                 }
             }
         });
@@ -376,63 +382,69 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     /**
      * Truy cap bang user lay thong tin id nguoi dung
      */
-    private void getAllFriendInfo(final int index,FriendsFragment fragment) {
-        if (index == listFriendID.size() && listFriendID.size()!=0) {
+    private void getAllFriendInfo(final int index, FriendsFragment fragment) {
+        try {
+            if (index == listFriendID.size() && listFriendID.size() != 0) {
 
-            Collections.sort(dataListFriend.getListFriend(), new Comparator() {
-                @Override
-                public int compare(Object o1, Object o2) {
-                    Friend p1 = (Friend) o1;
-                    Friend p2 = (Friend) o2;
-                    return p1.timestamp<(p2.timestamp)?1:-1;
-                }
-            });
-            listFriendEmails=new ArrayList<>();
-            for (Friend friend :dataListFriend.getListFriend()) {
-                listFriendEmails.add(friend.email);
-            }
-
-            //save list friend
-            getUserDetailsByEmails(matriId,TextUtils.join(",",listFriendEmails),fragment);
-//            adapter.notifyDataSetChanged();
-            if(dialogFindAllFriend!=null && dialogFindAllFriend.isShowing()) {
-                dialogFindAllFriend.dismiss();
-            }
-            mSwipeRefreshLayout.setRefreshing(false);
-            detectFriendOnline.start();
-        } else {
-            if(listFriendID.size()>0) {
-                final String id = listFriendID.get(index);
-                FirebaseDatabase.getInstance().getReference().child("user/" + id).addListenerForSingleValueEvent(new ValueEventListener() {
+                Collections.sort(dataListFriend.getListFriend(), new Comparator() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            Friend user = new Friend();
-                            HashMap mapUserInfo = (HashMap) dataSnapshot.getValue();
-                            user.name = (String) mapUserInfo.get("name");
-                            user.email = (String) mapUserInfo.get("email");
-                            user.avata = (String) mapUserInfo.get("avata");
-                            user.id = id;
-                            try{
-                                HashMap messageMap = (HashMap) mapUserInfo.get("message");
-                            user.message.timestamp =(long) messageMap.get("timestamp");
-                            user.message.text =(String) messageMap.get("text");
-                            user.timestamp = user.message.timestamp;
-                        }catch(Exception e){e.printStackTrace();}
-                            user.idRoom = id.compareTo(AppConstants.UID) > 0 ? (AppConstants.UID + id).hashCode() + "" : "" + (id + AppConstants.UID).hashCode();
-                            dataListFriend.getListFriend().add(user);
-                            FriendDB.getInstance(getContext()).addFriend(user);
-                            listFriendEmails.add(user.email);
-                        }
-                        getAllFriendInfo(index + 1, fragment);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
+                    public int compare(Object o1, Object o2) {
+                        Friend p1 = (Friend) o1;
+                        Friend p2 = (Friend) o2;
+                        return p1.timestamp < (p2.timestamp) ? 1 : -1;
                     }
                 });
+                listFriendEmails = new ArrayList<>();
+                for (Friend friend : dataListFriend.getListFriend()) {
+                    listFriendEmails.add(friend.email);
+                }
+
+                //save list friend
+                getUserDetailsByEmails(matriId, TextUtils.join(",", listFriendEmails), fragment);
+//            adapter.notifyDataSetChanged();
+                if (dialogFindAllFriend != null && dialogFindAllFriend.isShowing()) {
+                    dialogFindAllFriend.dismiss();
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+                detectFriendOnline.start();
+            } else {
+                if (listFriendID.size() > 0) {
+                    final String id = listFriendID.get(index);
+                    FirebaseDatabase.getInstance().getReference().child("user/" + id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue() != null) {
+                                Friend user = new Friend();
+                                HashMap mapUserInfo = (HashMap) dataSnapshot.getValue();
+                                user.name = (String) mapUserInfo.get("name");
+                                user.email = (String) mapUserInfo.get("email");
+                                user.avata = (String) mapUserInfo.get("avata");
+                                user.id = id;
+                                try {
+                                    HashMap messageMap = (HashMap) mapUserInfo.get("message");
+                                    user.message.timestamp = (long) messageMap.get("timestamp");
+                                    user.message.text = (String) messageMap.get("text");
+                                    user.timestamp = user.message.timestamp;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                user.idRoom = id.compareTo(AppConstants.UID) > 0 ? (AppConstants.UID + id).hashCode() + "" : "" + (id + AppConstants.UID).hashCode();
+                                dataListFriend.getListFriend().add(user);
+                                FriendDB.getInstance(getContext()).addFriend(user);
+                                listFriendEmails.add(user.email);
+                            }
+                            getAllFriendInfo(index + 1, fragment);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -505,12 +517,14 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             user.email = (String) userMap.get("email");
                             user.avata = (String) userMap.get("avata");
                             user.id = id;
-                            try{
+                            try {
                                 HashMap messageMap = (HashMap) userMap.get("message");
-                                user.message.timestamp =(long) messageMap.get("timestamp");
-                                user.message.text =(String) messageMap.get("text");
+                                user.message.timestamp = (long) messageMap.get("timestamp");
+                                user.message.text = (String) messageMap.get("text");
                                 user.timestamp = user.message.timestamp;
-                            }catch(Exception e){e.printStackTrace();}
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             user.idRoom = id.compareTo(AppConstants.UID) > 0 ? (AppConstants.UID + id).hashCode() + "" : "" + (id + AppConstants.UID).hashCode();
                             checkBeforAddFriend(id, user, context, fragment);
                         }
@@ -519,7 +533,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.e("chat",databaseError.getMessage());
+                    Log.e("chat", databaseError.getMessage());
                 }
             });
         }
@@ -533,9 +547,9 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             dialogWait.show();*/
 
             //Check xem da ton tai id trong danh sach id chua
-            if (listFriendID!=null && listFriendID.contains(idFriend)) {  //51an8ts59UOckgYMoxOxMRdOJzn1
+            if (listFriendID != null && listFriendID.contains(idFriend)) {  //51an8ts59UOckgYMoxOxMRdOJzn1
                 // dialogWait.dismiss();
-                AppConstants.setToastStr((Activity) context, "User " + userInfo.email + " has been friend");
+                Log.e("Exist", "User " + userInfo.email + " has been friend");
             } else {
                 addFriend(idFriend, true);
                 // listFriendID.add(idFriend);
@@ -569,8 +583,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (fragment != null) {
                     fragment.startActivityForResult(intent, FriendsFragment.ACTION_START_CHAT);
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -605,6 +618,14 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 addFriend(null, false);
+                                Message newMessage = new Message();
+                                newMessage.text = "";
+                                newMessage.idSender = "0";
+                                newMessage.idReceiver = "0";
+                                newMessage.type = "text";
+                                newMessage.timestamp = 0;
+                                FirebaseDatabase.getInstance().getReference().child("user/" + idFriend + "/message").setValue(newMessage);
+
                             }
                         }
                     })
@@ -626,20 +647,25 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
 
     }
-Context context;
+
+    Context context;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context=context;
+        this.context = context;
     }
 
     private void getUserDetailsByEmails(String login_matri_id, String strEmails, FriendsFragment fragment) {
 
-        Dialog progresDialog=showProgress(context);
-        try{
-        if(!progresDialog.isShowing()) {
-            progresDialog.show();
-        }}catch (Exception e){e.printStackTrace();}
+        Dialog progresDialog = showProgress(context);
+        try {
+            if (!progresDialog.isShowing()) {
+                progresDialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -651,9 +677,8 @@ Context context;
 
                 String URL = "";
 
-                    URL = AppConstants.MAIN_URL + "get_data_by_email.php";
-                    Log.e("get_data_by_email", "== " + URL);
-
+                URL = AppConstants.MAIN_URL + "get_data_by_email.php";
+                Log.e("get_data_by_email", "== " + URL);
 
 
                 HttpPost httpPost = new HttpPost(URL);
@@ -719,29 +744,28 @@ Context context;
                             Iterator<String> resIter = responseData.keys();
                             List<String> keyList = new ArrayList<>();*/
 
-                            for (int i=0;i<responseData.length();i++) {
-                                // keyList.add(resIter.next());
+                        for (int i = 0; i < responseData.length(); i++) {
+                            // keyList.add(resIter.next());
 
 
-                                JSONObject resItem = responseData.getJSONObject(i);
+                            JSONObject resItem = responseData.getJSONObject(i);
 
-                                String matri_id1 = resItem.getString("matri_id");
-                                String eiId = resItem.getString("ei_id");
-                                String user_profile_picture = resItem.getString("profile_picture");
-                                String is_blocked = resItem.getString("is_blocked");
-                                String is_favourite = resItem.getString("is_favourite");
-                                String username = resItem.getString("username");
+                            String matri_id1 = resItem.getString("matri_id");
+                            String eiId = resItem.getString("ei_id");
+                            String user_profile_picture = resItem.getString("profile_picture");
+                            String is_blocked = resItem.getString("is_blocked");
+                            String is_favourite = resItem.getString("is_favourite");
+                            String username = resItem.getString("username");
 
 
-
-                                arrShortListedUser.add(new beanUserData("", matri_id1, username, "", "", "", "", "", "", "", "", "",
-                                        "", "", "", is_blocked, is_favourite, user_profile_picture, eiId, ""));
-                            }
-                        adapter = new ListFriendsAdapter(context, dataListFriend, fragment,arrShortListedUser);
+                            arrShortListedUser.add(new beanUserData("", matri_id1, username, "", "", "", "", "", "", "", "", "",
+                                    "", "", "", is_blocked, is_favourite, user_profile_picture, eiId, ""));
+                        }
+                        adapter = new ListFriendsAdapter(context, dataListFriend, fragment, arrShortListedUser);
                         recyclerListFrends.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
 
-                       // }
+                        // }
                     } else {
                         listFriendID.clear();
                         dataListFriend.getListFriend().clear();
@@ -760,16 +784,16 @@ Context context;
                         alert.show();*/
                     }
 
-                    if(progresDialog!=null && progresDialog.isShowing()) {
+                    if (progresDialog != null && progresDialog.isShowing()) {
                         progresDialog.dismiss();
                     }
                 } catch (Exception t) {
-                    Log.e("fjkhgjkfa",t.getMessage());
-                    if(progresDialog!=null && progresDialog.isShowing()) {
+                    Log.e("fjkhgjkfa", t.getMessage());
+                    if (progresDialog != null && progresDialog.isShowing()) {
                         progresDialog.dismiss();
                     }
                 }
-                if(progresDialog!=null && progresDialog.isShowing()) {
+                if (progresDialog != null && progresDialog.isShowing()) {
                     progresDialog.dismiss();
                 }
 
@@ -781,13 +805,12 @@ Context context;
     }
 
 
-}
-    class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    static class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        public static Map<String, Query> mapQuery;
-        public static Map<String, DatabaseReference> mapQueryOnline;
-        public static Map<String, ChildEventListener> mapChildListener;
-        public static Map<String, ChildEventListener> mapChildListenerOnline;
+        public Map<String, Query> mapQuery;
+        public Map<String, DatabaseReference> mapQueryOnline;
+        public Map<String, ChildEventListener> mapChildListener;
+        public Map<String, ChildEventListener> mapChildListenerOnline;
         public static Map<String, Boolean> mapMark;
         Dialog dialogWaitDeleting;
         private ListFriend listFriend;
@@ -795,12 +818,17 @@ Context context;
         private FriendsFragment fragment;
         private ArrayList<Friend> arrFilter;
         ArrayList<beanUserData> arrShortListedUser;
+        ArrayList<beanUserData> arrShortListedfilter;
         SharedPreferences prefUpdate;
-String matriId="";
+        String matriId = "";
 
-        public ListFriendsAdapter(Context context, ListFriend listFriend, FriendsFragment fragment,ArrayList<beanUserData> arrShortListedUser) {
+        public ListFriendsAdapter(Context context, ListFriend listFriend, FriendsFragment fragment, ArrayList<beanUserData> arrShortListedUser) {
             this.listFriend = listFriend;
             this.arrShortListedUser = arrShortListedUser;
+            this.arrShortListedfilter = new ArrayList<>();
+            if (arrShortListedUser != null && arrShortListedUser.size() > 0) {
+                this.arrShortListedfilter.addAll(arrShortListedUser);
+            }
             this.arrFilter = new ArrayList<Friend>();
             this.arrFilter.addAll(listFriend.getListFriend());
             this.context = context;
@@ -811,8 +839,8 @@ String matriId="";
             mapQueryOnline = new HashMap<>();
             this.fragment = fragment;
             dialogWaitDeleting = showProgress(context);
-            prefUpdate= PreferenceManager.getDefaultSharedPreferences(context);
-            matriId=prefUpdate.getString("matri_id","");
+            prefUpdate = PreferenceManager.getDefaultSharedPreferences(context);
+            matriId = prefUpdate.getString("matri_id", "");
         }
 
         @Override
@@ -822,15 +850,23 @@ String matriId="";
         }
 
         @Override
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            String name = listFriend.getListFriend().get(position).name;
-            if(name==null || name.trim().isEmpty()){
-                if(arrShortListedUser.size()>0) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+            String name = "";
+           /* String name = listFriend.getListFriend().get(position).name;
+            if(name==null || name.trim().isEmpty()){*/
+            try {
+                if (arrShortListedUser.size() > 0) {
                     name = arrShortListedUser.get(position).getUsername();
-                }else{
-                    name="";
+                    listFriend.getListFriend().get(position).name = name;
+                    arrFilter.get(position).name = name;
+                } else {
+                    name = "";
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                name = "";
             }
+            // }
             final String id = listFriend.getListFriend().get(position).id;
             final String idRoom = listFriend.getListFriend().get(position).idRoom;
             final String avata = listFriend.getListFriend().get(position).avata;
@@ -838,36 +874,41 @@ String matriId="";
             ((ItemFriendViewHolder) holder).txtName.setText(name);
 
             String finalName = name;
-            ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ((ItemFriendViewHolder) holder).txtMessage.setTypeface(Typeface.DEFAULT);
-                            ((ItemFriendViewHolder) holder).txtName.setTypeface(Typeface.DEFAULT);
-                            strEmailOthers = email;
-                            Intent intent = new Intent(context, ChatDetailsActivity.class);
-                            intent.putExtra(AppConstants.INTENT_KEY_CHAT_FRIEND, finalName);
-                            ArrayList<CharSequence> idFriend = new ArrayList<CharSequence>();
-                            idFriend.add(id);
-                            intent.putCharSequenceArrayListExtra(AppConstants.INTENT_KEY_CHAT_ID, idFriend);
-                            intent.putExtra(AppConstants.INTENT_KEY_CHAT_ROOM_ID, idRoom);
-                            if(arrShortListedUser.size()>0) {
-                                intent.putExtra("isBlock", arrShortListedUser.get(position).getIs_blocked());
-                            }else{
-                                intent.putExtra("isBlock", arrShortListedUser.get(position).getIs_blocked());
-                            }
-                            ChatDetailsActivity.bitmapAvataFriend = new HashMap<>();
-                            if (!avata.equals(AppConstants.STR_DEFAULT_BASE64)) {
-                                byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
-                                ChatDetailsActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-                            } else {
-                                ChatDetailsActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_person_avatar));
-                            }
 
-                            mapMark.put(id, null);
-                            fragment.startActivityForResult(intent, FriendsFragment.ACTION_START_CHAT);
-                        }
-                    });
+                ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ((ItemFriendViewHolder) holder).txtMessage.setTypeface(Typeface.DEFAULT);
+                                ((ItemFriendViewHolder) holder).txtName.setTypeface(Typeface.DEFAULT);
+                                strEmailOthers = email;
+                                Intent intent = new Intent(context, ChatDetailsActivity.class);
+                                intent.putExtra(AppConstants.INTENT_KEY_CHAT_FRIEND, finalName);
+                                ArrayList<CharSequence> idFriend = new ArrayList<CharSequence>();
+                                idFriend.add(id);
+                                intent.putCharSequenceArrayListExtra(AppConstants.INTENT_KEY_CHAT_ID, idFriend);
+                                intent.putExtra(AppConstants.INTENT_KEY_CHAT_ROOM_ID, idRoom);
+                                try {
+                                    if (arrShortListedUser.size() > 0) {
+                                        intent.putExtra("isBlock", arrShortListedUser.get(position).getIs_blocked());
+                                    } else {
+                                        intent.putExtra("isBlock", arrShortListedUser.get(position).getIs_blocked());
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                ChatDetailsActivity.bitmapAvataFriend = new HashMap<>();
+                                if (!avata.equals(AppConstants.STR_DEFAULT_BASE64)) {
+                                    byte[] decodedString = Base64.decode(avata, Base64.DEFAULT);
+                                    ChatDetailsActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+                                } else {
+                                    ChatDetailsActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_person_avatar));
+                                }
+
+                                mapMark.put(id, null);
+                                fragment.startActivityForResult(intent, FriendsFragment.ACTION_START_CHAT);
+                            }
+                        });
 
             //nhấn giữ để xóa bạn
             ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
@@ -878,7 +919,7 @@ String matriId="";
 
                             new AlertDialog.Builder(context)
                                     .setTitle(R.string.delete_friend)
-                                    .setMessage(context.getString(R.string.are_you_sure_want_to_delete)+" " + friendName + "?")
+                                    .setMessage(context.getString(R.string.are_you_sure_want_to_delete) + " " + friendName + "?")
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -897,6 +938,22 @@ String matriId="";
                                     }).show();
 
                             return true;
+                        }
+                    });
+            //for view profile
+            ((View) ((ItemFriendViewHolder) holder).avata)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
+                                if (arrShortListedUser.size() > 0) {
+                                    ThirdHomeActivity.matri_id = arrShortListedUser.get(position).getMatri_id();
+                                    context.startActivity(new Intent(context, ThirdHomeActivity.class));
+                                }
+
+                            } else {
+                                AppConstants.setToastStr(((Activity) context), context.getString(R.string.this_member_has_blocked_you_for_message));
+                            }
                         }
                     });
 
@@ -943,8 +1000,8 @@ String matriId="";
                                 mapMark.put(id, false);
                             } else {
                                 try {
-                                listFriend.getListFriend().get(position).message.text = (String) mapMessage.get("text");
-                                notifyDataSetChanged();
+                                    listFriend.getListFriend().get(position).message.text = (String) mapMessage.get("text");
+                                    notifyDataSetChanged();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -1008,8 +1065,7 @@ String matriId="";
                         }
                     }
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 ((ItemFriendViewHolder) holder).avata.setImageResource(R.drawable.ic_person_avatar);
             }
@@ -1046,9 +1102,9 @@ String matriId="";
                         @Override
                         public void onClick(View v) {
                             if (((ItemFriendViewHolder) holder).RequestType.equalsIgnoreCase("Like")) {
-                                String test="";
-                                if(arrShortListedUser.size()>0) {
-                                     test = arrShortListedUser.get(position).getIs_blocked().toString();
+                                String test = "";
+                                if (arrShortListedUser.size() > 0) {
+                                    test = arrShortListedUser.get(position).getIs_blocked().toString();
                                     if (arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
                                         String msgBlock = context.getString(R.string.this_member_has_blocked_you);
                                         String msgNotPaid = context.getString(R.string.you_are_not_paid_memeber);
@@ -1063,7 +1119,7 @@ String matriId="";
                                         alert.show();
                                     } else {
                                         vibe.vibrate(vibrateBig);
-                                        shrinkAnim(((ItemFriendViewHolder) holder).ivLike,context);
+                                        shrinkAnim(((ItemFriendViewHolder) holder).ivLike, context);
                                         sendInterestRequest(matriId, arrShortListedUser.get(position).getMatri_id(), arrShortListedUser.get(position).getIs_favourite(), position, ((ItemFriendViewHolder) holder));
                                     }
                                 }
@@ -1071,7 +1127,7 @@ String matriId="";
 
 
                             } else if (((ItemFriendViewHolder) holder).RequestType.equalsIgnoreCase("Unlike")) {
-                                if(arrShortListedUser.size()>0) {
+                                if (arrShortListedUser.size() > 0) {
                                     if (arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
                                         String msgBlock = context.getString(R.string.this_member_has_blocked_you);
                                         String msgNotPaid = context.getString(R.string.you_are_not_paid_memeber);
@@ -1094,8 +1150,7 @@ String matriId="";
                     });
 
                 }
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -1114,9 +1169,13 @@ String matriId="";
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                         if (dataSnapshot.getValue() != null && dataSnapshot.getKey().equals("isOnline")) {
-                            Log.d("FriendsFragment change " + id, (boolean) dataSnapshot.getValue() + "");
-                            listFriend.getListFriend().get(position).status.isOnline = (boolean) dataSnapshot.getValue();
-                            notifyDataSetChanged();
+                            try {
+                                Log.d("FriendsFragment change " + id, (boolean) dataSnapshot.getValue() + "");
+                                listFriend.getListFriend().get(position).status.isOnline = (boolean) dataSnapshot.getValue();
+                                notifyDataSetChanged();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     }
 
@@ -1179,6 +1238,18 @@ String matriId="";
                                             Intent intentDeleted = new Intent(FriendsFragment.ACTION_DELETE_FRIEND);
                                             intentDeleted.putExtra("idFriend", idFriend);
                                             context.sendBroadcast(intentDeleted);
+
+                                            /*if(listFriendID!=null) {
+                                                listFriendID.clear();
+                                            }
+                                            if(dataListFriend.getListFriend()!=null) {
+                                                dataListFriend.getListFriend().clear();
+                                            }
+                                            //  adapter.notifyDataSetChanged();
+                                            FriendDB.getInstance(context).dropDB();
+                                            //detectFriendOnline.cancel();
+                                            getListFriendUId();*/
+                                            notifyDataSetChanged();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -1222,7 +1293,7 @@ String matriId="";
                                         public void onComplete(@NonNull Task<Void> task) {
                                             dialogWaitDeleting.dismiss();
 
-                                           // AppConstants.setToastStr((Activity) context, context.getString(R.string.friend_deleting_successfully));
+                                            // AppConstants.setToastStr((Activity) context, context.getString(R.string.friend_deleting_successfully));
                                             Intent intentDeleted = new Intent(FriendsFragment.ACTION_DELETE_FRIEND);
                                             intentDeleted.putExtra("idFriend", idFriend);
                                             context.sendBroadcast(intentDeleted);
@@ -1232,7 +1303,7 @@ String matriId="";
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             dialogWaitDeleting.dismiss();
-                                           // AppConstants.setToastStr((Activity) context, context.getString(R.string.error_occured_during_deleting_friend));
+                                            // AppConstants.setToastStr((Activity) context, context.getString(R.string.error_occured_during_deleting_friend));
                                         }
                                     });
                         }
@@ -1251,53 +1322,66 @@ String matriId="";
 
 
         class ItemFriendViewHolder extends RecyclerView.ViewHolder {
-            public PorterShapeImageView avata;
+            public ImageScaleView avata;
             public TextView txtName, txtTime, txtMessage;
             private Context context;
-            LinearLayout linBlock,linInterest;
+            LinearLayout linBlock, linInterest;
             TextView tvLike;
             ImageView ivLike;
             String RequestType;
+
             ItemFriendViewHolder(Context context, View itemView) {
                 super(itemView);
-                avata =  itemView.findViewById(R.id.icon_avata);
+                avata = itemView.findViewById(R.id.icon_avata);
                 txtName = (TextView) itemView.findViewById(R.id.txtName);
                 txtTime = (TextView) itemView.findViewById(R.id.txtTime);
                 txtMessage = (TextView) itemView.findViewById(R.id.txtMessage);
-                tvLike =  itemView.findViewById(R.id.tvLike);
-                ivLike =  itemView.findViewById(R.id.ivLike);
-                linBlock =  itemView.findViewById(R.id.linBlock);
-                linInterest =  itemView.findViewById(R.id.linInterest);
+                tvLike = itemView.findViewById(R.id.tvLike);
+                ivLike = itemView.findViewById(R.id.ivLike);
+                linBlock = itemView.findViewById(R.id.linBlock);
+                linInterest = itemView.findViewById(R.id.linInterest);
                 this.context = context;
             }
         }
 
 
         public void filter(String charText) {
-            charText = charText.toLowerCase(Locale.getDefault());
-            listFriend.getListFriend().clear();
-            if (charText.length() == 0) {
-                listFriend.getListFriend().addAll(arrFilter);
-            } else {
-                for (Friend wp : arrFilter) {
-                    String ProductName = wp.name;
+            try {
+                charText = charText.toLowerCase(Locale.getDefault());
+                listFriend.getListFriend().clear();
+                arrShortListedUser.clear();
+                if (charText.length() == 0) {
+                    listFriend.getListFriend().addAll(arrFilter);
+                    arrShortListedUser.addAll(arrShortListedfilter);
+                } else {
+//                for (Friend wp : arrFilter) {
+                    for (int i = 0; i < arrFilter.size(); i++) {
+                        Friend wp = arrFilter.get(i);
+                        beanUserData userData = arrShortListedfilter.get(i);
+                        String ProductName = userData.getUsername();
 
-                    if (ProductName.toLowerCase(Locale.getDefault()).contains(charText)) {
-                        listFriend.getListFriend().add(wp);
+                        if (ProductName.toLowerCase(Locale.getDefault()).contains(charText)) {
+                            listFriend.getListFriend().add(wp);
+                            arrShortListedUser.add(userData);
+                        }
                     }
                 }
-            }
 
-            if (listFriend.getListFriend().size() == 0) {
-                listFriend.getListFriend().addAll(arrFilter);
-            } else {
+                if (listFriend.getListFriend().size() == 0) {
+                    /*listFriend.getListFriend().addAll(arrFilter);
+                    arrShortListedUser.addAll(arrShortListedfilter);*/
+                    arrShortListedUser = new ArrayList<>();
+                }
                 notifyDataSetChanged();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
 
-        private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked,int position,String idFriendRemoval) {
-            Dialog  progresDialog = showProgress(context);
+        private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked, int position, String idFriendRemoval) {
+            Dialog progresDialog = showProgress(context);
            /* progresDialog.setCancelable(false);
             progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
             progresDialog.setIndeterminate(true);*/
@@ -1379,21 +1463,21 @@ String matriId="";
                         if (status.equalsIgnoreCase("1")) {
                             //String message=obj.getString("message").toString().trim();
 
-                        if (isBlocked.equalsIgnoreCase("1")) {
-                            if(arrShortListedUser.size()>0) {
-                                arrShortListedUser.get(position).setIs_blocked("0");
-                                setToastStrPinkBg((Activity) context, context.getString(R.string.sucessfully_unblock));
+                            if (isBlocked.equalsIgnoreCase("1")) {
+                                if (arrShortListedUser.size() > 0) {
+                                    arrShortListedUser.get(position).setIs_blocked("0");
+                                    setToastStrPinkBg((Activity) context, context.getString(R.string.sucessfully_unblock));
+                                }
+                            } else {
+                                if (arrShortListedUser.size() > 0) {
+                                    arrShortListedUser.get(position).setIs_blocked("1");
+                                    setToastStrPinkBg((Activity) context, context.getString(R.string.successfully_blocked));
+                                    listFriend.getListFriend().remove(position);
+                                    arrShortListedUser.remove(position);
+                                    deleteFriendWhileBlock(idFriendRemoval);
+                                    notifyDataSetChanged();
+                                }
                             }
-                        } else {
-                            if(arrShortListedUser.size()>0) {
-                                arrShortListedUser.get(position).setIs_blocked("1");
-                                setToastStrPinkBg((Activity) context, context.getString(R.string.successfully_blocked));
-                                listFriend.getListFriend().remove(position);
-                                arrShortListedUser.remove(position);
-                                deleteFriendWhileBlock(idFriendRemoval);
-                                notifyDataSetChanged();
-                            }
-                        }
                         } else {
                             String msgError = obj.getString("message");
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
@@ -1408,7 +1492,7 @@ String matriId="";
 
                         progresDialog.dismiss();
                     } catch (Exception t) {
-                        Log.e("fjkhgjkfa",t.getMessage());
+                        Log.e("fjkhgjkfa", t.getMessage());
                         progresDialog.dismiss();
                     }
                     progresDialog.dismiss();
@@ -1421,46 +1505,41 @@ String matriId="";
         }
 
 
-
         Dialog progresDialog;
-        private void sendInterestRequest(String login_matri_id, String strMatriId, final String isFavorite, final int pos, final ItemFriendViewHolder holder)
-        {
-            progresDialog= showProgress(context);
+
+        private void sendInterestRequest(String login_matri_id, String strMatriId, final String isFavorite, final int pos, final ItemFriendViewHolder holder) {
+            progresDialog = showProgress(context);
             /*progresDialog.setCancelable(false);
             progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
             progresDialog.setIndeterminate(true);*/
             progresDialog.show();
 
-            class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
-            {
+            class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
                 @Override
-                protected String doInBackground(String... params)
-                {
+                protected String doInBackground(String... params) {
                     String paramsLoginMatriId = params[0];
                     String paramsUserMatriId = params[1];
 
                     HttpClient httpClient = new DefaultHttpClient();
 
-                    String URL= AppConstants.MAIN_URL +"send_intrest.php";
-                    Log.e("send_intrest", "== "+URL);
+                    String URL = AppConstants.MAIN_URL + "send_intrest.php";
+                    Log.e("send_intrest", "== " + URL);
 
                     HttpPost httpPost = new HttpPost(URL);
 
                     BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("sender_id", paramsLoginMatriId);
-                    BasicNameValuePair UserMatriIdPair  = new BasicNameValuePair("receiver_id", paramsUserMatriId);
+                    BasicNameValuePair UserMatriIdPair = new BasicNameValuePair("receiver_id", paramsUserMatriId);
 
 
                     List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                     nameValuePairList.add(LoginMatriIdPair);
                     nameValuePairList.add(UserMatriIdPair);
 
-                    try
-                    {
+                    try {
                         UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
                         httpPost.setEntity(urlEncodedFormEntity);
-                        Log.e("Parametters Array=", "== "+(nameValuePairList.toString().trim().replaceAll(",","&")));
-                        try
-                        {
+                        Log.e("Parametters Array=", "== " + (nameValuePairList.toString().trim().replaceAll(",", "&")));
+                        try {
                             HttpResponse httpResponse = httpClient.execute(httpPost);
                             InputStream inputStream = httpResponse.getEntity().getContent();
                             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -1468,8 +1547,7 @@ String matriId="";
                             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                             StringBuilder stringBuilder = new StringBuilder();
                             String bufferedStrChunk = null;
-                            while((bufferedStrChunk = bufferedReader.readLine()) != null)
-                            {
+                            while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
                                 stringBuilder.append(bufferedStrChunk);
                             }
 
@@ -1478,8 +1556,7 @@ String matriId="";
                         } catch (ClientProtocolException cpe) {
                             System.out.println("Firstption caz of HttpResponese :" + cpe);
                             cpe.printStackTrace();
-                        } catch (IOException ioe)
-                        {
+                        } catch (IOException ioe) {
                             System.out.println("Secondption caz of HttpResponse :" + ioe);
                             ioe.printStackTrace();
                         }
@@ -1494,48 +1571,41 @@ String matriId="";
                 }
 
                 @Override
-                protected void onPostExecute(String result)
-                {
+                protected void onPostExecute(String result) {
                     super.onPostExecute(result);
 
-                    Log.e("send_intrest", "=="+result);
+                    Log.e("send_intrest", "==" + result);
 
-                    try
-                    {
+                    try {
                         JSONObject obj = new JSONObject(result);
 
-                        String status=obj.getString("status");
+                        String status = obj.getString("status");
 
-                        if (status.equalsIgnoreCase("1"))
-                        {
+                        if (status.equalsIgnoreCase("1")) {
 
                             holder.ivLike.setImageResource(R.drawable.ic_heart);
                             holder.tvLike.setText(context.getString(R.string.unlike));
-                            String message=obj.getString("message").toString().trim();
-                            setToastStrPinkBg((Activity) context, ""+message);
+                            String message = obj.getString("message").toString().trim();
+                            setToastStrPinkBg((Activity) context, "" + message);
                             //arrShortListedUser.remove(pos);
 
-                        if(isFavorite.equalsIgnoreCase("1")) {
-                            if(arrShortListedUser.size()>0) {
-                                arrShortListedUser.get(pos).setIs_favourite("0");
+                            if (isFavorite.equalsIgnoreCase("1")) {
+                                if (arrShortListedUser.size() > 0) {
+                                    arrShortListedUser.get(pos).setIs_favourite("0");
+                                }
+                            } else {
+                                if (arrShortListedUser.size() > 0) {
+                                    arrShortListedUser.get(pos).setIs_favourite("1");
+                                    arrShortListedUser.get(pos).setei_reqid("" + obj.getString("ei_id"));
+                                }
                             }
-                        }else
-                        {
-                            if(arrShortListedUser.size()>0) {
-                                arrShortListedUser.get(pos).setIs_favourite("1");
-                                arrShortListedUser.get(pos).setei_reqid("" + obj.getString("ei_id"));
-                            }
-                        }
                             notifyDataSetChanged();
 
-                        }else
-                        {
-                            String msgError=obj.getString("message");
+                        } else {
+                            String msgError = obj.getString("message");
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                            builder.setMessage(""+msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
-                            {
-                                public void onClick(DialogInterface dialog, int id)
-                                {
+                            builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                                     dialog.dismiss();
                                 }
                             });
@@ -1543,9 +1613,8 @@ String matriId="";
                             alert.show();
                         }
                         progresDialog.dismiss();
-                    } catch (Exception t)
-                    {
-                        Log.e("fjglfjl",t.getMessage());
+                    } catch (Exception t) {
+                        Log.e("fjglfjl", t.getMessage());
                         progresDialog.dismiss();
                     }
                     progresDialog.dismiss();
@@ -1555,48 +1624,43 @@ String matriId="";
             }
 
             SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-            sendPostReqAsyncTask.execute(login_matri_id,strMatriId);
+            sendPostReqAsyncTask.execute(login_matri_id, strMatriId);
         }
 
 
-        private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite, final int pos, ItemFriendViewHolder holder)
-        {
-            progresDialog= showProgress(context);
+        private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite, final int pos, ItemFriendViewHolder holder) {
+            progresDialog = showProgress(context);
             /*progresDialog.setCancelable(false);
             progresDialog.setMessage(context.getResources().getString(R.string.Please_Wait));
             progresDialog.setIndeterminate(true);*/
             progresDialog.show();
 
-            class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
-            {
+            class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
                 @Override
-                protected String doInBackground(String... params)
-                {
+                protected String doInBackground(String... params) {
                     String paramsLoginMatriId = params[0];
                     String paramsEiId = params[1];
 
                     HttpClient httpClient = new DefaultHttpClient();
 
-                    String URL= AppConstants.MAIN_URL +"remove_intrest.php";
-                    Log.e("remove_intrest", "== "+URL);
+                    String URL = AppConstants.MAIN_URL + "remove_intrest.php";
+                    Log.e("remove_intrest", "== " + URL);
 
                     HttpPost httpPost = new HttpPost(URL);
 
                     BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("matri_id", paramsLoginMatriId);
-                    BasicNameValuePair UserMatriIdPair  = new BasicNameValuePair("ei_id", paramsEiId);
+                    BasicNameValuePair UserMatriIdPair = new BasicNameValuePair("ei_id", paramsEiId);
 
 
                     List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                     nameValuePairList.add(LoginMatriIdPair);
                     nameValuePairList.add(UserMatriIdPair);
 
-                    try
-                    {
+                    try {
                         UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
                         httpPost.setEntity(urlEncodedFormEntity);
-                        Log.e("Parametters Array=", "== "+(nameValuePairList.toString().trim().replaceAll(",","&")));
-                        try
-                        {
+                        Log.e("Parametters Array=", "== " + (nameValuePairList.toString().trim().replaceAll(",", "&")));
+                        try {
                             HttpResponse httpResponse = httpClient.execute(httpPost);
                             InputStream inputStream = httpResponse.getEntity().getContent();
                             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -1604,8 +1668,7 @@ String matriId="";
                             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                             StringBuilder stringBuilder = new StringBuilder();
                             String bufferedStrChunk = null;
-                            while((bufferedStrChunk = bufferedReader.readLine()) != null)
-                            {
+                            while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
                                 stringBuilder.append(bufferedStrChunk);
                             }
 
@@ -1614,8 +1677,7 @@ String matriId="";
                         } catch (ClientProtocolException cpe) {
                             System.out.println("Firstption caz of HttpResponese :" + cpe);
                             cpe.printStackTrace();
-                        } catch (IOException ioe)
-                        {
+                        } catch (IOException ioe) {
                             System.out.println("Secondption caz of HttpResponse :" + ioe);
                             ioe.printStackTrace();
                         }
@@ -1630,46 +1692,39 @@ String matriId="";
                 }
 
                 @Override
-                protected void onPostExecute(String result)
-                {
+                protected void onPostExecute(String result) {
                     super.onPostExecute(result);
 
-                    Log.e("send_intrest", "=="+result);
+                    Log.e("send_intrest", "==" + result);
 
-                    try
-                    {
+                    try {
                         JSONObject obj = new JSONObject(result);
 
-                        String status=obj.getString("status");
+                        String status = obj.getString("status");
 
-                        if (status.equalsIgnoreCase("1"))
-                        {
+                        if (status.equalsIgnoreCase("1")) {
                             holder.ivLike.setImageResource(R.drawable.ic_heart_greybg);
                             holder.tvLike.setText(context.getString(R.string.like));
-                            String message=obj.getString("message").toString().trim();
-                            setToastStrPinkBg((Activity) context, ""+message);
+                            String message = obj.getString("message").toString().trim();
+                            setToastStrPinkBg((Activity) context, "" + message);
 
-                            if(isFavorite.equalsIgnoreCase("1")) {
-                                if(arrShortListedUser.size()>0) {
+                            if (isFavorite.equalsIgnoreCase("1")) {
+                                if (arrShortListedUser.size() > 0) {
                                     arrShortListedUser.get(pos).setIs_favourite("0");
                                 }
-                            }else
-                            {
-                                if(arrShortListedUser.size()>0) {
+                            } else {
+                                if (arrShortListedUser.size() > 0) {
                                     arrShortListedUser.get(pos).setIs_favourite("1");
                                 }
                             }
 
-                           notifyDataSetChanged();
+                            notifyDataSetChanged();
 
-                        }else
-                        {
-                            String msgError=obj.getString("message");
+                        } else {
+                            String msgError = obj.getString("message");
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                            builder.setMessage(""+msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
-                            {
-                                public void onClick(DialogInterface dialog, int id)
-                                {
+                            builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                                     dialog.dismiss();
                                 }
                             });
@@ -1679,8 +1734,7 @@ String matriId="";
 
 
                         progresDialog.dismiss();
-                    } catch (Throwable t)
-                    {
+                    } catch (Throwable t) {
                         progresDialog.dismiss();
                     }
                     progresDialog.dismiss();
@@ -1689,7 +1743,8 @@ String matriId="";
             }
 
             SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-            sendPostReqAsyncTask.execute(login_matri_id,strMatriId);
+            sendPostReqAsyncTask.execute(login_matri_id, strMatriId);
         }
 
     }
+}

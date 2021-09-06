@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,11 +20,13 @@ public class RecycleImagesAdapter extends RecyclerView.Adapter<RecycleImagesAdap
 
     Context nContext;
     ArrayList<Uri> imguris;
+    ArrayList<String> hobbiesTextArr;
     private final OnItemClickListener clickListener;
 
-    public RecycleImagesAdapter(Context nContext, ArrayList<Uri> imguris, OnItemClickListener clickListener) {
+    public RecycleImagesAdapter(Context nContext, ArrayList<Uri> imguris,ArrayList<String> hobbiesTextArr, OnItemClickListener clickListener) {
         this.nContext = nContext;
         this.imguris = imguris;
+        this.hobbiesTextArr = hobbiesTextArr;
         this.clickListener = clickListener;
 
     }
@@ -42,6 +45,12 @@ public class RecycleImagesAdapter extends RecyclerView.Adapter<RecycleImagesAdap
                 .load(imguris.get(position))
                 .into(holder.imgView);
         //holder.imgView.setClipToOutline(true);
+        if(hobbiesTextArr.get(position).isEmpty()){
+            holder.hobbyName.setVisibility(View.GONE);
+        }else{
+            holder.hobbyName.setVisibility(View.VISIBLE);
+            holder.hobbyName.setText(nContext.getString(R.string.my_hobby)+" - "+hobbiesTextArr.get(position));
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,9 +66,11 @@ public class RecycleImagesAdapter extends RecyclerView.Adapter<RecycleImagesAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgView;
+        TextView hobbyName;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgView=itemView.findViewById(R.id.imgView);
+            hobbyName=itemView.findViewById(R.id.tvDetail);
         }
     }
     public interface OnItemClickListener {

@@ -103,7 +103,7 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/bg_round_red"/>-->
 </RelativeLayout>
-                    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                  <!--  <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
                         android:id="@+id/rivProfileImage"
                         android:layout_width="@dimen/_25sdp"
                         android:layout_height="@dimen/_35sdp"
@@ -111,7 +111,15 @@
                         android:src="@drawable/shape_corner_round_square"
                         app:siShape="@drawable/shape_corner_round_square"
                         app:siSquare="false"
-                        android:scaleType="fitXY"/>
+                        android:scaleType="fitXY"/>-->
+                    <com.prometteur.sathiya.utills.ImageScaleView
+                        android:id="@+id/rivProfileImage"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:scaleType="matrix"
+                        android:src="@drawable/shape_corner_round_square"
+                        app:matrixType="top_center" />
+
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/linSearch"
@@ -142,6 +150,8 @@
                    android:paddingRight="15dp"
                    android:hint="@string/search_by_matri_id"
                    android:textColor="@color/black"
+                   android:singleLine="true"
+                   android:imeOptions="actionSearch"
                    android:textColorHint="@color/grey2"/>
                 <ImageView
                     android:id="@+id/imgSearch"

@@ -1,5 +1,24 @@
 package com.prometteur.sathiya.adapters;
 
+import static com.prometteur.sathiya.SplashActivity.strLang;
+import static com.prometteur.sathiya.SplashActivity.strLangCode;
+import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
+import static com.prometteur.sathiya.home.MusicService.mPlayer;
+import static com.prometteur.sathiya.home.SecondHomeActivity.activityRunning;
+import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimer;
+import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimerPlayPause;
+import static com.prometteur.sathiya.home.SecondHomeActivity.isSwiped;
+import static com.prometteur.sathiya.home.SecondHomeActivity.ivPlayPause;
+import static com.prometteur.sathiya.home.SecondHomeActivity.mMainViewModel;
+import static com.prometteur.sathiya.home.SecondHomeActivity.videoStarted;
+import static com.prometteur.sathiya.home.SecondHomeActivity.videoView;
+import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
+import static com.prometteur.sathiya.utills.AppConstants.vibe;
+import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
+import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
+import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -78,21 +97,6 @@ import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-import static com.prometteur.sathiya.SplashActivity.strLang;
-import static com.prometteur.sathiya.SplashActivity.strLangCode;
-import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
-import static com.prometteur.sathiya.home.MusicService.mPlayer;
-import static com.prometteur.sathiya.home.SecondHomeActivity.activityRunning;
-import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimer;
-import static com.prometteur.sathiya.home.SecondHomeActivity.isSwiped;
-import static com.prometteur.sathiya.home.SecondHomeActivity.mMainViewModel;
-import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
-import static com.prometteur.sathiya.utills.AppConstants.vibe;
-import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
-import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
-import static com.prometteur.sathiya.utills.AppMethods.showProgress;
-import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
-
 public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "CardStackAdapter";
     private final int VIEW_TYPE_ITEM = 0;
@@ -103,11 +107,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     ArrayList<String> tokans;
     CardStackView cardStackView;
     String RequestType;
-    String matri_id = "",userMobileNo="";
+    String matri_id = "", userMobileNo = "";
     SharedPreferences prefUpdate;
     CardStackLayoutManager manager;
     FriendsFragment.FragFriendClickFloatButton onClickFloatButton;
     long milliLeft = 0;
+    int pauseVal=0;
     private OnNotifyDataSetChanged onNotifyDataSetChanged;
 
     public CardStackAdapter(Activity nActivity, List<beanUserData> mDataList, CardStackView cardStackView, ArrayList<String> tokans, CardStackLayoutManager manager, OnNotifyDataSetChanged onNotifyDataSetChanged) {
@@ -173,7 +178,19 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View view) {
                     if (NetworkConnection.hasConnection(nActivity)) {
-                        setContact(matri_id, singleUser.getMatri_id(), singleUser.getUserMobile());
+                        if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
+                            String msgBlock = "This member is blocked.";
+                            AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
+                            builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        } else {
+                            setContact(matri_id, singleUser.getMatri_id(), singleUser.getUserMobile());
+                        }
                     } else {
                         AppConstants.CheckConnection(nActivity);
                     }
@@ -225,9 +242,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         Log.d("TAG", "CHECK =" + test);
 
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
-                            String msgBlock = "This member has blocked you. You can't express your interest.";
-                            String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
-
+                            String msgBlock = "This member is blocked.";
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                             builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -246,7 +261,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
                     } else if (RequestType.equalsIgnoreCase("Unlike")) {
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
-                            String msgBlock = "This member has blocked you. You can't express your interest.";
+                            String msgBlock = "This member is blocked. You can't express your interest.";
                             String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
@@ -276,11 +291,25 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.profileBinding.civMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openChatOnce = false;
-                    Intent activityIntent = new Intent(nActivity, ChatActivity.class);
-                    activityIntent.putExtra("friendEmail", singleUser.getEmail());
-                    nActivity.startActivity(activityIntent);
-                    nActivity.finish();
+                    if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
+                        String msgBlock = "This member is blocked. You can't express your interest.";
+                        String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
+                        builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    } else {
+                        openChatOnce = false;
+                        Intent activityIntent = new Intent(nActivity, ChatActivity.class);
+                        activityIntent.putExtra("friendEmail", singleUser.getEmail());
+                        nActivity.startActivity(activityIntent);
+                        nActivity.finish();
+                    }
 //                   onClickFloatButton.findIDEmail(singleUser.getEmail(),nActivity);
                 }
             });
@@ -301,6 +330,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (mDataList.get(position).getImageUri() != null) {
                 holder.imguris.addAll(mDataList.get(position).getImageUri());
+            }
+            if (mDataList.get(position).getHobbiesText() != null) {
+                holder.hobbiesTextArr.addAll(mDataList.get(position).getHobbiesText());
             }
 
 
@@ -332,25 +364,26 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 //holder.stringData.add("");// for initial filler
                 holder.stringData.addAll(mDataList.get(position).getPhotoPath());
             }
-            /*holder.stringData.add("Blank");
+         /*   holder.stringData.add("Welcome to my profile");
             holder.stringData.add("Mera naam Sumit Dhara hai");
             holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
             holder.stringData.add("Mien orisa ka rahne wala hoon");
-            holder.stringData.add("Blank");
+           // holder.stringData.add("Blank");
             holder.stringData.add("Meri umar 38 saal hai");
             holder.stringData.add("Blank");
             holder.stringData.add("Mera kad 5 ft 10 inch hai");
-            holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+           // holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
             holder.stringData.add("Mein shakahari hoon");
             holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
             holder.stringData.add("Mere ghar pe Hindi boli jaati h");
-            holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+          //  holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
             holder.stringData.add("Mien 12th tak pada hoon");
             holder.stringData.add("Blank");
             holder.stringData.add("Mein plumber hoon");
-            holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+           // holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
             holder.stringData.add("Meri maasik aay 10 haazaar hai");
             holder.stringData.add("Lekin khushiya bonus mein");
+            holder.stringData.add("What I am looking for?");
             holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");*/
             milliLeft = 0;
             holder.profileBinding.ivPlayPause.setOnClickListener(new View.OnClickListener() {
@@ -366,6 +399,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    videoView=holder.profileBinding.videoView;
+                    ivPlayPause=holder.profileBinding.ivPlayPause;
                     holder.profileBinding.videoView.setVisibility(View.VISIBLE);
                     holder.profileBinding.tvDetail.setVisibility(View.VISIBLE);
                     Glide.with(nActivity)
@@ -383,6 +418,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             .into(holder.profileBinding.rivProfileImage);
 
                     if (holder.paused) {
+                        pauseVal=1;
                         nActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                         if (mPlayer != null) {
                             mPlayer.pause();
@@ -408,13 +444,15 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         showHideView(holder, holder.paused);
                     } else {
                         holder.paused = true;
+                        videoStarted=true;
                         nActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+                        holder.profileBinding.videoView.setVisibility(View.VISIBLE);
+                        holder.profileBinding.recycler.setVisibility(View.GONE);
 
                         //if(!mPlayer.isPlaying()) {
 
                         // }
-                        if (holder.current == 0 || holder.current == 21) {
+                        if (holder.current == 0 || holder.current == 17) {
                             // holder.loadjpgs();
                             if (!holder.repeat) {
                                 holder.repeat = true;
@@ -426,7 +464,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
                         try {
                             mPlayer.start();
-                        }catch (Exception e){e.printStackTrace();}
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         holder.profileBinding.ivPlayPause.setImageResource(R.drawable.ic_pause_circle_white);
                         holder.profileBinding.ivPlayPause.setVisibility(View.GONE);
 
@@ -434,12 +474,13 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((Animatable) holder.drawable).start();
                         }
 
-try {
-    if (!holder.profileBinding.videoView.isPlaying()) {
-        holder.profileBinding.videoView.start();
-    }
-}catch (Exception e)
-{e.printStackTrace();}
+                        try {
+                            if (!holder.profileBinding.videoView.isPlaying()) {
+                                holder.profileBinding.videoView.start();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                         if (holder.current != 0 && holder.imageIndex != holder.imguris.size()) {
                             //holder.loadjpgs();
@@ -448,7 +489,7 @@ try {
 
 
                         showHideView(holder, holder.paused);
-                        if (holder.current == 21) {
+                        if (holder.current == 17) {
                             holder.current = 0;
                         }
                         setViews(holder.stringData, holder, holder.current, singleUser);
@@ -464,7 +505,11 @@ try {
                         holder.mute = false;
                         holder.profileBinding.ivVolume.setImageResource(R.drawable.ic_nosound_icon);
                         AudioManager mAlramMAnager = (AudioManager) nActivity.getSystemService(Context.AUDIO_SERVICE);
-                        MusicService.mPlayer.setVolume(0, 0);
+                        try {
+                            MusicService.mPlayer.setVolume(0, 0);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             // mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_MUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_MUTE, 0);
@@ -537,19 +582,19 @@ try {
         longArrayList.add(4000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
         longArrayList.add(4000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
-        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        // longArrayList.add(5000L);//holder.stringData.add("Blank");
         longArrayList.add(7000L);//holder.stringData.add("Meri umar 38 saal hai");
         longArrayList.add(5000L);//holder.stringData.add("Blank");
         longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
-        longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+        // longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
         longArrayList.add(4000L);//holder.stringData.add("Mein shakahari hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
-        longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+        //  longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
         longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
         longArrayList.add(5000L);//holder.stringData.add("Blank");
         longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
-        longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+        //  longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
         longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
         longArrayList.add(3000L);//holder.stringData.add("Lekin khushiya bonus mein");
         longArrayList.add(3000L);//holder.stringData.add("What I am looking for?");
@@ -562,29 +607,57 @@ try {
         }*/
         if (activityRunning) {
             if (longArrayList.size() > 0) {
+                if(pauseVal==1){
+                    pauseVal=0;
+                    if(milliLeft<1000){
+                        milliLeft=1000;
+                    }
+                    longArrayList.set(poss[0],(milliLeft));
+                    Log.e("In restart ",poss[0]+" Remaining Time : "+(milliLeft));
+                }
+                countDownTimerPlayPause=holder.countDownTimer;
                 holder.countDownTimer = new CountDownTimer(longArrayList.get(poss[0]), 1000) {
                     @Override
                     public void onTick(long l) {
                         milliLeft = l;
-                        if (!arraylist.get(poss[0]).isEmpty() && !arraylist.get(poss[0]).equalsIgnoreCase("blank")) {
-                            holder.translateText(arraylist.get(poss[0]), userData.getGender());
-                        } else {
-                            holder.profileBinding.tvDetail.setText(arraylist.get(poss[0]));
+                        try {
+                            Log.e("Mili", poss[0] + " Remaining Time : " + l);
+                            if (!arraylist.get(poss[0]).isEmpty() && !arraylist.get(poss[0]).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(poss[0]), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(poss[0]));
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
 
                     @Override
                     public void onFinish() {
                         poss[0]++;
+                        try{
                         holder.current = poss[0];
                         if (arraylist.size() == poss[0]) {
 
                             if (holder.imguris.size() > 0) {
                                 holder.profileBinding.recycler.setVisibility(View.VISIBLE);
+                                Glide.with(nActivity)
+                                        .asBitmap()
+                                        .apply(new RequestOptions()
+//                            .fitCenter()
+                                                .format(DecodeFormat.PREFER_ARGB_8888)
+                                                .override(Target.SIZE_ORIGINAL))
+                                        .thumbnail(0.5f)
+//                    .load(R.drawable.bg_pink_card)
+                                        .load("")
+                                        .placeholder(R.drawable.bg_pink_card)
+                                        .error(R.drawable.bg_pink_card)
+                                        .into(holder.profileBinding.rivProfileImage);
+
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, holder.profileBinding.videoView.getHeight());
                                 params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
                                 holder.profileBinding.recycler.setLayoutParams(params);
-                                holder.adapter = new RecycleImagesAdapter(nContext, holder.imguris, new RecycleImagesAdapter.OnItemClickListener() {
+                                holder.adapter = new RecycleImagesAdapter(nContext, holder.imguris, holder.hobbiesTextArr, new RecycleImagesAdapter.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(int position) {
                                         holder.profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
@@ -596,25 +669,29 @@ try {
                                 holder.loadjpgs();
                             } else {
                                 holder.profileBinding.recycler.setVisibility(View.GONE);
+                                holder.profileBinding.rivProfileImage.setVisibility(View.VISIBLE);
+                                holder.profileBinding.videoView.setVisibility(View.GONE);
+                                Glide.with(nActivity)
+                                        .asBitmap()
+                                        .apply(new RequestOptions()
+//                            .fitCenter()
+                                                .format(DecodeFormat.PREFER_ARGB_8888)
+                                                .override(Target.SIZE_ORIGINAL))
+                                        .thumbnail(0.5f)
+//                    .load(R.drawable.bg_pink_card)
+                                        .load(userData.getUser_profile_picture())
+                                        .placeholder(R.drawable.bg_pink_card)
+                                        .error(R.drawable.bg_pink_card)
+                                        .into(holder.profileBinding.rivProfileImage);
+
                                 if (MusicService.mPlayer == null) {
                                     MusicService.mPlayer = new MediaPlayer();
                                 }
                                 MusicService.mPlayer.stop();
                                 nActivity.stopService(new Intent(nActivity, MusicService.class));
-                                holder.repeat=false;
+                                holder.repeat = false;
                             }
-                            Glide.with(nActivity)
-                                    .asBitmap()
-                                    .apply(new RequestOptions()
-//                            .fitCenter()
-                                            .format(DecodeFormat.PREFER_ARGB_8888)
-                                            .override(Target.SIZE_ORIGINAL))
-                                    .thumbnail(0.5f)
-//                    .load(R.drawable.bg_pink_card)
-                                    .load(userData.getUser_profile_picture())
-                                    .placeholder(R.drawable.bg_pink_card)
-                                    .error(R.drawable.bg_pink_card)
-                                    .into(holder.profileBinding.rivProfileImage);
+
                             holder.profileBinding.tvDetail.setVisibility(View.GONE);
                             holder.profileBinding.videoView.setVisibility(View.GONE);
                             if (holder.imguris.size() == 0) {
@@ -626,7 +703,11 @@ try {
                             }
                         } else {
                             holder.voiceCall = true;
+                            pauseVal=0;
                             setViews(arraylist, holder, poss[0], userData);
+                        }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 }.start();
@@ -996,9 +1077,9 @@ try {
 
                         if (status.equalsIgnoreCase("1")) {
 
-                           /* Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:" + userMobile));//change the number
-                            nActivity.startActivity(callIntent);*/
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:+911140844881"));//change the number
+                            nActivity.startActivity(callIntent);
                             AppConstants.setToastStr(nActivity, "" + obj.getString("message"));
                         } else {
                             AppConstants.setToastStr(nActivity, "" + obj.getString("message"));
@@ -1129,8 +1210,9 @@ try {
         ItemHomeProfileBinding profileBinding;
         int imageIndex = 0;
         int current = 0;
-        ArrayList<Uri> uris = new ArrayList<>();
+        int currentForPlayPause = 0;
         ArrayList<Uri> imguris = new ArrayList<>();
+        ArrayList<String> hobbiesTextArr = new ArrayList<>();
         ArrayList<Animation> animationtypes = new ArrayList<>();
         ArrayList<String> stringData = new ArrayList<>();
         Typeface typefaces;
@@ -1158,17 +1240,32 @@ try {
                     repeat = false;
                     imageIndex = 0;
                     current = 0;
-                    profileBinding.tvDetail.setVisibility(View.VISIBLE);
-                    profileBinding.recycler.setVisibility(View.GONE);
-                    profileBinding.videoView.setVisibility(View.VISIBLE);
+                    profileBinding.tvDetail.setVisibility(View.GONE);
+                    profileBinding.recycler.setVisibility(View.VISIBLE);
+                    profileBinding.videoView.setVisibility(View.GONE);
+                   /* Glide.with(nActivity)
+                            .asBitmap()
+                            .apply(new RequestOptions()
+//                            .fitCenter()
+                                    .format(DecodeFormat.PREFER_ARGB_8888)
+                                    .override(Target.SIZE_ORIGINAL))
+                            .thumbnail(0.5f)
+//                    .load(R.drawable.bg_pink_card)
+                            .load(userData.getUser_profile_picture())
+                            .placeholder(R.drawable.bg_pink_card)
+                            .error(R.drawable.bg_pink_card)
+                            .into(profileBinding.rivProfileImage);
+*/
                     if (MusicService.mPlayer == null) {
                         MusicService.mPlayer = new MediaPlayer();
                     }
                     try {
                         MusicService.mPlayer.stop();
-                    }catch (Exception e){e.printStackTrace();}
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     nActivity.stopService(new Intent(nActivity, MusicService.class));
-                    repeat=false;
+                    repeat = false;
                 }
             }
         };
@@ -1277,7 +1374,7 @@ try {
 
                         @Override
                         public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                            setToastStr(nActivity, "" + e.getMessage());
+                            //setToastStr(nActivity, "" + e.getMessage());
                             //makeToast("Speak failed " + e.getMessage(), true);
                             Log.e("speak_failed ", "Speak failed", e);
                         }

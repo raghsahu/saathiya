@@ -57,7 +57,7 @@ if(position==image_arraylist.size()-1){
     ivPlayPause.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            activity.startActivity(new Intent(activity, DialogPlayVideoActivity.class));
+            activity.startActivity(new Intent(activity, DialogPlayVideoActivity.class).putStringArrayListExtra("profileImages", (ArrayList<String>) imagePaths));
         }
     });
 }else{

@@ -1,6 +1,15 @@
 package com.prometteur.sathiya.home;
 
-import com.prometteur.sathiya.BaseActivity;
+import static com.prometteur.sathiya.SplashActivity.strLang;
+import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
+import static com.prometteur.sathiya.utills.AppConstants.sendPushNotification;
+import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
+import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
+import static com.prometteur.sathiya.utills.AppConstants.vibe;
+import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
+import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
+import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.prometteur.sathiya.BaseActivity;
 import com.prometteur.sathiya.R;
 import com.prometteur.sathiya.adapters.SliderPhotoPagerAdapter;
 import com.prometteur.sathiya.beans.beanHobbyImage;
@@ -36,6 +46,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,34 +61,28 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
-import static com.prometteur.sathiya.SplashActivity.strLang;
-import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
-import static com.prometteur.sathiya.utills.AppConstants.sendPushNotification;
-import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
-import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
-import static com.prometteur.sathiya.utills.AppConstants.vibe;
-import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
-import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
-import static com.prometteur.sathiya.utills.AppMethods.showProgress;
-import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
-
 public class ThirdHomeActivity extends BaseActivity {
-ActivityThirdHomeBinding thirdHomeBinding;
-BaseActivity nActivity=ThirdHomeActivity.this;
-    public static String matri_id, login_matri_id, gender, is_shortlist, strUserImage,username;
+    public static String matri_id, login_matri_id, gender, is_shortlist, strUserImage, username;
+    ActivityThirdHomeBinding thirdHomeBinding;
+    BaseActivity nActivity = ThirdHomeActivity.this;
     SharedPreferences prefUpdate;
 
-    String mobileNo = "",userMobileNo="",  country_code ="", firebase_email="";
+    String mobileNo = "", userMobileNo = "", country_code = "", firebase_email = "";
     String Maritalstatus = "";
-    String is_interest="",RequestType="";
-    String tokans ="";
-    String Photo_Pass= "";
-    String is_blocked,genderOther="";
-    FriendsFragment.FragFriendClickFloatButton  onClickFloatButton;
+    String is_interest = "", RequestType = "";
+    String tokans = "";
+    String Photo_Pass = "";
+    String is_blocked, genderOther = "";
+    FriendsFragment.FragFriendClickFloatButton onClickFloatButton;
+    String isFavorite = "", eiId = "";
+    SliderPhotoPagerAdapter sliderPagerAdapter;
+    List<beanHobbyImage> arrPhotos = new ArrayList<>();
+    TextView[] dots;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        thirdHomeBinding=ActivityThirdHomeBinding.inflate(getLayoutInflater());
+        thirdHomeBinding = ActivityThirdHomeBinding.inflate(getLayoutInflater());
         setContentView(thirdHomeBinding.getRoot());
         thirdHomeBinding.ivBackClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,18 +99,15 @@ BaseActivity nActivity=ThirdHomeActivity.this;
         username = prefUpdate.getString("username", "");
         strLang = prefUpdate.getString("selLang", "");
         userMobileNo = prefUpdate.getString("mobile", "");
-if(getIntent().getStringExtra("getListType")!=null)
-{
-    if(getIntent().getStringExtra("getListType").equalsIgnoreCase("call") || getIntent().getStringExtra("getListType").equalsIgnoreCase("msg")) {
-        thirdHomeBinding.tvBlock.setVisibility(View.VISIBLE);
-    }else
-    {
-        thirdHomeBinding.tvBlock.setVisibility(View.GONE);
-    }
-}else
-{
-    thirdHomeBinding.tvBlock.setVisibility(View.GONE);
-}
+        if (getIntent().getStringExtra("getListType") != null) {
+            if (getIntent().getStringExtra("getListType").equalsIgnoreCase("call") || getIntent().getStringExtra("getListType").equalsIgnoreCase("msg")) {
+                thirdHomeBinding.tvBlock.setVisibility(View.VISIBLE);
+            } else {
+                thirdHomeBinding.tvBlock.setVisibility(View.GONE);
+            }
+        } else {
+            thirdHomeBinding.tvBlock.setVisibility(View.GONE);
+        }
         Onclick();
        /* refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -120,33 +123,32 @@ if(getIntent().getStringExtra("getListType")!=null)
                     .into(thirdHomeBinding.civUserPicture);
         }*/
         //thirdHomeBinding.textUsername.setText("" + username);
-       // thirdHomeBinding.tvRefNo.setText("#"+login_matri_id);
-        if (NetworkConnection.hasConnection(nActivity)){
-            Log.e("getMemberData",""+login_matri_id+" "+matri_id);
+        // thirdHomeBinding.tvRefNo.setText("#"+login_matri_id);
+        if (NetworkConnection.hasConnection(nActivity)) {
+            Log.e("getMemberData", "" + login_matri_id + " " + matri_id);
             getMemberProfile(login_matri_id, matri_id);
 
-        }else
-        {
+        } else {
             AppConstants.CheckConnection(nActivity);
         }
     }
+
     private void Onclick() {
 
-        if(getIntent().getStringExtra("pageType")==null) {
+        if (getIntent().getStringExtra("pageType") == null) {
             thirdHomeBinding.ivLike.setEnabled(true);
             thirdHomeBinding.tvLike.setEnabled(true);
             thirdHomeBinding.linlayCall.setEnabled(true);
             thirdHomeBinding.linlayChat.setEnabled(true);
             thirdHomeBinding.linlayLike.setEnabled(true);
-        }else
-        {
-            if(getIntent().getStringExtra("pageType").equalsIgnoreCase("rejected")) {
+        } else {
+            if (getIntent().getStringExtra("pageType").equalsIgnoreCase("rejected")) {
                 thirdHomeBinding.ivLike.setEnabled(true);
                 thirdHomeBinding.tvLike.setEnabled(true);
                 thirdHomeBinding.linlayCall.setEnabled(false);
                 thirdHomeBinding.linlayChat.setEnabled(false);
                 thirdHomeBinding.linlayLike.setEnabled(true);
-            }else {
+            } else {
                 thirdHomeBinding.ivLike.setEnabled(true);
                 thirdHomeBinding.tvLike.setEnabled(true);
                 thirdHomeBinding.linlayCall.setEnabled(true);
@@ -162,9 +164,8 @@ if(getIntent().getStringExtra("getListType")!=null)
                     String test = is_blocked;
                     Log.d("TAG", "CHECK =" + test);
 
-                    if (is_blocked.equalsIgnoreCase("1")) {
-                        String msgBlock = "This member has blocked you. You can't express your interest.";
-                        String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+                    if (!is_blocked.equalsIgnoreCase("1")) {
+                        String msgBlock = "This member is blocked. You can't express your interest.";
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                         builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -175,17 +176,18 @@ if(getIntent().getStringExtra("getListType")!=null)
                         AlertDialog alert = builder.create();
                         alert.show();
                     } else {
-                        vibe.vibrate(vibrateBig);
-                        shrinkAnim(thirdHomeBinding.ivLike,nActivity);
+                        if(vibe!=null) {
+                            vibe.vibrate(vibrateBig);
+                        }
+                        shrinkAnim(thirdHomeBinding.ivLike, nActivity);
                         sendPushNotification(tokans,
                                 AppConstants.msg_express_intress + " " + login_matri_id,
                                 AppConstants.msg_express_intress_title, AppConstants.express_intress_id);
                         sendInterestRequest(login_matri_id, matri_id, is_interest);
                     }
                 } else if (RequestType.equalsIgnoreCase("Unlike")) {
-                    if (is_blocked.equalsIgnoreCase("1")) {
-                        String msgBlock = "This member has blocked you. You can't express your interest.";
-                        String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+                    if (!is_blocked.equalsIgnoreCase("1")) {
+                        String msgBlock = "This member is blocked. You can't express your interest.";
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                         builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -196,8 +198,10 @@ if(getIntent().getStringExtra("getListType")!=null)
                         AlertDialog alert = builder.create();
                         alert.show();
                     } else {
-                        vibe.vibrate(vibrateSmall);
-                        shrinkAnim(thirdHomeBinding.ivLike,nActivity);
+                        if(vibe!=null) {
+                            vibe.vibrate(vibrateSmall);
+                        }
+                        shrinkAnim(thirdHomeBinding.ivLike, nActivity);
                         sendInterestRequestRemind(login_matri_id, eiId, is_interest);
                     }
                 }
@@ -205,11 +209,7 @@ if(getIntent().getStringExtra("getListType")!=null)
         });
 
 
-
-
-
 //____NOTE:____________0 = BLOCK_________1=UNBLOCK____________
-
 
 
         thirdHomeBinding.tvBlock.setOnClickListener(new View.OnClickListener() {
@@ -217,9 +217,9 @@ if(getIntent().getStringExtra("getListType")!=null)
             public void onClick(View v) {
 //                if (thirdHomeBinding.tvBlock.getText().toString().equalsIgnoreCase("Block")) {
 
-                    addToBlockRequest(login_matri_id, matri_id, is_blocked);
+                addToBlockRequest(login_matri_id, matri_id, is_blocked);
 
-                    //}
+                //}
 
                /* } else if (thirdHomeBinding.tvBlock.getText().toString().equalsIgnoreCase("Unblock")) {
                     addToBlockRequest(login_matri_id, matri_id, "1");
@@ -236,12 +236,25 @@ if(getIntent().getStringExtra("getListType")!=null)
         thirdHomeBinding.linlayChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openChatOnce=false;
-                Intent activityIntent = new Intent(ThirdHomeActivity.this, ChatActivity.class);
-                activityIntent.putExtra("friendEmail",firebase_email);
-                startActivity(activityIntent);
-                finish();
-               // onClickFloatButton.findIDEmail(,nActivity);
+                if (!is_blocked.equalsIgnoreCase("1")) {
+                    String msgBlock = "This member blocked.";
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
+                    builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
+                    openChatOnce = false;
+                    Intent activityIntent = new Intent(ThirdHomeActivity.this, ChatActivity.class);
+                    activityIntent.putExtra("friendEmail", firebase_email);
+                    startActivity(activityIntent);
+                    finish();
+                }
+                // onClickFloatButton.findIDEmail(,nActivity);
             }
         });
 
@@ -249,18 +262,30 @@ if(getIntent().getStringExtra("getListType")!=null)
         thirdHomeBinding.linlayCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setContact(login_matri_id,matri_id,mobileNo);
+                if (!is_blocked.equalsIgnoreCase("1")) {
+                    String msgBlock = "This member is blocked.";
+                    
+                    AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
+                    builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                } else {
+                    setContact(login_matri_id, matri_id, mobileNo);
+                }
             }
         });
 
         thirdHomeBinding.tvHobbiesInterest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ThirdHomeActivity.this, HobbiesInterestActivity.class).putExtra("fromOtherProfile","fromOtherProfile").putExtra("matriId",matri_id));
+                startActivity(new Intent(ThirdHomeActivity.this, HobbiesInterestActivity.class).putExtra("fromOtherProfile", "fromOtherProfile").putExtra("matriId", matri_id));
             }
         });
     }
-
 
     public void getMemberProfile(String strLoginMatriId, String strMatriId) {
         thirdHomeBinding.progressBar1.setVisibility(View.VISIBLE);
@@ -280,7 +305,7 @@ if(getIntent().getStringExtra("getListType")!=null)
 
                 HttpPost httpPost = new HttpPost(URL);
 
-                Log.e("getMemberData11",""+paramLoginMatriId+" "+paramsMatriId);
+                Log.e("getMemberData11", "" + paramLoginMatriId + " " + paramsMatriId);
 
                 BasicNameValuePair LOginMatriIdPair = new BasicNameValuePair("login_matri_id", paramLoginMatriId);
                 BasicNameValuePair MatriIdPair = new BasicNameValuePair("matri_id", paramsMatriId);
@@ -347,7 +372,7 @@ if(getIntent().getStringExtra("getListType")!=null)
 
                                 String key = resIter.next();
                                 JSONObject resItem = responseData.getJSONObject(key);
-                                ProfileActivity.resItem=responseData.getJSONObject(key);
+                                ProfileActivity.resItem = responseData.getJSONObject(key);
                                 String matri_id = resItem.getString("matri_id");
                                 String email = resItem.getString("email");
                                 firebase_email = resItem.getString("firebase_email");
@@ -358,7 +383,7 @@ if(getIntent().getStringExtra("getListType")!=null)
                                 country_code = resItem.getString("country_code");
                                 String subcaste = resItem.getString("subcaste");
                                 String gender = resItem.getString("gender");
-                                genderOther=gender;
+                                genderOther = gender;
                                 String birthdate = resItem.getString("birthdate");
 
                                 tokans = resItem.getString("tokan");
@@ -416,19 +441,36 @@ if(getIntent().getStringExtra("getListType")!=null)
                                 thirdHomeBinding.tvUserCaste.setText("" + getNullAvoid(resItem.getString("caste_name")));
                                 //not existing
                                 thirdHomeBinding.tvUserParntMob.setText("" + getNullAvoid(resItem.getString("profileby")));
-                                if (getNullAvoid(resItem.getString("shadibudget")).isEmpty() || getNullAvoid(resItem.getString("shadibudget")).equalsIgnoreCase("Not Available")|| getNullAvoid(resItem.getString("shadibudget")).equalsIgnoreCase("0")) {
+                                if (getNullAvoid(resItem.getString("shadibudget")).isEmpty() || getNullAvoid(resItem.getString("shadibudget")).equalsIgnoreCase("Not Available") || getNullAvoid(resItem.getString("shadibudget")).equalsIgnoreCase("0")) {
                                     thirdHomeBinding.tvUserShadiBudget.setText(getNullAvoid(resItem.getString("shadibudget")));
-                                } else{
+                                } else {
                                     thirdHomeBinding.tvUserShadiBudget.setText("₹" + getNullAvoid(resItem.getString("shadibudget")) + " lacs approx");
-                            }
+                                }
                                 thirdHomeBinding.tvUserAbled.setText("" + getNullAvoid(resItem.getString("physicalStatus")));
-                                if(getNullAvoid(resItem.getString("time_to_call")).contains("Not Available")){
-                                    thirdHomeBinding.tvUserCallTime.setText("" +getString(R.string.all_time));
-                                }else {
-                                    thirdHomeBinding.tvUserCallTime.setText("" +getNullAvoid(resItem.getString("time_to_call")));
+                                if (resItem.getString("time_to_call").equalsIgnoreCase("Any Time")) {
+                                    thirdHomeBinding.tvUserCallTime.setText(getString(R.string.all_time));
+                                } else {
+                                    if (getNullAvoid(resItem.getString("time_to_call")).contains("Not Available")) {
+                                        thirdHomeBinding.tvUserCallTime.setText("" + getString(R.string.all_time));
+                                    } else {
+                                        String[] timeArr = resItem.getString("time_to_call").split("-");
+                                        if (timeArr.length > 1) {
+                                            SimpleDateFormat sdfSource = new SimpleDateFormat("HH:mm");
+                                            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa");
+                                            try {
+                                                thirdHomeBinding.tvUserCallTime.setText("" + sdf.format(sdfSource.parse(timeArr[0] + ":00").getTime()) + " - " + sdf.format(sdfSource.parse(timeArr[1] + ":00").getTime()));
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        } else {
+                                            thirdHomeBinding.tvUserCallTime.setText("" + getNullAvoid(resItem.getString("time_to_call")));
+                                        }
+//                                    thirdHomeBinding.tvUserCallTime.setText("" +getNullAvoid(resItem.getString("time_to_call")));
+                                    }
                                 }
 
-                                    thirdHomeBinding.tvUserManglik.setText("" + getNullAvoid(resItem.getString("manglik")));
+                                thirdHomeBinding.tvUserManglik.setText("" + getNullAvoid(resItem.getString("manglik")));
 
 
                                 if (resItem.has("is_blocked")) {
@@ -444,15 +486,13 @@ if(getIntent().getStringExtra("getListType")!=null)
                                 } else {
                                     is_blocked = "0";
                                 }
-                                Log.e("bfgh",resItem.getString("is_blocked"));
-
+                                Log.e("bfgh", resItem.getString("is_blocked"));
 
 
                                 String part_income = resItem.getString("part_income");
 
 
-
-                                arrPhotos=new ArrayList<>();
+                                arrPhotos = new ArrayList<>();
                                 String photo1 = resItem.getString("photo1");
                                 String photo2 = resItem.getString("photo2");
                                 String photo3 = resItem.getString("photo3");
@@ -466,11 +506,10 @@ if(getIntent().getStringExtra("getListType")!=null)
                                 String strUsername = firstname + " " + lastname;
 
 
-
-                                thirdHomeBinding.tvUserMobile.setText(""+mobileNo);
-                                thirdHomeBinding.tvUserGender.setText(""+gender);
-                                thirdHomeBinding.tvUserFamIncome.setText("" +getNullAvoid(part_income));
-                                thirdHomeBinding.tvUserDiet.setText("" +getNullAvoid(diet));
+                                thirdHomeBinding.tvUserMobile.setText("" + mobileNo);
+                                thirdHomeBinding.tvUserGender.setText("" + gender);
+                                thirdHomeBinding.tvUserFamIncome.setText("" + getNullAvoid(part_income));
+                                thirdHomeBinding.tvUserDiet.setText("" + getNullAvoid(diet));
 
                                 if (!photo1.equalsIgnoreCase("")) {
                                     Log.d("PROFILE_____", photo1);
@@ -481,57 +520,64 @@ if(getIntent().getStringExtra("getListType")!=null)
                                             //.fit()
                                             .error(R.drawable.ic_profile)
                                             .into(thirdHomeBinding.ivClientThumbnail);*/
-                                    beanHobbyImage hobbyImage=new beanHobbyImage("1",photo1);
+                                    beanHobbyImage hobbyImage = new beanHobbyImage("1", photo1);
                                     arrPhotos.add(hobbyImage);
-                                }if (!photo2.equalsIgnoreCase("")) {
+                                }
+                                if (!photo2.equalsIgnoreCase("")) {
                                     Log.d("PROFILE_____", photo2);
                                     progresDialog.dismiss();
-                                    beanHobbyImage hobbyImage=new beanHobbyImage("2",photo2);
+                                    beanHobbyImage hobbyImage = new beanHobbyImage("2", photo2);
                                     arrPhotos.add(hobbyImage);
-                                }if (!photo3.equalsIgnoreCase("")) {
+                                }
+                                if (!photo3.equalsIgnoreCase("")) {
                                     Log.d("PROFILE_____", photo3);
                                     progresDialog.dismiss();
-                                    beanHobbyImage hobbyImage=new beanHobbyImage("3",photo3);
+                                    beanHobbyImage hobbyImage = new beanHobbyImage("3", photo3);
                                     arrPhotos.add(hobbyImage);
-                                }if (!photo4.equalsIgnoreCase("")) {
+                                }
+                                if (!photo4.equalsIgnoreCase("")) {
                                     Log.d("PROFILE_____", photo4);
                                     progresDialog.dismiss();
-                                    beanHobbyImage hobbyImage=new beanHobbyImage("4",photo4);
+                                    beanHobbyImage hobbyImage = new beanHobbyImage("4", photo4);
                                     arrPhotos.add(hobbyImage);
-                                }if (!photo5.equalsIgnoreCase("")) {
+                                }
+                                if (!photo5.equalsIgnoreCase("")) {
                                     Log.d("PROFILE_____", photo5);
                                     progresDialog.dismiss();
-                                    beanHobbyImage hobbyImage=new beanHobbyImage("5",photo5);
+                                    beanHobbyImage hobbyImage = new beanHobbyImage("5", photo5);
                                     arrPhotos.add(hobbyImage);
-                                }if (!photo6.equalsIgnoreCase("")) {
+                                }
+                                if (!photo6.equalsIgnoreCase("")) {
                                     Log.d("PROFILE_____", photo6);
                                     progresDialog.dismiss();
-                                    beanHobbyImage hobbyImage=new beanHobbyImage("6",photo6);
+                                    beanHobbyImage hobbyImage = new beanHobbyImage("6", photo6);
                                     arrPhotos.add(hobbyImage);
                                 }
 
 
-
                             }
-init();
+                            init();
                         }
 
+                    }else if (status.equalsIgnoreCase("2")) {
+                        progresDialog.dismiss();
+                        thirdHomeBinding.progressBar1.setVisibility(View.GONE);
+                        String msgError = obj.getString("message");
+                        setToastStr(nActivity, "" + msgError);
+                            finish();
                     } else {
                         progresDialog.dismiss();
                         thirdHomeBinding.progressBar1.setVisibility(View.GONE);
                         String msgError = obj.getString("message");
                         setToastStr(nActivity, "" + msgError);
-                        if(msgError.contains("Matri Id doesnot exist"))
-                        {
-                            finish();
-                        }
+
                     }
 
                     progresDialog.dismiss();
                     thirdHomeBinding.progressBar1.setVisibility(View.GONE);
                 } catch (Exception t) {
                     Log.e("edrj", t.getMessage());
-                    setToastStr(nActivity, ""+ t.getMessage());
+                    setToastStr(nActivity, "" + t.getMessage());
                     progresDialog.dismiss();
                     thirdHomeBinding.progressBar1.setVisibility(View.GONE);
                 }
@@ -543,7 +589,6 @@ init();
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(strLoginMatriId, strMatriId);
     }
-
 
     private void addToBlockRequest(String login_matri_id, String strMatriId, final String isBlocked) {
         Dialog progresDialog = showProgress(nActivity);
@@ -648,7 +693,7 @@ init();
 
                     progresDialog.dismiss();
                 } catch (Exception t) {
-                    Log.e("fjkhgjkfa",t.getMessage());
+                    Log.e("fjkhgjkfa", t.getMessage());
                     progresDialog.dismiss();
                 }
                 progresDialog.dismiss();
@@ -659,43 +704,38 @@ init();
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute(login_matri_id, strMatriId, isBlocked);
     }
-    String isFavorite="",eiId="";
-    private void sendInterestRequest(String login_matri_id, String strMatriId, String isFavorite)
-    {
-        this.isFavorite=isFavorite;
+
+    private void sendInterestRequest(String login_matri_id, String strMatriId, String isFavorite) {
+        this.isFavorite = isFavorite;
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
-        class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
-        {
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
-            protected String doInBackground(String... params)
-            {
+            protected String doInBackground(String... params) {
                 String paramsLoginMatriId = params[0];
                 String paramsUserMatriId = params[1];
 
                 HttpClient httpClient = new DefaultHttpClient();
 
-                String URL= AppConstants.MAIN_URL +"send_intrest.php";
-                Log.e("send_intrest", "== "+URL);
+                String URL = AppConstants.MAIN_URL + "send_intrest.php";
+                Log.e("send_intrest", "== " + URL);
 
                 HttpPost httpPost = new HttpPost(URL);
 
                 BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("sender_id", paramsLoginMatriId);
-                BasicNameValuePair UserMatriIdPair  = new BasicNameValuePair("receiver_id", paramsUserMatriId);
+                BasicNameValuePair UserMatriIdPair = new BasicNameValuePair("receiver_id", paramsUserMatriId);
 
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(LoginMatriIdPair);
                 nameValuePairList.add(UserMatriIdPair);
 
-                try
-                {
+                try {
                     UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
                     httpPost.setEntity(urlEncodedFormEntity);
-                    Log.e("Parametters Array=", "== "+(nameValuePairList.toString().trim().replaceAll(",","&")));
-                    try
-                    {
+                    Log.e("Parametters Array=", "== " + (nameValuePairList.toString().trim().replaceAll(",", "&")));
+                    try {
                         HttpResponse httpResponse = httpClient.execute(httpPost);
                         InputStream inputStream = httpResponse.getEntity().getContent();
                         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -703,8 +743,7 @@ init();
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                         StringBuilder stringBuilder = new StringBuilder();
                         String bufferedStrChunk = null;
-                        while((bufferedStrChunk = bufferedReader.readLine()) != null)
-                        {
+                        while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
                             stringBuilder.append(bufferedStrChunk);
                         }
 
@@ -713,8 +752,7 @@ init();
                     } catch (ClientProtocolException cpe) {
                         System.out.println("Firstption caz of HttpResponese :" + cpe);
                         cpe.printStackTrace();
-                    } catch (IOException ioe)
-                    {
+                    } catch (IOException ioe) {
                         System.out.println("Secondption caz of HttpResponse :" + ioe);
                         ioe.printStackTrace();
                     }
@@ -729,50 +767,42 @@ init();
             }
 
             @Override
-            protected void onPostExecute(String result)
-            {
+            protected void onPostExecute(String result) {
                 super.onPostExecute(result);
 
-                Log.e("send_intrest", "=="+result);
+                Log.e("send_intrest", "==" + result);
 
-                try
-                {
+                try {
                     JSONObject obj = new JSONObject(result);
 
-                    String status=obj.getString("status");
+                    String status = obj.getString("status");
 
-                    if (status.equalsIgnoreCase("1"))
-                    {
-                     //   ivInterest.setImageResource(R.drawable.ic_reminder);
+                    if (status.equalsIgnoreCase("1")) {
+                        //   ivInterest.setImageResource(R.drawable.ic_reminder);
 
-                        RequestType="Unlike";
+                        RequestType = "Unlike";
                         thirdHomeBinding.tvLike.setText(getString(R.string.unlike));
                         thirdHomeBinding.ivLike.setImageResource(R.drawable.ic_heart);
-                        String message=obj.getString("message").toString().trim();
-                        setToastStrPinkBg(nActivity, ""+message);
+                        String message = obj.getString("message").toString().trim();
+                        setToastStrPinkBg(nActivity, "" + message);
 
-                        if(ThirdHomeActivity.this.isFavorite.equalsIgnoreCase("1")) {
+                        if (ThirdHomeActivity.this.isFavorite.equalsIgnoreCase("1")) {
                             //arrUserList.get(pos).setIs_favourite("0");
-                            is_interest="0";
-                            ThirdHomeActivity.this.isFavorite="0";
-                        }else
-                        {
+                            is_interest = "0";
+                            ThirdHomeActivity.this.isFavorite = "0";
+                        } else {
                             // arrUserList.get(pos).setIs_favourite("1");
-                            is_interest="1";
-                            ThirdHomeActivity.this.isFavorite="1";
-                            eiId=""+obj.getString("ei_id");
+                            is_interest = "1";
+                            ThirdHomeActivity.this.isFavorite = "1";
+                            eiId = "" + obj.getString("ei_id");
                         }
 
 
-
-                    }else
-                    {
-                        String msgError=obj.getString("message");
+                    } else {
+                        String msgError = obj.getString("message");
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
-                        builder.setMessage(""+msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
+                        builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
                             }
                         });
@@ -780,9 +810,8 @@ init();
                         alert.show();
                     }
                     progresDialog.dismiss();
-                } catch (Exception t)
-                {
-                    Log.e("fjglfjl",t.getMessage());
+                } catch (Exception t) {
+                    Log.e("fjglfjl", t.getMessage());
                     progresDialog.dismiss();
                 }
                 progresDialog.dismiss();
@@ -792,45 +821,39 @@ init();
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(login_matri_id,strMatriId);
+        sendPostReqAsyncTask.execute(login_matri_id, strMatriId);
     }
 
-
-    private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite)
-    {
+    private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite) {
         Dialog progresDialog = showProgress(nActivity);
         progresDialog.show();
 
-        class SendPostReqAsyncTask extends AsyncTask<String, Void, String>
-        {
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
-            protected String doInBackground(String... params)
-            {
+            protected String doInBackground(String... params) {
                 String paramsLoginMatriId = params[0];
                 String paramsEiId = params[1];
 
                 HttpClient httpClient = new DefaultHttpClient();
 
-                String URL= AppConstants.MAIN_URL +"remove_intrest.php";
-                Log.e("send_intrest", "== "+URL);
+                String URL = AppConstants.MAIN_URL + "remove_intrest.php";
+                Log.e("send_intrest", "== " + URL);
 
                 HttpPost httpPost = new HttpPost(URL);
 
                 BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("matri_id", paramsLoginMatriId);
-                BasicNameValuePair UserMatriIdPair  = new BasicNameValuePair("ei_id", paramsEiId);
+                BasicNameValuePair UserMatriIdPair = new BasicNameValuePair("ei_id", paramsEiId);
 
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(LoginMatriIdPair);
                 nameValuePairList.add(UserMatriIdPair);
 
-                try
-                {
+                try {
                     UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
                     httpPost.setEntity(urlEncodedFormEntity);
-                    Log.e("Parametters Array=", "== "+(nameValuePairList.toString().trim().replaceAll(",","&")));
-                    try
-                    {
+                    Log.e("Parametters Array=", "== " + (nameValuePairList.toString().trim().replaceAll(",", "&")));
+                    try {
                         HttpResponse httpResponse = httpClient.execute(httpPost);
                         InputStream inputStream = httpResponse.getEntity().getContent();
                         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -838,8 +861,7 @@ init();
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                         StringBuilder stringBuilder = new StringBuilder();
                         String bufferedStrChunk = null;
-                        while((bufferedStrChunk = bufferedReader.readLine()) != null)
-                        {
+                        while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
                             stringBuilder.append(bufferedStrChunk);
                         }
 
@@ -848,8 +870,7 @@ init();
                     } catch (ClientProtocolException cpe) {
                         System.out.println("Firstption caz of HttpResponese :" + cpe);
                         cpe.printStackTrace();
-                    } catch (IOException ioe)
-                    {
+                    } catch (IOException ioe) {
                         System.out.println("Secondption caz of HttpResponse :" + ioe);
                         ioe.printStackTrace();
                     }
@@ -864,48 +885,40 @@ init();
             }
 
             @Override
-            protected void onPostExecute(String result)
-            {
+            protected void onPostExecute(String result) {
                 super.onPostExecute(result);
 
-                Log.e("send_intrest", "=="+result);
+                Log.e("send_intrest", "==" + result);
 
-                try
-                {
+                try {
                     JSONObject obj = new JSONObject(result);
 
-                    String status=obj.getString("status");
+                    String status = obj.getString("status");
 
-                    if (status.equalsIgnoreCase("1"))
-                    {
+                    if (status.equalsIgnoreCase("1")) {
 
-                        String message=obj.getString("message").toString().trim();
-                        setToastStrPinkBg(nActivity, ""+message);
-                        RequestType="Like";
+                        String message = obj.getString("message").toString().trim();
+                        setToastStrPinkBg(nActivity, "" + message);
+                        RequestType = "Like";
                         thirdHomeBinding.tvLike.setText(getString(R.string.like));
                         thirdHomeBinding.ivLike.setImageResource(R.drawable.ic_heart_greybg);
-                        if(ThirdHomeActivity.this.isFavorite.equalsIgnoreCase("1")) {
+                        if (ThirdHomeActivity.this.isFavorite.equalsIgnoreCase("1")) {
                             //arrUserList.get(pos).setIs_favourite("0");
-                            ThirdHomeActivity.this.isFavorite="0";
-                        }else
-                        {
+                            ThirdHomeActivity.this.isFavorite = "0";
+                        } else {
                             // arrUserList.get(pos).setIs_favourite("1");
-                            ThirdHomeActivity.this.isFavorite="1";
-                          //4  eiId=""+obj.getString("ei_id");
+                            ThirdHomeActivity.this.isFavorite = "1";
+                            //4  eiId=""+obj.getString("ei_id");
                         }
 
-                       // }
+                        // }
 
 
-
-                    }else
-                    {
-                        String msgError=obj.getString("message");
+                    } else {
+                        String msgError = obj.getString("message");
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
-                        builder.setMessage(""+msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int id)
-                            {
+                        builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
                             }
                         });
@@ -915,8 +928,7 @@ init();
 
 
                     progresDialog.dismiss();
-                } catch (Throwable t)
-                {
+                } catch (Throwable t) {
                     progresDialog.dismiss();
                 }
                 progresDialog.dismiss();
@@ -925,10 +937,10 @@ init();
         }
 
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(login_matri_id,strMatriId);
+        sendPostReqAsyncTask.execute(login_matri_id, strMatriId);
     }
 
-    private void setContact(String strLoginMatriId,String matriId,String userMobile) {
+    private void setContact(String strLoginMatriId, String matriId, String userMobile) {
 
         final Dialog progresDialog11 = showProgress(nActivity);
         progresDialog11.show();
@@ -1002,19 +1014,18 @@ init();
                 Log.e("get price", "==" + result);
 
                 try {
-                    if (result!=null) {
+                    if (result != null) {
                         JSONObject obj = new JSONObject(result);
 
                         String status = obj.getString("status");
 
                         if (status.equalsIgnoreCase("1")) {
-                            /*Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:"+userMobile));//change the number
-                            nActivity.startActivity(callIntent);*/
-                            AppConstants.setToastStrPinkBg(nActivity,""+obj.getString("message"));
-                        }else
-                        {
-                            AppConstants.setToastStr(nActivity,""+obj.getString("message"));
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:+911140844881"));//08046805845 //local number
+                            nActivity.startActivity(callIntent);
+                            AppConstants.setToastStrPinkBg(nActivity, "" + obj.getString("message"));
+                        } else {
+                            AppConstants.setToastStr(nActivity, "" + obj.getString("message"));
                         }
                         progresDialog11.dismiss();
                     }
@@ -1030,23 +1041,17 @@ init();
         sendPostReqAsyncTask.execute();
     }
 
-
-    public String getNullAvoid(String text)
-    {
-        if(text!=null && !text.isEmpty()&& !text.equalsIgnoreCase("null") && !text.equalsIgnoreCase("Not Available")){
+    public String getNullAvoid(String text) {
+        if (text != null && !text.isEmpty() && !text.equalsIgnoreCase("null") && !text.equalsIgnoreCase("Not Available")) {
             return text;
-        }else
-        {
+        } else {
             return getString(R.string.not_available);
         }
     }
 
-
-    SliderPhotoPagerAdapter sliderPagerAdapter;
-    List<beanHobbyImage> arrPhotos=new ArrayList<>();
     private void init() {
 
-        sliderPagerAdapter = new SliderPhotoPagerAdapter(nActivity, arrPhotos,genderOther);
+        sliderPagerAdapter = new SliderPhotoPagerAdapter(nActivity, arrPhotos, genderOther);
         thirdHomeBinding.vpSlider.setAdapter(sliderPagerAdapter);
 
         thirdHomeBinding.vpSlider.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1066,7 +1071,7 @@ init();
             }
         });
     }
-    TextView[] dots;
+
     private void addBottomDots(int currentPage) {
         dots = new TextView[arrPhotos.size()];
 

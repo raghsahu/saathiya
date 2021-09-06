@@ -23,18 +23,37 @@
             android:id="@+id/relImg"
     android:layout_width="wrap_content"
     android:layout_height="130dp">
-    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
-        android:id="@+id/rivProfileImage"
-        android:layout_width="80dp"
-        android:layout_height="130dp"
-        android:cropToPadding="true"
-        android:src="@drawable/bg_corner_round_blackfill"
-        android:background="@drawable/placeholder_gray_corner"
-        app:siShape="@drawable/shape_left_corner_round_rectangle"
-        app:siSquare="false"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+
+           <!-- <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="110dp"
+                android:layout_height="130dp"
+                android:background="@drawable/placeholder_gray_corner"
+                android:cropToPadding="true"
+                android:scaleType="matrix"
+                android:src="@drawable/bg_corner_round_blackfill"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:siShape="@drawable/shape_left_corner_round_rectangle"
+                app:siSquare="false" />-->
+           <!-- <com.prometteur.sathiya.utills.BottomCropImage
+                android:id="@+id/rivProfileImage"
+                android:layout_width="110dp"
+                android:layout_height="130dp"
+                android:background="@drawable/placeholder_gray_corner"
+                android:cropToPadding="true"
+                android:src="@drawable/bg_corner_round_blackfill"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:siShape="@drawable/shape_left_corner_round_rectangle"
+                app:siSquare="false" />-->
+            <com.prometteur.sathiya.utills.ImageScaleView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="110dp"
+                android:layout_height="130dp"
+                android:scaleType="matrix"
+                app:matrixType="top_center"
+                android:src="@drawable/placeholder_gray_corner"/>
 
         </RelativeLayout>
   <!--  <com.github.siyamed.shapeimageview.RoundedImageView

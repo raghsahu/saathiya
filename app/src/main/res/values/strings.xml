@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Saathiya</string>
     <string name="go_back">Are you sure want to go back?</string>
+    <string name="close_app">Are you sure want to close application?</string>
     <string name="Login">Login</string>
     <string name="Sign_Up">REGISTER FREE</string>
     <string name="data_not_avelable">Data not available</string>
@@ -218,6 +219,7 @@ When they install this app, you will get 10 calls in your account.
     <string name="my_interest">My Interest</string>
     <string name="other">Other</string>
     <string name="recent_profile_not_found">No new profile found</string>
+    <string name="filter_profile_not_found">No profile found please update your filter</string>
     <string name="you_are_all_caught_for_now">You are all caught for now</string>
     <string name="membership_status">Membership Status -</string>
     <string name="edit_profile">Edit Profile</string>
@@ -349,7 +351,7 @@ When they install this app, you will get 10 calls in your account.
     <string name="failed_to_add_friend_success">Failed to add user</string>
     <string name="add_friend_success">User added successfully</string>
     <string name="additional_details">Additional Details</string>
-    <string name="please_enter_valide_matri_id">Please enter valid sathiya id.</string>
+    <string name="please_enter_valide_matri_id">Please enter valid saathiya id.</string>
     <string name="error_occured_during_deleting_friend">Error occurred during deleting user</string>
     <string name="password_not_matched">Password not matched</string>
     <string name="email_exist_or_weak_password">Email exist or weak password!</string>
@@ -365,13 +367,13 @@ When they install this app, you will get 10 calls in your account.
     <string name="deleting">Deleting…</string>
     <string name="cancel">CANCEL</string>
     <string name="your_payment_failed">Your Payment Failed</string>
-    <string name="this_member_has_blocked_you">This member has blocked you. You can\'t express your interest.</string>
+    <string name="this_member_has_blocked_you">This member is blocked. You can\'t express your interest.</string>
     <string name="you_are_not_paid_memeber">You are not paid member. Please update your membership to express your interest.</string>
-    <string name="this_member_has_blocked_you_for_message">This member has blocked you. You can\'t send message.</string>
+    <string name="this_member_has_blocked_you_for_message">This member is blocked you. You can\'t send message.</string>
     <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove this photo?</string>
     <string name="remove">Remove</string>
     <string name="liked_profiles">Likes \nSent</string>
-    <string name="mutually_liked">Mutually \nLiked</string>
+    <string name="mutually_liked">Mutually\nLiked</string>
     <string name="you_rejected_by">You are rejected by</string>
     <string name="you_rejected">You rejected</string>
     <string name="rejected_users">Rejected Users</string>
@@ -390,8 +392,9 @@ When they install this app, you will get 10 calls in your account.
     <string name="calls_not_available">Available calls are</string>
     <string name="so_enter_within_that">so enter within that range</string>
     <string name="messaged_users_not_found">Messaged users not found</string>
-    <string name="gift_calls">Gift Calls</string>
-    <string name="please_enter_valid_username_or_password">Please enter valid username or password.</string>
+    <string name="gift_calls">Gift Calls to other member</string>
+    <string name="please_enter_valid_username_or_password">Please register.</string>
+<!--    <string name="please_enter_valid_username_or_password">Please enter valid username or password.</string>-->
     <string name="above_50k">Above 50K</string>
     <string name="your_viewed_all_the_profiles">You viewed all the profiles please update your filter</string>
     <string name="please_select_mother_tongue">Please select mother tongue</string>
@@ -403,4 +406,10 @@ When they install this app, you will get 10 calls in your account.
     <string name="my_video">My Video</string>
     <string name="send">Send</string>
     <string name="balance">Balance</string>
+    <string name="price_per_call">Price per call (₹)</string>
+    <string name="user_has_not_uploaded_any_content">User has not uploaded any content</string>
+    <string name="my_hobby">My hobby</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete, you may take a break by deactivating you account. Deleting will permanently erase your account details.</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -47,6 +47,7 @@ public class beanUserData implements Serializable
     String m_tongue;
     String rejectedStatus;
     ArrayList<Uri> imageUri;
+    ArrayList<String> hobbiesText;
     List<String> photoPath;
     public beanUserData(){}
 
@@ -422,6 +423,14 @@ public class beanUserData implements Serializable
 
     public void setImageUri(ArrayList<Uri> imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public ArrayList<String> getHobbiesText() {
+        return hobbiesText;
+    }
+
+    public void setHobbiesText(ArrayList<String> hobbiesText) {
+        this.hobbiesText = hobbiesText;
     }
 
     public String getM_tongue() {

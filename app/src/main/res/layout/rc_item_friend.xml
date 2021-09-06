@@ -16,15 +16,15 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-      <!--  <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.prometteur.sathiya.utills.ImageScaleView
             android:id="@+id/icon_avata"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:scaleType="matrix"
             android:layout_margin="10dp"
-            android:layout_weight="1"
-            app:civ_border_color="@color/colorPrimary"/>-->
-        <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+            android:src="@drawable/shape_corner_round_square"
+            card_view:matrixType="top_center" />
+       <!-- <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
             android:id="@+id/icon_avata"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_40sdp"
@@ -35,7 +35,7 @@
             android:scaleType="fitXY"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"/>-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

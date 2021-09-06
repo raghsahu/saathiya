@@ -68,6 +68,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.prometteur.sathiya.fragments.FragmentOtpVerificationBottomSheetDialog;
 import com.prometteur.sathiya.home.HomeActivity;
 import com.prometteur.sathiya.model.chatmodel.User;
 import com.prometteur.sathiya.profile.EditProfileActivity;
@@ -76,7 +77,9 @@ import com.prometteur.sathiya.utills.NetworkConnection;
 import com.prometteur.sathiya.utills.RequestPermissionHandler;
 import com.prometteur.sathiya.utills.SharedPreferenceHelper;
 
+import static com.prometteur.sathiya.fragments.FragmentOtpVerificationBottomSheetDialog.fromPage;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
+import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
 import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 
@@ -132,7 +135,7 @@ LinearLayout linBack;
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                 user = firebaseAuth.getCurrentUser();
 
                 if (user != null) {
                     // User is signed in
@@ -171,7 +174,6 @@ LinearLayout linBack;
         tvRegister.setText(" "+getString(R.string.register_now));
 
         inputPassword = findViewById(R.id.inputPassword);
-
 
     }
 
@@ -257,36 +259,7 @@ LinearLayout linBack;
                 finish();
             }
         });
-      /*  edtEmailId.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                edtPassword.setBackground(getResources().getDrawable(R.drawable.login_edt_rounded_white_background));
-                edtEmailId.setBackground(getResources().getDrawable(R.drawable.bg_pink_login));
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInputFromWindow(
-                        edtEmailId.getApplicationWindowToken(),
-                        InputMethodManager.SHOW_FORCED, 0);
-                *//*setDrawableWithColor(edtEmailId,R.drawable.ic_username,R.color.colorPrimary);
-                setDrawableWithColor(edtPassword,R.drawable.ic_password,R.color.grey2);*//*
-                //setDrawableWithColor(inputPassword,R.drawable.ic_password,R.color.grey2);
-                return true;
-            }
-        });
-        edtPassword.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                edtPassword.setBackground(getResources().getDrawable(R.drawable.bg_pink_login));
-                edtEmailId.setBackground(getResources().getDrawable(R.drawable.login_edt_rounded_white_background));
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInputFromWindow(
-                        edtPassword.getApplicationWindowToken(),
-                        InputMethodManager.SHOW_FORCED, 0);
-               *//* setDrawableWithColor(edtEmailId,R.drawable.ic_username,R.color.grey2);
-                setDrawableWithColor(edtPassword,R.drawable.ic_password,R.color.colorPrimary);*//*
-              //  setDrawableWithColor(inputPassword,R.drawable.ic_password,R.color.colorPrimary);
-                return true;
-            }
-        });*/
+
 
     }
 
@@ -423,6 +396,7 @@ LinearLayout linBack;
                         JSONObject responseData = obj.getJSONObject("responseData");
                         SharedPreferences.Editor editor=prefUpdate.edit();
                         editor.putString("user_id",responseData.getString("user_id"));
+                        editor.putString("user_id_r", responseData.getString("user_id"));//for otp verify used
                         editor.putString("email",responseData.getString("email"));
                         editor.putString("firbase_pass",responseData.getString("firebase_password"));
                         editor.putString("firbase_email",responseData.getString("firebase_email"));
@@ -434,6 +408,7 @@ LinearLayout linBack;
                         editor.putString("paid_status",responseData.getString("membership_status"));
                         editor.putString("call_package_status",responseData.getString("call_package_status"));
                         editor.putString("city_name","");//responseData.getString("city_name"));
+
                         editor.apply();
 
                         String dt = responseData.getString("reg_date");
@@ -518,8 +493,8 @@ LinearLayout linBack;
 
                         if (!task.isSuccessful()) {
                             Log.w("TAG", "signInWithEmail:failed", task.getException());
-
-                            AppConstants.setToastStr(LoginActivity.this,getString(R.string.email_not_exist_or_wrong_password));
+                            createUser( email, password, name,dt,matriId);
+                            //AppConstants.setToastStr(LoginActivity.this,getString(R.string.email_not_exist_or_wrong_password));
                         } else {
                             saveUserInfo(name);
                             getCheckBasicDetails(matriId);
@@ -544,6 +519,54 @@ LinearLayout linBack;
                     }
                 });
     }
+
+
+
+    void createUser(String email, String password,String username,String dt,String matriId) {
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        // waitingDialog.dismiss();
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            AppConstants.setToastStr(LoginActivity.this,getString(R.string.email_exist_or_weak_password));
+                        } else {
+                            initNewUserInfo(username);
+                            Log.e("firebase login","Register and Login success");
+                            setToastStrPinkBg(LoginActivity.this, getString(R.string.registration_successful));
+                            signIn(email, password, dt, username, matriId);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //waitingDialog.dismiss();
+                        if(!e.getMessage().contains("FirebaseTooManyRequestsException")) {
+                            if(callReg>2) {
+                                callReg++;
+                                createUser(email, password, username, dt, matriId);
+                            }
+                        }
+                    }
+                })
+        ;
+    }
+    public static int callReg=0;
+    private FirebaseUser user;
+    void initNewUserInfo(String username) {
+        User newUser = new User();
+        newUser.email = user.getEmail();
+        newUser.name = username;//user.getEmail().substring(0, user.getEmail().indexOf("@"));
+        newUser.avata = AppConstants.STR_DEFAULT_BASE64;
+        FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
+    }
+
     /**
      * Luu thong tin user info cho nguoi dung dang nhap
      */
@@ -555,8 +578,10 @@ LinearLayout linBack;
                 HashMap hashUser = (HashMap) dataSnapshot.getValue();
                 User userInfo = new User();
                 userInfo.name =name; //(String) hashUser.get("name");
-                userInfo.email = (String) hashUser.get("email");
-                userInfo.avata = (String) hashUser.get("avata");
+                if(hashUser!=null) {
+                    userInfo.email = (String) hashUser.get("email");
+                    userInfo.avata = (String) hashUser.get("avata");
+                }
                 SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(userInfo);
             }
 

@@ -42,18 +42,28 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15sdp" />
 
-            <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+           <!-- <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
                 android:id="@+id/rivProfileImage"
                 android:layout_width="@dimen/_25sdp"
                 android:layout_height="@dimen/_35sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/_10sdp"
                 android:background="@drawable/shape_corner_round_square"
+                android:scaleType="fitXY"
                 android:src="@drawable/shape_corner_round_square"
                 app:siShape="@drawable/shape_corner_round_square"
-                app:siSquare="false"
-                android:scaleType="fitXY"
-                android:layout_marginRight="@dimen/_10sdp"
+                app:siSquare="false" />-->
+            <com.prometteur.sathiya.utills.ImageScaleView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:scaleType="matrix"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_marginRight="@dimen/_10sdp"
+                android:src="@drawable/shape_corner_round_square"
+                app:matrixType="top_center" />
 
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>

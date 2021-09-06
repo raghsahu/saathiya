@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 //import android.support.annotation.NonNull;
 //import android.support.v7.app.BaseActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -72,6 +73,7 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
+import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
 import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class SplashActivity extends BaseActivity {
@@ -226,6 +228,14 @@ public static TextView txt_language;
                         return false;
                     }})
                 .into(gifView1);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        double x = Math.pow(dm.widthPixels/dm.xdpi,2);
+        double y = Math.pow(dm.heightPixels/dm.ydpi,2);
+        double screenInches = Math.sqrt(x+y);
+        Log.e("debug","Screen inches : " + screenInches);
+        //setToastStr(SplashActivity.this,""+screenInches);
     }
 
     private void openActivityOnNotification(Bundle bundle) {

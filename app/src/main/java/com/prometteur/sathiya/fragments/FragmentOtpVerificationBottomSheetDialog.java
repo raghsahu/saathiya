@@ -77,7 +77,7 @@ public class FragmentOtpVerificationBottomSheetDialog extends BottomSheetDialogF
 
         prefVerifyOtp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final String[] otp = {prefVerifyOtp.getString("otp", "")};
-        tvOtp.setText(""+otp[0]);
+       // tvOtp.setText(""+otp[0]);
         img_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,14 +278,17 @@ public class FragmentOtpVerificationBottomSheetDialog extends BottomSheetDialogF
 
                 HttpClient httpClient = new DefaultHttpClient();
 
-                String URL= AppConstants.MAIN_URL +"resend_otp.php";
+                String URL= AppConstants.MAIN_URL +"get_otp.php";
                 Log.e("URL", "== "+URL);
 
                 HttpPost httpPost = new HttpPost(URL);
                 BasicNameValuePair UserIdPAir = new BasicNameValuePair("user_id", paramUserId);
+                BasicNameValuePair MobilePAir = new BasicNameValuePair("mobile", prefVerifyOtp.getString("mobileNo",""));
+
 
                 List<NameValuePair> nameValuePairList = new ArrayList<>();
                 nameValuePairList.add(UserIdPAir);
+                nameValuePairList.add(MobilePAir);
 
                 try
                 {

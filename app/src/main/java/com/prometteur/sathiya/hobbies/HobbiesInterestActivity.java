@@ -5,36 +5,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-
-import com.prometteur.sathiya.BaseActivity;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.prometteur.sathiya.R;
+import com.prometteur.sathiya.BaseActivity;
 import com.prometteur.sathiya.adapters.HobbiesListAdapter;
 import com.prometteur.sathiya.adapters.HobbiesOtherListAdapter;
-import com.prometteur.sathiya.adapters.LikeReceivedListAdapter;
-import com.prometteur.sathiya.beans.beanHobby;
 import com.prometteur.sathiya.beans.beanHobbyImage;
-import com.prometteur.sathiya.beans.beanUserData;
 import com.prometteur.sathiya.databinding.ActivityHobbiesInterestBinding;
-import com.prometteur.sathiya.dialog.DialogAddPhotoActivity;
 import com.prometteur.sathiya.dialog.DialogHobbiesSearchActivity;
-import com.prometteur.sathiya.model.DateObject;
 import com.prometteur.sathiya.model.HistoryDataModelObject;
 import com.prometteur.sathiya.model.ListObject;
 import com.prometteur.sathiya.model.UserDataObject;
 import com.prometteur.sathiya.utills.AppConstants;
-import com.prometteur.sathiya.utills.DateParser;
 import com.prometteur.sathiya.utills.NetworkConnection;
 
 import org.json.JSONObject;
@@ -44,8 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -134,12 +121,13 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
             @Override
             public void onClick(View view) {
                 hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
+                hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.GONE);
                 hobbiesInterestBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                 hobbiesInterestBinding.tvSearchResults.setVisibility(View.VISIBLE);
                 linearLayoutManager=new GridLayoutManager(nActivity,2);
 
                 intType="myHobby";
-                // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);
+                // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);v
                 //  hobbiesInterestBinding.rvLikedUsers.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(getResources().getDimensionPixelOffset(R.dimen._5sdp)), true));
                 if (NetworkConnection.hasConnection(nActivity)) {
                     getHobbyImageList(matri_id,hobbyId,km);
@@ -466,8 +454,8 @@ if(progressDialogSendReq!=null){
                     }
 
                 } catch (Exception e) {
-                   /* hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
-                    hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);*/
+                    hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
+                    hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                     if(progressDialogSendReq!=null){
                         progressDialogSendReq.dismiss();
                     }

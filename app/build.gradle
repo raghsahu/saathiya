@@ -8,8 +8,8 @@ android {
         applicationId "com.prometteur.sathiya"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "1.0.9"
         viewBinding.enabled = true
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -24,24 +24,33 @@
         <RelativeLayout
             android:id="@+id/relImg"
     android:layout_width="wrap_content"
-    android:layout_height="100dp">
-    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
-        android:id="@+id/rivProfileImage"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        android:cropToPadding="true"
-        app:siShape="@drawable/shape_left_corner_round_rectangle"
-        android:src="@drawable/placeholder_gray_corner"
-        android:background="@drawable/placeholder_gray_corner"
-        app:siSquare="false"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    android:layout_height="130dp">
+
+           <!-- <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="80dp"
+                android:layout_height="100dp"
+                android:background="@drawable/placeholder_gray_corner"
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/placeholder_gray_corner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:siShape="@drawable/shape_left_corner_round_rectangle"
+                app:siSquare="false" />-->
+            <com.prometteur.sathiya.utills.ImageScaleView
+                android:id="@+id/rivProfileImage"
+                android:layout_width="110dp"
+                android:layout_height="130dp"
+                android:scaleType="matrix"
+                android:src="@drawable/placeholder_gray_corner"
+                app:matrixType="top_center" />
+
             <com.prometteur.sathiya.utills.TextViewCustomFont
                 android:id="@+id/tvCity"
-                android:layout_width="70dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Mumbai"
+                android:text=""
                 android:textColor="@color/white"
                 android:background="@drawable/bg_rounds_transparent"
                 android:textSize="12dp"
@@ -86,126 +95,136 @@
         android:visibility="gone"/>
 -->
 
-<LinearLayout
-    android:id="@+id/linMiddle"
-    android:layout_width="wrap_content"
-    android:layout_height="100dp"
-    android:orientation="vertical"
-    android:layout_toEndOf="@+id/relImg">
     <LinearLayout
+        android:id="@+id/linMiddle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    <com.prometteur.sathiya.utills.TextViewCustomFont
-        android:id="@+id/tvProfileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="13dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="-1"
-        /> <com.prometteur.sathiya.utills.TextViewCustomFont
-        android:id="@+id/tvRefNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/colorRedd"
-        android:textSize="13dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="-1"
-        />
+        android:layout_height="130dp"
+        android:layout_toEndOf="@+id/relImg"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="50dp">
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvProfileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="-1"
+                android:maxLines="2"
+                android:layout_weight="1"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="13dp" />
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvRefNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="-1"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/colorRedd"
+                android:textSize="13dp" />
+
+        </LinearLayout>
+
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:id="@+id/tvSalonLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:maxLines="1"
+            android:paddingEnd="90dp"
+            android:text=""
+            android:textColor="@color/darkGray"
+            android:textSize="10dp"
+            app:layout_constraintStart_toEndOf="@id/rivProfileImage"
+            app:layout_constraintTop_toBottomOf="@id/tvProfileName" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="10dp">
+
+            <LinearLayout
+                android:id="@+id/linBlock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivBlock"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="10dp"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:src="@drawable/ic_block"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+                <com.prometteur.sathiya.utills.TextViewCustomFont
+                    android:id="@+id/tvBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ivBlock"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="5dp"
+                    android:text="@string/block"
+                    android:textColor="@color/darkGray"
+                    android:textSize="10dp" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
-    <com.prometteur.sathiya.utills.TextViewCustomFont
-        android:id="@+id/tvSalonLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/darkGray"
-        android:textSize="10dp"
-        android:layout_marginStart="10dp"
-        android:paddingEnd="90dp"
-        android:maxLines="1"
-        app:layout_constraintStart_toEndOf="@id/rivProfileImage"
-        app:layout_constraintTop_toBottomOf="@id/tvProfileName"
-        />
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:paddingBottom="10dp">
-    <LinearLayout
-        android:id="@+id/linBlock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true">
-    <ImageView
-        android:id="@+id/ivBlock"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:textColor="@color/black"
-        android:textSize="13dp"
-        android:gravity="center"
-        android:src="@drawable/ic_block"
-        android:layout_marginStart="10dp"
-        android:drawablePadding="5dp"
-       />
-    <com.prometteur.sathiya.utills.TextViewCustomFont
-        android:id="@+id/tvBlock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/block"
-        android:gravity="center_vertical"
-        android:textColor="@color/darkGray"
-        android:textSize="10dp"
-        android:paddingStart="5dp"
-        android:drawablePadding="5dp"
-        android:layout_toRightOf="@+id/ivBlock" />
-    </LinearLayout>
-</RelativeLayout>
-</LinearLayout>
+
     <LinearLayout
         android:id="@+id/linBook"
         android:layout_width="85dp"
-        android:layout_height="100dp"
-        android:orientation="vertical"
+        android:layout_height="130dp"
+        android:layout_alignParentRight="true"
         android:gravity="center_horizontal|top"
-       android:layout_alignParentRight="true">
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/ivLike"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:textColor="@color/black"
-            android:textSize="13dp"
-            android:gravity="center"
-            android:src="@drawable/ic_heart"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:drawablePadding="5dp" />
-            <com.prometteur.sathiya.utills.TextViewCustomFont
-            android:id="@+id/tvRatingCnt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/darkGray"
-            android:textSize="10dp"
-            android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:drawablePadding="5dp" />
-        </LinearLayout>
 
+            <ImageView
+                android:id="@+id/ivLike"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:src="@drawable/ic_heart"
+                android:textColor="@color/black"
+                android:textSize="13dp" />
+
+            <com.prometteur.sathiya.utills.TextViewCustomFont
+                android:id="@+id/tvRatingCnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:textColor="@color/darkGray"
+                android:textSize="10dp" />
+        </LinearLayout>
 
 
     </LinearLayout>

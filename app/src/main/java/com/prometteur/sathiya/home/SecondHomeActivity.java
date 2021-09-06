@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,14 +24,18 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
@@ -54,6 +59,7 @@ import com.prometteur.sathiya.profilestatus.ProfileVisitedActivity;
 import com.prometteur.sathiya.translateapi.Http;
 import com.prometteur.sathiya.translateapi.MainViewModel;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.ImageScaleView;
 import com.prometteur.sathiya.utills.NetworkConnection;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
@@ -105,7 +111,12 @@ public class SecondHomeActivity extends BaseActivity implements NavigationView.O
     public static ImageView ivNotification;
     public static boolean activityRunning=false;
     public static MainViewModel mMainViewModel;
+    public static boolean videoStarted=false;
     public static List<CountDownTimer> countDownTimer=new ArrayList<>();
+
+    public static VideoView videoView;
+    public static ImageView ivPlayPause;
+    public static CountDownTimer countDownTimerPlayPause;
     //replace yourActivity.this with your own activity or if you declared a context you can write context.getSystemService(Context.VIBRATOR_SERVICE);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +205,38 @@ public class SecondHomeActivity extends BaseActivity implements NavigationView.O
                 homeBinding.ivWedRing.setVisibility(View.GONE);
             }
         });
+
+        homeBinding.edtSearch.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        // Identifier of the action. This will be either the identifier you supplied,
+                        // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH
+                                || actionId == EditorInfo.IME_ACTION_DONE
+                                || event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                            if(!homeBinding.edtSearch.getText().toString().isEmpty()) {
+                                ThirdHomeActivity.matri_id = homeBinding.edtSearch.getText().toString().replace("#","");
+                                nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+                                homeBinding.edtSearch.setText("");
+                                homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
+                                homeBinding.linSearch.setVisibility(View.GONE);
+                                homeBinding.linToolbar.setVisibility(View.VISIBLE);
+                                homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
+                                homeBinding.ivFilter.setVisibility(View.VISIBLE);
+                                homeBinding.ivWedRing.setVisibility(View.VISIBLE);
+                            }else
+                            {
+                                AppConstants.setToastStr(nActivity,getString(R.string.please_enter_valid_matri_id));
+                            }
+                            return true;
+                        }
+                        // Return true if you have consumed the action, else false.
+                        return false;
+                    }
+                });
+
         homeBinding.imgSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,7 +272,7 @@ public class SecondHomeActivity extends BaseActivity implements NavigationView.O
 
     private void getHeaderView() {
         View header = homeBinding.navView.getHeaderView(0);
-        PorterShapeImageView civProfileImg = header.findViewById(R.id.civProfileImg);
+        ImageScaleView civProfileImg = header.findViewById(R.id.civProfileImg);
         ImageView ivClose = header.findViewById(R.id.ivClose);
         TextView tvProfileName = header.findViewById(R.id.tvProfileName);
         TextView tvId = header.findViewById(R.id.tvId);
@@ -613,19 +656,24 @@ Direction direction;
                                         beanUserData.setIncome(resItem.getString("income"));
                                         beanUserData.setM_tongue(resItem.getString("m_tongue"));
                                         ArrayList<Uri> imgUris=new ArrayList<>();
+                                        ArrayList<String> hobbiesArr=new ArrayList<>();
                                         JSONArray profilePhotoArr=new JSONArray(resItem.getString("profile_photos"));
                                         for(int i1=0;i1<profilePhotoArr.length();i1++) {
                                             JSONObject profilePhotoObj=profilePhotoArr.getJSONObject(i1);
                                             Uri uri = Uri.parse(profilePhotoObj.getString("photo"));
                                             imgUris.add(uri);
+                                            hobbiesArr.add("");
                                         }
                                         JSONArray hobbiesPhotoArr=new JSONArray(resItem.getString("hobby_data"));
                                         for(int i1=0;i1<hobbiesPhotoArr.length();i1++) {
                                             JSONObject hobbiesPhotoObj=hobbiesPhotoArr.getJSONObject(i1);
                                             Uri uri = Uri.parse(hobbiesPhotoObj.getString("photo"));
                                             imgUris.add(uri);
+                                            hobbiesArr.add(hobbiesPhotoObj.getString("title"));
+
                                         }
                                         beanUserData.setImageUri(imgUris);
+                                        beanUserData.setHobbiesText(hobbiesArr);
 
                                         ArrayList<String> fillerTextList=new ArrayList<>();
                                         JSONArray fillerTextArr=new JSONArray(resItem.getString("filler"));
@@ -647,19 +695,24 @@ Direction direction;
                                         beanUserData.setIncome(resItem.getString("income"));
                                         beanUserData.setM_tongue(resItem.getString("m_tongue"));
                                         ArrayList<Uri> imgUris=new ArrayList<>();
+                                        ArrayList<String> hobbiesArr=new ArrayList<>();
                                         JSONArray profilePhotoArr=new JSONArray(resItem.getString("profile_photos"));
                                         for(int i1=0;i1<profilePhotoArr.length();i1++) {
                                             JSONObject profilePhotoObj=profilePhotoArr.getJSONObject(i1);
                                             Uri uri = Uri.parse(profilePhotoObj.getString("photo"));
                                             imgUris.add(uri);
+                                            hobbiesArr.add("");
                                         }
                                         JSONArray hobbiesPhotoArr=new JSONArray(resItem.getString("hobby_data"));
                                         for(int i1=0;i1<hobbiesPhotoArr.length();i1++) {
                                             JSONObject hobbiesPhotoObj=hobbiesPhotoArr.getJSONObject(i1);
                                             Uri uri = Uri.parse(hobbiesPhotoObj.getString("photo"));
                                             imgUris.add(uri);
+                                            hobbiesArr.add(hobbiesPhotoObj.getString("title"));
+
                                         }
                                         beanUserData.setImageUri(imgUris);
+                                        beanUserData.setHobbiesText(hobbiesArr);
 
                                         ArrayList<String> fillerTextList=new ArrayList<>();
                                         JSONArray fillerTextArr=new JSONArray(resItem.getString("filler"));
@@ -727,34 +780,54 @@ Direction direction;
             e.printStackTrace();
         }
         super.onResume();
-        try{
-            if(isNotification)
-            {
-                Glide.with(nActivity).asGif().load(R.drawable.notification_gif).into(ivNotification);
-                ivNotification.setPadding(0,15,0,15);
-            }else
-            {
-                Glide.with(nActivity).load(R.drawable.ic_notification).into(ivNotification);
-            }}catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        call_package_status = prefUpdate.getString("call_package_status", "");
-        getHeaderView();
-        getIntetData();
+        if(!videoStarted) {
+            try {
+                if (isNotification) {
+                    Glide.with(nActivity).asGif().load(R.drawable.notification_gif).into(ivNotification);
+                    ivNotification.setPadding(0, 15, 0, 15);
+                } else {
+                    Glide.with(nActivity).load(R.drawable.ic_notification).into(ivNotification);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            call_package_status = prefUpdate.getString("call_package_status", "");
+            getHeaderView();
+            homeBinding.ivFilter.setColorFilter(null);
+            getIntetData();
+        }else{
+            videoView.start();
+            videoView.seekTo(stopPosition+2000);
 
+            ivPlayPause.setImageResource(R.drawable.ic_pause_circle_white);
+            try {
+                if (MusicService.mPlayer == null) {
+                    MusicService.mPlayer = new MediaPlayer();
+                }
+                MusicService.mPlayer.start();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            if(countDownTimerPlayPause!=null) {
+                countDownTimerPlayPause.start();
+            }
+        }
 
     }
-
+public static int stopPosition=0;
     @Override
     protected void onPause() {
         try {
             activityRunning = false;
             mMainViewModel.pause();
+            stopPosition = videoView.getCurrentPosition();
+            videoView.pause();
+            ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
             if (MusicService.mPlayer == null) {
                 MusicService.mPlayer = new MediaPlayer();
             }
             MusicService.mPlayer.pause();
+            countDownTimerPlayPause.cancel();
            // stopService(new Intent(nActivity, MusicService.class));
         }catch (Exception e)
         {
@@ -791,6 +864,7 @@ Direction direction;
             //Gender = bundle.getString("Gender");
             // Log.e("genderr", Gender);
             if(bundle.getString("AgeM")!=null) {
+                homeBinding.ivFilter.setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                 AgeM = bundle.getString("AgeM");
                 AgeF = bundle.getString("AgeF");
                 HeightM = bundle.getString("HeightM");
@@ -1035,6 +1109,7 @@ Direction direction;
                         String msgError = obj.getString("message");
                         AppConstants.setToastStr(nActivity, "" + msgError);
                         homeBinding.cardStackView.setVisibility(View.GONE);
+                        homeBinding.tvEmptyMsg.setText(getString(R.string.filter_profile_not_found));
                         homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                     }
 
@@ -1059,6 +1134,7 @@ Direction direction;
     @Override
     protected void onDestroy() {
         activityRunning = false;
+        videoStarted=false;
         if (MusicService.mPlayer == null) {
             MusicService.mPlayer = new MediaPlayer();
         }

@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.prometteur.sathiya.BaseActivity;
@@ -38,11 +40,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.prometteur.sathiya.R;
+import com.prometteur.sathiya.SplashActivity;
 import com.prometteur.sathiya.adapters.PhotosAdapter;
 import com.prometteur.sathiya.beans.beanPhotos;
+import com.prometteur.sathiya.home.ThirdHomeActivity;
 import com.prometteur.sathiya.model.chatmodel.Consersation;
 import com.prometteur.sathiya.model.chatmodel.Message;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.ImageScaleView;
 import com.prometteur.sathiya.utills.MySingleton;
 import com.prometteur.sathiya.utills.SharedPreferenceHelper;
 
@@ -93,7 +98,7 @@ public class ChatDetailsActivity extends BaseActivity implements View.OnClickLis
     SharedPreferences prefUpdate;
     beanPhotos profileOthers;
     public static String strEmailOthers;
-PorterShapeImageView civProfileImg;
+ImageScaleView civProfileImg;
 String isBlocked="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +134,7 @@ String isBlocked="";
         editWriteMessage = (EditText) findViewById(R.id.editWriteMessage);
         tvProfileName = findViewById(R.id.tvProfileName);
         if (idFriend != null && nameFriend != null) {
-            tvProfileName.setText(nameFriend);
+          //  tvProfileName.setText(nameFriend);
             //   getSupportActionBar().setTitle(nameFriend);
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
@@ -283,6 +288,8 @@ String isBlocked="";
                 return params;
             }
         };
+     /*   RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(jsonObjectRequest);*/
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
@@ -317,10 +324,11 @@ String isBlocked="";
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder instanceof ItemMessageFriendHolder) {
-                ((ItemMessageFriendHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
-                ((ItemMessageFriendHolder) holder).textTimeStamp.setText(getTimestamp(consersation.getListMessageData().get(position).timestamp));
-                Bitmap currentAvata = bitmapAvata.get(consersation.getListMessageData().get(position).idSender);
+            try {
+                if (holder instanceof ItemMessageFriendHolder) {
+                    ((ItemMessageFriendHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
+                    ((ItemMessageFriendHolder) holder).textTimeStamp.setText(getTimestamp(consersation.getListMessageData().get(position).timestamp));
+                    Bitmap currentAvata = bitmapAvata.get(consersation.getListMessageData().get(position).idSender);
                 /*if (currentAvata != null) {
                     ((ItemMessageFriendHolder) holder).avata.setImageBitmap(currentAvata);
                 } else {
@@ -349,16 +357,19 @@ String isBlocked="";
                         });
                     }
                 }*/
-if(profileOthers!=null) {
-    Glide.with(context).load(profileOthers.getImageURL()).into(((ItemMessageFriendHolder) holder).avata);
-}
-            } else if (holder instanceof ItemMessageUserHolder) {
-                ((ItemMessageUserHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
-                ((ItemMessageUserHolder) holder).textTimeStampUser.setText(getTimestamp(consersation.getListMessageData().get(position).timestamp));
-                if (bitmapAvataUser != null) {
-                    Glide.with(context).load(bitmapAvataUser).into(((ItemMessageUserHolder) holder).avata);
-                    //  ((ItemMessageUserHolder) holder).avata.setImageBitmap(bitmapAvataUser);
+                    if (profileOthers != null) {
+                        Glide.with(context).load(profileOthers.getImageURL()).into(((ItemMessageFriendHolder) holder).avata);
+                    }
+                } else if (holder instanceof ItemMessageUserHolder) {
+                    ((ItemMessageUserHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
+                    ((ItemMessageUserHolder) holder).textTimeStampUser.setText(getTimestamp(consersation.getListMessageData().get(position).timestamp));
+                    if (bitmapAvataUser != null) {
+                        Glide.with(context).load(bitmapAvataUser).into(((ItemMessageUserHolder) holder).avata);
+                        //  ((ItemMessageUserHolder) holder).avata.setImageBitmap(bitmapAvataUser);
+                    }
                 }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
 
@@ -388,7 +399,7 @@ if(profileOthers!=null) {
     class ItemMessageUserHolder extends RecyclerView.ViewHolder {
         public TextView txtContent;
         public TextView textTimeStampUser;
-        public PorterShapeImageView avata;
+        public ImageScaleView avata;
 
         public ItemMessageUserHolder(View itemView) {
             super(itemView);
@@ -401,7 +412,7 @@ if(profileOthers!=null) {
     class ItemMessageFriendHolder extends RecyclerView.ViewHolder {
         public TextView txtContent;
         public TextView textTimeStamp;
-        public PorterShapeImageView avata;
+        public ImageScaleView avata;
 
         public ItemMessageFriendHolder(View itemView) {
             super(itemView);
@@ -484,9 +495,36 @@ if(profileOthers!=null) {
                             JSONObject responseKey = responseData.getJSONObject("1");*/
 
                             String photo1 = obj.getString("photo").toString().trim();
+                            String name = obj.getString("name").toString().trim();
+                            String matriId = obj.getString("matri_id").toString().trim();
 
-                            profileOthers = new beanPhotos("1", photo1,"");
+                            profileOthers = new beanPhotos("1", photo1,name);
+                            tvProfileName.setText(""+name);
                             Glide.with(ChatDetailsActivity.this).load(photo1).into(civProfileImg);
+                            tvProfileName.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if(!isBlocked.equalsIgnoreCase("1")) {
+                                        ThirdHomeActivity.matri_id = matriId;
+                                        startActivity(new Intent(ChatDetailsActivity.this, ThirdHomeActivity.class));
+                                    }else
+                                    {
+                                        AppConstants.setToastStr(ChatDetailsActivity.this,getString(R.string.this_member_has_blocked_you_for_message));
+                                    }
+                                }
+                            });
+                            civProfileImg.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if(!isBlocked.equalsIgnoreCase("1")) {
+                                        ThirdHomeActivity.matri_id = matriId;
+                                        startActivity(new Intent(ChatDetailsActivity.this, ThirdHomeActivity.class));
+                                    }else
+                                    {
+                                        AppConstants.setToastStr(ChatDetailsActivity.this,getString(R.string.this_member_has_blocked_you_for_message));
+                                    }
+                                }
+                            });
                             adapter.notifyDataSetChanged();
                         } else {
                             String msgError = obj.getString("message");

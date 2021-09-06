@@ -194,7 +194,7 @@ holder.likedUserBinding.tvRefNo.setText("#"+homeResultList.get(position).getMatr
                     {
                         if (homeResultList.get(position).getIs_blocked().equalsIgnoreCase("1"))
                         {
-                            String msgBlock = "This member has blocked you. You can't express your interest.";
+                            String msgBlock = "This member is blocked. You can't express your interest.";
                             String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
@@ -216,7 +216,7 @@ holder.likedUserBinding.tvRefNo.setText("#"+homeResultList.get(position).getMatr
                     {
                         if (homeResultList.get(position).getIs_blocked().equalsIgnoreCase("1"))
                         {
-                            String msgBlock = "This member has blocked you. You can't express your interest.";
+                            String msgBlock = "This member is blocked. You can't express your interest.";
                             String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);

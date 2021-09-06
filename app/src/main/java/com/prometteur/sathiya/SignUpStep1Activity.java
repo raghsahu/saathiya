@@ -137,13 +137,7 @@ public static String strPassword=null,strUsername=null;
                         AppConstants.setToastStr(SignUpStep1Activity.this, getString(R.string.please_enter_lastname));
                         return;
                     }
-                    if (signupStep.tvGender.getText().toString().equalsIgnoreCase("") || signupStep.tvGender.getText().toString().equalsIgnoreCase("Select Gender")) {
-                        signupStep.tvGender.requestFocus();
-//                            edtEmailId.setError("Please enter email id.");
-//                            Toast.makeText(SignUpStep1Activity.this, "Please enter email id", Toast.LENGTH_SHORT).show();
-                        AppConstants.setToastStr(SignUpStep1Activity.this, getString(R.string.please_select_gender));
-                        return;
-                    }
+
                     if (signupStep.edtEmailId.getText().toString().equalsIgnoreCase("")) {
                         signupStep.edtEmailId.requestFocus();
 //                            edtEmailId.setError("Please enter email id.");
@@ -158,6 +152,13 @@ public static String strPassword=null,strUsername=null;
                         AppConstants.setToastStr(SignUpStep1Activity.this, getResources().getString(R.string.please_enter_valid_email_address));
                         return;
                     }*/
+                    if (signupStep.tvGender.getText().toString().equalsIgnoreCase("") || signupStep.tvGender.getText().toString().equalsIgnoreCase("Select Gender")) {
+                        signupStep.tvGender.requestFocus();
+//                            edtEmailId.setError("Please enter email id.");
+//                            Toast.makeText(SignUpStep1Activity.this, "Please enter email id", Toast.LENGTH_SHORT).show();
+                        AppConstants.setToastStr(SignUpStep1Activity.this, getString(R.string.please_select_gender));
+                        return;
+                    }
                     if (signupStep.edtMobileNo.getText().toString().equalsIgnoreCase("")) {
                         signupStep.edtMobileNo.requestFocus();
 //                            edtMobileNo.setError("Please enter your mobile no.");
@@ -331,7 +332,7 @@ public static String strPassword=null,strUsername=null;
      */
     private void initFirebase() {
         //Khoi tao thanh phan de dang nhap, dang ky
-        FirebaseMessaging.getInstance().subscribeToTopic("chats");  //
+        FirebaseMessaging.getInstance().subscribeToTopic("chats");
 
         mAuth = FirebaseAuth.getInstance();
         authUtils = new AuthUtils();
@@ -522,7 +523,7 @@ public static String strPassword=null,strUsername=null;
                         editor.putString("CountryId", AppConstants.CountryId);
                         editor.putString("CountryName", AppConstants.CountryName);
                         editor.putString("CountryCode", AppConstants.CountryCodeName);
-                        editor.putString("mobile", MobileNo);
+                        editor.putString("mobileNo", MobileNo);
                         editor.putString("signup_step", "1");
                         editor.putString("user_id_r", responseObj.getString("user_id"));
                         editor.putString(AppConstants.EMAIL_ID, signupStep.edtEmailId.getText().toString());
@@ -540,17 +541,18 @@ public static String strPassword=null,strUsername=null;
 
                     } else {
                         String msgError = responseObj.getString("message");
-                        if(msgError.contains("Mobile Number Already Exist")){
+                        if(msgError.contains("Mobile Number Already Exist") && (responseObj.getString("email").equalsIgnoreCase(EmailId)||responseObj.getString("firebase_email").equalsIgnoreCase(EmailId))){
                             authUtils.createUser(EmailId, Password,FirstName+" "+LastName);
+                        }else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpStep1Activity.this);
+                            builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
                         }
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpStep1Activity.this);
-                        builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                        AlertDialog alert = builder.create();
-                        alert.show();
                     }
 
                     responseObj = null;
@@ -602,7 +604,7 @@ public static String strPassword=null,strUsername=null;
             e.printStackTrace();
         }
     }
-
+public static int callCount=0;
     /**
      * Dinh nghia cac ham tien ich cho quas trinhf dang nhap, dang ky,...
      */
@@ -625,25 +627,6 @@ public static String strPassword=null,strUsername=null;
                             // the auth state listener will be notified and logic to handle the
                             // signed in user can be handled in the listener.
                             if (!task.isSuccessful()) {
-                                /*new LovelyInfoDialog(LoginActivity.this) {
-                                    @Override
-                                    public LovelyInfoDialog setConfirmButtonText(String text) {
-                                        findView(com.yarolegovich.lovelydialog.R.id.ld_btn_confirm).setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                dismiss();
-                                            }
-                                        });
-                                        return super.setConfirmButtonText(text);
-                                    }
-                                }
-                                        .setTopColorRes(R.color.colorAccent)
-                                        .setIcon(R.drawable.ic_add_friend)
-                                        .setTitle("Register false")
-                                        .setMessage("Email exist or weak password!")
-                                        .setConfirmButtonText("ok")
-                                        .setCancelable(false)
-                                        .show();*/
                                 AppConstants.setToastStr(SignUpStep1Activity.this,getString(R.string.email_exist_or_weak_password));
                             } else {
                                 initNewUserInfo(username);
@@ -658,6 +641,10 @@ public static String strPassword=null,strUsername=null;
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             //waitingDialog.dismiss();
+                            if(callCount<3) {
+                                callCount++;
+                                createUser(email, password, username);
+                            }
                         }
                     })
             ;

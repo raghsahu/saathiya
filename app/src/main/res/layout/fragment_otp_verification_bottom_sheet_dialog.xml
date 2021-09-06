@@ -63,7 +63,8 @@
         android:layout_marginTop="9dp"
         android:text=""
         android:layout_below="@+id/tvOtpMsg"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 
     <in.aabhasjindal.otptextview.OtpTextView
         android:id="@+id/otpTextView"

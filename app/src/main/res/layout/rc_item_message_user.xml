@@ -7,15 +7,17 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp">
 
-   <!-- <de.hdodenhof.circleimageview.CircleImageView
+    <com.prometteur.sathiya.utills.ImageScaleView
         android:id="@+id/imageView2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:scaleType="matrix"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="5dp"
-        android:src="@drawable/ic_person_avatar" />-->
-    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+        android:src="@drawable/shape_corner_round_square"
+        card_view:matrixType="top_center" />
+    <!--<com.github.siyamed.shapeimageview.mask.PorterShapeImageView
         android:id="@+id/imageView2"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_35sdp"
@@ -26,7 +28,7 @@
         android:scaleType="fitXY"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="5dp" />
+        android:layout_marginEnd="5dp" />-->
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

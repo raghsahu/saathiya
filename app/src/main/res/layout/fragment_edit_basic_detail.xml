@@ -47,7 +47,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:text="@string/full_name"
+                        android:text="@string/first_name"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp" />
                     <com.prometteur.sathiya.utills.TextViewCustomFont
@@ -72,7 +72,44 @@
                     android:padding="@dimen/_5sdp"
                     android:text=""
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
-                    android:hint="@string/firstname_lastname"
+                    android:hint="@string/first_name"
+                    android:textColor="@color/black"
+                    style="@style/EditTextviewStyle"/>
+ <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/last_name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+                    <com.prometteur.sathiya.utills.TextViewCustomFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:text="*"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+                <com.prometteur.sathiya.utills.CustomeEditText
+                    android:id="@+id/edtLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@drawable/bg_gray_rounded_rectengle"
+                    android:drawableLeft="@drawable/ic_user_logo"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:text=""
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:hint="@string/last_name"
                     android:textColor="@color/black"
                     style="@style/EditTextviewStyle"/>
 

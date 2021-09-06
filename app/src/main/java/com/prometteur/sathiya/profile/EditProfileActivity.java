@@ -19,6 +19,7 @@ import com.prometteur.sathiya.fragments.EditDocumentFragment;
 import com.prometteur.sathiya.fragments.EditEducationDetailFragment;
 import com.prometteur.sathiya.fragments.EditOtherDetailsFragment;
 import com.prometteur.sathiya.fragments.EditPhotosFragment;
+import com.prometteur.sathiya.utills.ImageScaleView;
 
 public class EditProfileActivity extends BaseActivity {
 
@@ -26,7 +27,7 @@ public class EditProfileActivity extends BaseActivity {
     public static ViewPager viewPager;
     public static TextView tvProfDet,tvPhoto;
     public static String pageType;
-    public static PorterShapeImageView rivProfileImage;
+    public static ImageScaleView rivProfileImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

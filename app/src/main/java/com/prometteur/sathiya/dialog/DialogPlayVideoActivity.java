@@ -1,67 +1,43 @@
 package com.prometteur.sathiya.dialog;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.prometteur.sathiya.BaseActivity;
-import com.prometteur.sathiya.LoginActivity;
 import com.prometteur.sathiya.R;
-import com.prometteur.sathiya.adapters.CardStackAdapter;
 import com.prometteur.sathiya.adapters.RecycleImagesAdapter;
 import com.prometteur.sathiya.databinding.DialogPlayVideoBinding;
-import com.prometteur.sathiya.databinding.DialogReasonBinding;
 import com.prometteur.sathiya.home.MusicService;
 import com.prometteur.sathiya.translateapi.Http;
 import com.prometteur.sathiya.translateapi.MainViewModel;
-import com.prometteur.sathiya.utills.AppConstants;
 import com.prometteur.sathiya.utills.NetworkConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import darren.googlecloudtts.GoogleCloudTTS;
 import darren.googlecloudtts.GoogleCloudTTSFactory;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -71,11 +47,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static com.prometteur.sathiya.SplashActivity.strLangCode;
 import static com.prometteur.sathiya.home.MusicService.mPlayer;
-import static com.prometteur.sathiya.home.SecondHomeActivity.activityRunning;
-import static com.prometteur.sathiya.home.SecondHomeActivity.mMainViewModel;
 import static com.prometteur.sathiya.profile.ProfileActivity.resItem;
-import static com.prometteur.sathiya.utills.AppConstants.isNotification;
-import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 public class DialogPlayVideoActivity extends BaseActivity {
    DialogPlayVideoBinding profileBinding;
@@ -91,6 +63,8 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
     public boolean activityRunning = false;
     public boolean voiceCall = true;
     public MainViewModel mMainViewModel;
+    ArrayList<Uri> imguris = new ArrayList<>();
+    ArrayList<String> hobbiesArr=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,14 +102,13 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
         stringData = new ArrayList<>();
 
-        //ArrayList<String> fillerTextList=new ArrayList<>();
         JSONArray fillerTextArr= null;
         try {
             fillerTextArr = new JSONArray(resItem.getString("filler"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //stringData.add("");// for initial filler
+
         for(int i1=0;i1<fillerTextArr.length();i1++) {
             JSONObject hobbiesPhotoObj= null;
             try {
@@ -147,28 +120,56 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
             }
 
         }
-
-        /*stringData.add("Blank");
+       /* stringData.add("Welcome to my profile");
         stringData.add("Mera naam Sumit Dhara hai");
         stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
         stringData.add("Mien orisa ka rahne wala hoon");
-        stringData.add("Blank");
+        //stringData.add("Blank");
         stringData.add("Meri umar 38 saal hai");
         stringData.add("Blank");
         stringData.add("Mera kad 5 ft 10 inch hai");
-        stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+        //stringData.add("Par koshish karunga tumhare liye tare tod laaun");
         stringData.add("Mein shakahari hoon");
         stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
         stringData.add("Mere ghar pe Hindi boli jaati h");
-        stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+        //stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
         stringData.add("Mien 12th tak pada hoon");
         stringData.add("Blank");
         stringData.add("Mein plumber hoon");
-        stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+        //stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
         stringData.add("Meri maasik aay 10 haazaar hai");
         stringData.add("Lekin khushiya bonus mein");
         stringData.add("What I am looking for?");
-        stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");*/
+        stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
+*/
+        if(getIntent().getStringArrayListExtra("profileImages")!=null){
+            for(int i=0;i<getIntent().getStringArrayListExtra("profileImages").size();i++) {
+                Uri uri = Uri.parse(getIntent().getStringArrayListExtra("profileImages").get(i));
+                imguris.add(uri);
+                hobbiesArr.add("");
+            }
+        }
+
+        JSONArray hobbiesPhotoArr= null;
+        try {
+            hobbiesPhotoArr = new JSONArray(resItem.getString("hobby_data"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(hobbiesPhotoArr!=null) {
+            for (int i1 = 0; i1 < hobbiesPhotoArr.length(); i1++) {
+                JSONObject hobbiesPhotoObj = null;
+                try {
+                    hobbiesPhotoObj = hobbiesPhotoArr.getJSONObject(i1);
+                    Uri uri = Uri.parse(hobbiesPhotoObj.getString("photo"));
+                    imguris.add(uri);
+                    hobbiesArr.add(hobbiesPhotoObj.getString("title"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         milliLeft=0;
         profileBinding.ivPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,8 +182,13 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
 
                 if (paused) {
-                    if (mPlayer != null) {
-                        mPlayer.pause();
+                    pauseVal=1;
+                    try {
+                        if (mPlayer != null) {
+                            mPlayer.pause();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     paused = false;
@@ -233,7 +239,7 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
 
                    // showHideView(holder, paused);
-                    if(current==21){
+                    if(current==17){
                         current=0;
                     }
                     setViews(stringData, (int) current);
@@ -253,14 +259,24 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
                 if (MusicService.mPlayer == null) {
                     MusicService.mPlayer = new MediaPlayer();
                 }
-                MusicService.mPlayer.stop();
+                try{
+                MusicService.mPlayer.stop();}catch (Exception e){e.printStackTrace();}
                 stopService(new Intent(nActivity, MusicService.class));
                 finish();
             }
         });
+
+        profileBinding.RelRay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+                playPauseHandler.postDelayed(playPauserunnable, 1000);
+            }
+        });
+
     }
 
-
+    int pauseVal=0;
     private void setViews(final List<String> arraylist, int pos) {
         profileBinding.tvDetail.setVisibility(View.VISIBLE);
         profileBinding.videoView.setVisibility(View.VISIBLE);
@@ -269,89 +285,162 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         longArrayList.add(4000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
         longArrayList.add(4000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
-        longArrayList.add(5000L);//holder.stringData.add("Blank");
+        // longArrayList.add(5000L);//holder.stringData.add("Blank");
         longArrayList.add(7000L);//holder.stringData.add("Meri umar 38 saal hai");
         longArrayList.add(5000L);//holder.stringData.add("Blank");
         longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
-        longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+        // longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
         longArrayList.add(4000L);//holder.stringData.add("Mein shakahari hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
         longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
-        longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+        //  longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
         longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
         longArrayList.add(5000L);//holder.stringData.add("Blank");
         longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
-        longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+        //  longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
         longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
         longArrayList.add(3000L);//holder.stringData.add("Lekin khushiya bonus mein");
         longArrayList.add(3000L);//holder.stringData.add("What I am looking for?");
         longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
         final int[] poss = {pos};
-        /*if(milliLeft>0)
-        {
-           longArrayList.set(poss[0],milliLeft);
-            milliLeft=0;
-        }*/
+
+
+        if(pauseVal==1){
+            pauseVal=0;
+            if(milliLeft<1000){
+                milliLeft=1000;
+            }
+            longArrayList.set(poss[0],(milliLeft));
+            Log.e("In restart ",poss[0]+" Remaining Time : "+(milliLeft));
+        }
+
         countDownTimer = new CountDownTimer(longArrayList.get(poss[0]), 1000) {
             @Override
             public void onTick(long l) {
-                //milliLeft=l;
+                milliLeft=l;
+                try{
                 if(!arraylist.get(poss[0]).isEmpty() && !arraylist.get(poss[0]).equalsIgnoreCase("blank")) {
                     translateText(arraylist.get(poss[0]),gender);
                 }else {
                     profileBinding.tvDetail.setText(arraylist.get(poss[0]));
                 }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFinish() {
-                poss[0]++;
-                current=poss[0];
-                if(arraylist.size()==poss[0]){
+                try {
+                    poss[0]++;
+                    current = poss[0];
+                    if (arraylist.size() == poss[0]) {
 
-                    /*if(imguris.size()>0) {
-                        profileBinding.recycler.setVisibility(View.VISIBLE);
-                        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,profileBinding.videoView.getHeight());
-                        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                        profileBinding.recycler.setLayoutParams(params);
-                        adapter = new RecycleImagesAdapter(nContext, imguris, new RecycleImagesAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
-                                profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
-                                playPauseHandler.postDelayed(playPauserunnable, 2000);
+                        if (imguris.size() > 0) {
+                            profileBinding.recycler.setVisibility(View.VISIBLE);
+                            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, profileBinding.videoView.getHeight());
+                            params.gravity = Gravity.CENTER;
+                            profileBinding.recycler.setLayoutParams(params);
+                            RecycleImagesAdapter adapter = new RecycleImagesAdapter(nActivity, imguris, hobbiesArr, new RecycleImagesAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int position) {
+                                    profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+                                    playPauseHandler.postDelayed(playPauserunnable, 2000);
+                                }
+                            });
+                            profileBinding.recycler.setLayoutManager(new LinearLayoutManager(nActivity, LinearLayoutManager.HORIZONTAL, false));
+                            profileBinding.recycler.setAdapter(adapter);
+                            loadjpgs();
+                        } else {
+                            profileBinding.recycler.setVisibility(View.GONE);
+                            profileBinding.tvDetail.setVisibility(View.GONE);
+                            //profileBinding.videoView.setVisibility(View.GONE);
+
+                            profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+                            paused = false;
+                            profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
+                            if (MusicService.mPlayer == null) {
+                                MusicService.mPlayer = new MediaPlayer();
                             }
-                        });
-                        profileBinding.recycler.setLayoutManager(new LinearLayoutManager(nContext, LinearLayoutManager.HORIZONTAL, false));
-                        profileBinding.recycler.setAdapter(adapter);
-                        loadjpgs();
-                    }else{
-                        profileBinding.recycler.setVisibility(View.GONE);
-                    }*/
-                    profileBinding.tvDetail.setVisibility(View.GONE);
-                    //profileBinding.videoView.setVisibility(View.GONE);
+                            MusicService.mPlayer.stop();
+                            stopService(new Intent(nActivity, MusicService.class));
+                            repeat = false;
+                        }
 
-                    profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
-                    paused = false;
-                    profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
-                    if (MusicService.mPlayer == null) {
-                        MusicService.mPlayer = new MediaPlayer();
-                    }
-                    MusicService.mPlayer.stop();
-                    stopService(new Intent(nActivity, MusicService.class));
-                    repeat=false;
                     /*if(imguris.size()==0) {
 
 
                         showHideView(holder, paused);
                     }*/
-                }else {
-                    voiceCall=true;
-                    setViews(arraylist, poss[0]);
-                }
+                    } else {
+                        voiceCall = true;
+                        pauseVal=0;
+                        setViews(arraylist, poss[0]);
+                    }
+                }catch (Exception e)
+                {e.printStackTrace();}
             }
         }.start();
 
     }
+    Handler handler2 = new Handler();
+    private void loadjpgs() {
+        profileBinding.tvDetail.setText("");
+        profileBinding.tvDetail.setVisibility(View.GONE);
+        //profileBinding.imageview.setVisibility(View.GONE);
+        profileBinding.recycler.setVisibility(View.VISIBLE);
+
+        profileBinding.recycler.smoothScrollToPosition(imageIndex);
+        handler2.postDelayed(runnable2, 3000);
+
+    }
+    int imageIndex = 0;
+    Runnable runnable2 = new Runnable() {
+        @Override
+        public void run() {
+            imageIndex = 1 + imageIndex;
+            if (imageIndex < imguris.size()) {
+                //loadVideo();
+                profileBinding.tvDetail.setVisibility(View.GONE);
+                loadjpgs();
+            } else {
+                profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+                paused = false;
+                profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
+                //showHideView(, false);
+                repeat = false;
+                imageIndex = 0;
+                current = 0;
+                profileBinding.tvDetail.setVisibility(View.VISIBLE);
+                profileBinding.recycler.setVisibility(View.GONE);
+                profileBinding.videoView.setVisibility(View.VISIBLE);
+                if (MusicService.mPlayer == null) {
+                    MusicService.mPlayer = new MediaPlayer();
+                }
+                try {
+                    MusicService.mPlayer.stop();
+                }catch (Exception e){e.printStackTrace();}
+                nActivity.stopService(new Intent(nActivity, MusicService.class));
+                repeat=false;
+            }
+        }
+    };
+
+
+    Handler playPauseHandler = new Handler();
+    Runnable playPauserunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (paused) {
+                profileBinding.ivPlayPause.setVisibility(View.GONE);
+            } else {
+                profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+                //playPauseHandler.removeCallbacks(playPauserunnable);
+            }
+            playPauseHandler.removeCallbacks(playPauserunnable);
+        }
+    };
+
 
     private void translateText(String input,String gender) {
         if(strLangCode.equalsIgnoreCase("en")){
@@ -424,7 +513,7 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        Toast.makeText(nActivity, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(nActivity, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         //makeToast("Speak failed " + e.getMessage(), true);
                         Log.e("speak_failed ", "Speak failed", e);
                     }
@@ -460,10 +549,48 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         {
             e.printStackTrace();
         }
+
+        //from here
+        paused = true;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (current == 0) {
+            // loadjpgs();
+            if (!repeat) {
+                repeat = true;
+                startService(new Intent(DialogPlayVideoActivity.this, MusicService.class));
+            }
+        }
+        if (mPlayer == null) {
+            mPlayer = new MediaPlayer();
+        }
+        try {
+            mPlayer.start();
+        }catch (Exception e){e.printStackTrace();}
+        profileBinding.ivPlayPause.setImageResource(R.drawable.ic_pause_circle_white);
+        profileBinding.ivPlayPause.setVisibility(View.GONE);
+
+                   /* if (drawable instanceof Animatable) {
+                        ((Animatable) drawable).start();
+                    }*/
+
+
+        if (!profileBinding.videoView.isPlaying()) {
+            profileBinding.videoView.seekTo(stopPosition+2000);
+            profileBinding.videoView.start();
+        }
+
+
+        // showHideView(holder, paused);
+        if(current==17){
+            current=0;
+        }
+        setViews(stringData, (int) current);
+//to here
+
         super.onResume();
 
     }
-
+int stopPosition=0;
     @Override
     protected void onPause() {
         try {
@@ -473,13 +600,49 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         {
             e.printStackTrace();
         }
-        if (MusicService.mPlayer == null) {
-            MusicService.mPlayer = new MediaPlayer();
+        if(countDownTimer!=null) {
+            countDownTimer.cancel();
         }
+
         try {
+            if (MusicService.mPlayer == null) {
+                MusicService.mPlayer = new MediaPlayer();
+            }
             MusicService.mPlayer.stop();
+            stopService(new Intent(nActivity, MusicService.class));
         }catch (Exception e){e.printStackTrace();}
-        stopService(new Intent(nActivity, MusicService.class));
+
+       // finish();
+
+//from here
+       /* if (mPlayer != null) {
+            try {
+                mPlayer.pause();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }*/
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        paused = false;
+        profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
+        profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+                    /*drawable = profileBinding.imageview.getDrawable();
+                    if (drawable instanceof Animatable) {
+                        ((Animatable) drawable).stop();
+                    }*/
+
+
+        if(countDownTimer!=null) {
+            countDownTimer.cancel();
+        }
+
+
+        if (profileBinding.videoView.isPlaying()) {
+            stopPosition = profileBinding.videoView.getCurrentPosition();
+            profileBinding.videoView.pause();
+        }
+
+//to here
         super.onPause();
     }
 

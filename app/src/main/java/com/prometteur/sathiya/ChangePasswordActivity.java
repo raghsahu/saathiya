@@ -86,24 +86,24 @@ BaseActivity nActivity=this;
                 String newPassword = passwordBinding.edtNewPassword.getText().toString().trim();
                 String conPassword = passwordBinding.edtConfPassword.getText().toString().trim();
 
-                if(oldPassword.equalsIgnoreCase("")) {
+                if(oldPassword.length()<6) {
                     //edtEmailId.setError(getResources().getString(R.string.Please_enter_username));
                     setToastStr(ChangePasswordActivity.this, getResources().getString(R.string.Please_enter_password));
-                } else if(newPassword.equalsIgnoreCase("")) {
+                } else if(newPassword.length()<6) {
                     //edtEmailId.setError(getResources().getString(R.string.Please_enter_username));
                     setToastStr(ChangePasswordActivity.this,getResources().getString(R.string.please_enter_new_password));
-                }else if(conPassword.equalsIgnoreCase("")) {
+                }else if(conPassword.length()<6) {
                     //edtEmailId.setError(getResources().getString(R.string.Please_enter_username));
                     setToastStr(ChangePasswordActivity.this, getResources().getString(R.string.please_enter_confirm_password));
                 } else if (!newPassword.equalsIgnoreCase(conPassword)) {
                     setToastStr(ChangePasswordActivity.this, getResources().getString(R.string.password_does_not_match));
-                } else if(!isValidPassword(newPassword)) {
+                }/* else if(!isValidPassword(newPassword)) {
                     setToastStr(ChangePasswordActivity.this, getResources().getString(R.string.enter_password_with_special_characters));
                     passwordBinding.edtNewPassword.requestFocus();
                 }else if(!isValidPassword(conPassword)) {
                     setToastStr(ChangePasswordActivity.this, getResources().getString(R.string.enter_password_with_special_characters));
                     passwordBinding.edtConfPassword.requestFocus();
-                } else {
+                }*/ else {
                     getChangePasswordRequest(oldPassword,newPassword);
                 }
             }

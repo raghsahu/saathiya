@@ -621,12 +621,18 @@ public class ProfileLikeReceivedActivity extends BaseActivity implements OnClick
 
                             if (mutually_liked != 0) {
                                 profileLikedBinding.tvAccepted.setText(getString(R.string.mutually_liked) + "(" + mutually_liked + ")");
+                            }else{
+                                profileLikedBinding.tvAccepted.setText(getString(R.string.mutually_liked));
                             }
                             if (liked_profiles != 0) {
                                 profileLikedBinding.tvLikedUsers.setText(getString(R.string.liked_profiles) + "(" + liked_profiles + ")");
+                            }else{
+                                profileLikedBinding.tvLikedUsers.setText(getString(R.string.liked_profiles));
                             }
                             if (likes_received != 0) {
                                 profileLikedBinding.tvWaitingForResponse.setText(getString(R.string.likes_received) + "(" + likes_received + ")");
+                            }else{
+                                profileLikedBinding.tvWaitingForResponse.setText(getString(R.string.likes_received));
                             }
 
 

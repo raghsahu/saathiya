@@ -8,7 +8,9 @@ import com.prometteur.sathiya.BaseActivity;
 
 import com.prometteur.sathiya.ChangePasswordActivity;
 import com.prometteur.sathiya.databinding.ActivitySettingBinding;
+import com.prometteur.sathiya.dialog.DialogDeleteWarningActivity;
 import com.prometteur.sathiya.dialog.DialogReasonActivity;
+import com.prometteur.sathiya.dialog.DialogWarningActivity;
 import com.prometteur.sathiya.language.LanguateActivity;
 
 //import android.support.v7.app.BaseActivity;
@@ -49,6 +51,13 @@ ActivitySettingBinding settingBinding;
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(nActivity, DialogReasonActivity.class));
+            }
+        });
+
+        settingBinding.btnDeleteAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(nActivity, DialogDeleteWarningActivity.class));
             }
         });
     }

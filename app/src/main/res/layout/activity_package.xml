@@ -27,6 +27,25 @@
         android:layout_margin="@dimen/_10sdp"
         app:cardCornerRadius="@dimen/_8sdp"
         >
+        <com.prometteur.sathiya.utills.TextViewCustomFont
+            android:id="@+id/tvBalanceCalls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Balance Calls"
+            android:padding="@dimen/_10sdp"
+
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            />
+    </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_8sdp"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,7 +141,7 @@
                         android:paddingRight="@dimen/_10sdp"
                         android:paddingTop="@dimen/_3sdp"
                         android:paddingBottom="@dimen/_2sdp"
-                        android:text="Calls"
+                        android:text="@string/calls"
                         android:gravity="center"
                         android:layout_margin="@dimen/_3sdp"
                         android:textColor="@color/black"
@@ -142,7 +161,7 @@
                         android:paddingRight="@dimen/_10sdp"
                         android:paddingTop="@dimen/_3sdp"
                         android:paddingBottom="@dimen/_2sdp"
-                        android:text="Price (₹)"
+                        android:text="@string/price_per_call"
                         android:gravity="center"
                         android:layout_margin="@dimen/_3sdp"
                         android:textColor="@color/black"
@@ -217,18 +236,7 @@
                 android:digits="1234567890"
                 style="@style/EditTextviewStyle"
                android:background="@drawable/login_edt_rounded_white_background"/>
-            <com.prometteur.sathiya.utills.TextViewCustomFont
-                android:id="@+id/tvBalanceCalls"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Balance Calls"
-                android:padding="@dimen/_10sdp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_marginRight="@dimen/_8sdp"
-                android:textColor="@color/black"
-                android:gravity="center"
-                />
+
 
             <com.prometteur.sathiya.utills.TextViewCustomFont
                 android:id="@+id/sendCalls"

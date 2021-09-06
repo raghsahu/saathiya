@@ -114,7 +114,7 @@ this.bundle=bundle;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder1, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder1, int position) {
         /*if(homeResultList.size()==0)
         {
             nActivity.startActivity(new Intent(nActivity, HomeActivity.class));

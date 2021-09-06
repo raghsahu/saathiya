@@ -58,7 +58,7 @@ public final class FriendDB {
 // you will actually use after this query.
         try {
 //            Cursor cursor = db.rawQuery("select * from " + FeedEntry.TABLE_NAME , null);
-            Cursor cursor = db.rawQuery("select * from " + FeedEntry.TABLE_NAME +" ORDER BY timestamp DESC", null);
+            Cursor cursor = db.rawQuery("select DISTINCT * from " + FeedEntry.TABLE_NAME +" ORDER BY timestamp DESC", null);
             while (cursor.moveToNext()) {
                 Friend friend = new Friend();
                 friend.id = cursor.getString(0);

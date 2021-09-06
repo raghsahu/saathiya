@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">साथिया </string>
     <string name="go_back">क्या आप पिछले पेज पर वापस जाना चाहते हैं ?</string>
+    <string name="close_app">क्या आप वाकई ऐप बंद करना चाहते हैं?</string>
     <string name="Login">लोगिन </string>
     <string name="Sign_Up">फ्री में रजिस्टर करें </string>
     <string name="data_not_avelable">डाटा उपलब्ध नहीं है </string>
@@ -193,7 +194,8 @@
     <string name="hobbies_and_interest">शौक एवं रुचि</string>
     <string name="my_interest">मेरे शौक एवं रुचि</string>
     <string name="other">अन्य</string>
-    <string name="recent_profile_not_found">प्रोफाइल नहीं मिली </string>
+    <string name="recent_profile_not_found">प्रोफाइल नहीं मिली</string>
+    <string name="filter_profile_not_found">कोई प्रोफ़ाइल नहीं मिली कृपया अपना फ़िल्टर अपडेट करें</string>
     <string name="membership_status">मेम्बरशिप -</string>
     <string name="edit_profile">प्रोफाइल बदलाव</string>
     <string name="liked_profile">तुमने लाइक किए</string>
@@ -364,7 +366,8 @@
     <string name="please_enter_calls">कृपया कॉल दर्ज करें</string>
     <string name="calls_not_available">उपलब्ध कॉल </string>
     <string name="so_enter_within_that">उस सीमा के भीतर दर्ज करें</string>
-    <string name="please_enter_valid_username_or_password">कृपया मान्य नाम / पासवर्ड दर्ज करें।</string>
+    <string name="please_enter_valid_username_or_password">कृपया रजिस्टर करें।</string>
+<!--    <string name="please_enter_valid_username_or_password">कृपया मान्य नाम / पासवर्ड दर्ज करें।</string>-->
     <string name="mobile_no_prof">मोबाइल नंबर</string>
     <string name="above_50k">50K.से ऊपर</string>
     <string name="your_viewed_all_the_profiles">आपने सभी प्रोफ़ाइल देख ली हैं कृपया अपना फ़िल्टर अपडेट करें</string>
@@ -380,8 +383,14 @@
 
     <string name="please_select_specially_abled">कृपया विशेष रूप से विकलांग का चयन करें</string>
     <string name="messaged_users_not_found">संदेश भेजे गए उपयोगकर्ता नहीं मिले</string>
-    <string name="gift_calls">उपहार कॉल</string>
+    <string name="gift_calls">अन्य सदस्यों को उपहार कॉल</string>
     <string name="approved">मंजूर की</string>
     <string name="pending">विचाराधीन</string>
     <string name="you_are_not_paid_memeber">आप भुगतान किए गए सदस्य नहीं हैं। अपनी रुचि व्यक्त करने के लिए कृपया अपनी सदस्यता अपडेट करें।</string>
+    <string name="price_per_call">मूल्य प्रति कॉल (₹)</string>
+    <string name="user_has_not_uploaded_any_content">उपयोगकर्ता ने कोई सामग्री अपलोड नहीं की है।</string>
+    <string name="my_hobby">मेरा शौक</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete, you may take a break by deactivating you account. Deleting will permanently erase your account details.</string>
+    <string name="delete">Delete</string>
 </resources>

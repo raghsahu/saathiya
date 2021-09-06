@@ -2,16 +2,21 @@ package com.prometteur.sathiya.home;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +26,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.prometteur.sathiya.BaseActivity;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
@@ -31,8 +38,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.prometteur.sathiya.BaseActivity;
+import com.prometteur.sathiya.LoginActivity;
 import com.prometteur.sathiya.MyApp;
 import com.prometteur.sathiya.R;
+import com.prometteur.sathiya.SignUpStep1Activity;
 import com.prometteur.sathiya.adapters.UserHomeListAdapter;
 import com.prometteur.sathiya.adapters.UserLikedListAdapter;
 import com.prometteur.sathiya.beans.beanUserData;
@@ -52,6 +61,7 @@ import com.prometteur.sathiya.profilestatus.ProfileLikedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileRejectedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileVisitedActivity;
 import com.prometteur.sathiya.utills.AppConstants;
+import com.prometteur.sathiya.utills.ImageScaleView;
 import com.prometteur.sathiya.utills.LocaleUtils;
 import com.prometteur.sathiya.utills.NetworkConnection;
 
@@ -251,6 +261,37 @@ if(bundle!=null) {
             homeBinding.ivWedRing.setVisibility(View.GONE);
         }
     });
+    homeBinding.edtSearch.setOnEditorActionListener(
+            new EditText.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    // Identifier of the action. This will be either the identifier you supplied,
+                    // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH
+                            || actionId == EditorInfo.IME_ACTION_DONE
+                            || event.getAction() == KeyEvent.ACTION_DOWN
+                            && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                        if(!homeBinding.edtSearch.getText().toString().isEmpty()) {
+                            ThirdHomeActivity.matri_id = homeBinding.edtSearch.getText().toString().replace("#","");
+                            nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+                            homeBinding.edtSearch.setText("");
+                            homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
+                            homeBinding.linSearch.setVisibility(View.GONE);
+                            homeBinding.linToolbar.setVisibility(View.VISIBLE);
+                            homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
+                            homeBinding.ivFilter.setVisibility(View.VISIBLE);
+                            homeBinding.ivWedRing.setVisibility(View.VISIBLE);
+                        }else
+                        {
+                            AppConstants.setToastStr(nActivity,getString(R.string.please_enter_valid_matri_id));
+                        }
+                        return true;
+                    }
+                    // Return true if you have consumed the action, else false.
+                    return false;
+                }
+            });
+
     homeBinding.imgSearch.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -288,12 +329,30 @@ if(bundle!=null) {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+        builder.setTitle(getResources().getString(R.string.app_name));
+        builder.setMessage(getResources().getString(R.string.go_back));
+        builder.setCancelable(false);
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+            }
+        });
+
+        builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
     private void getHeaderView() {
         View header = homeBinding.navView.getHeaderView(0);
-        PorterShapeImageView civProfileImg = header.findViewById(R.id.civProfileImg);
+        ImageScaleView civProfileImg = header.findViewById(R.id.civProfileImg);
         ImageView ivClose = header.findViewById(R.id.ivClose);
         TextView tvProfileName = header.findViewById(R.id.tvProfileName);
         TextView tvId = header.findViewById(R.id.tvId);
@@ -522,7 +581,7 @@ Log.i("chat login","Chat login");
                                         String userMobile = resItem.getString("mobile");
                                         String userEmail = resItem.getString("email");
                                         String income = resItem.getString("email");
-                                        String user_profile_picture = resItem.getString("user_profile_picture");
+                                        String user_profile_picture = resItem.getString("old_user_profile_picture");
                                         tokans.add(resItem.getString("tokan"));
                                         beanUserData beanUserData=new beanUserData(user_id, matri_id1, username, birthdate, ocp_name, height, Address,
                                                 city_name, country_name, photo1_approve, photo_view_status, photo_protect,
@@ -546,6 +605,7 @@ Log.i("chat login","Chat login");
                                         },null);
                                         homeBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
                                         homeBinding.rvLikedUsers.setVisibility(View.VISIBLE);
+                                        userLikedListAdapter.notifyDataSetChanged();
                                     } else {
                                         homeBinding.rvLikedUsers.setVisibility(View.GONE);
                                         homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
@@ -634,6 +694,7 @@ Log.i("chat login","Chat login");
         }
         call_package_status = prefUpdate.getString("call_package_status", "");
         getHeaderView();
+        homeBinding.ivFilter.setColorFilter(null);
         getIntetData();
 
 
@@ -666,6 +727,7 @@ Bundle bundle1=null;
             //Gender = bundle.getString("Gender");
            // Log.e("genderr", Gender);
             if(bundle.getString("AgeM")!=null) {
+                homeBinding.ivFilter.setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                 AgeM = bundle.getString("AgeM");
                 AgeF = bundle.getString("AgeF");
                 HeightM = bundle.getString("HeightM");
@@ -860,7 +922,7 @@ Bundle bundle1=null;
                                 AppConstants.is_blocked = resItem.getString("is_blocked");
 
                                 String is_favourite = resItem.getString("is_favourite");
-                                String user_profile_picture = resItem.getString("user_profile_picture");
+                                String user_profile_picture = resItem.getString("old_user_profile_picture");
                                 String eiId = resItem.getString("ei_id");
                                 tokans.add(resItem.getString("tokan"));
                                 beanUserData beanUserData=new beanUserData(user_id, matri_id1, username, birthdate, ocp_name, height, Address, city_name, country_name, photo1_approve, photo_view_status, photo_protect,
@@ -891,7 +953,7 @@ Bundle bundle1=null;
                                 String msgError = obj.getString("message");
                                 AppConstants.setToastStr(nActivity, "" + msgError);
                                 homeBinding.rvLikedUsers.setVisibility(View.GONE);
-                                homeBinding.tvEmptyMsg.setText(getString(R.string.recent_profile_not_found));
+                                homeBinding.tvEmptyMsg.setText(getString(R.string.filter_profile_not_found));
                                 homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                             }
                         }
@@ -901,6 +963,7 @@ Bundle bundle1=null;
                         String msgError = obj.getString("message");
                         AppConstants.setToastStr(nActivity, "" + msgError);
                         homeBinding.rvLikedUsers.setVisibility(View.GONE);
+                        homeBinding.tvEmptyMsg.setText(getString(R.string.filter_profile_not_found));
                         homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                     }
 
