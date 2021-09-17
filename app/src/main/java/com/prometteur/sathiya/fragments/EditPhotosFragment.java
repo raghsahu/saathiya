@@ -487,14 +487,13 @@ public class EditPhotosFragment extends Fragment {
                     String message = profileManagePhotoResponse.getMessage();
                     AppConstants.setToastStrPinkBg(getActivity(), message);
 
-                    String responseImage = profileManagePhotoResponse.getImage();
+                    if (NetworkConnection.hasConnection(getActivity())){
+                        ViewPhoto(matri_id);
 
-                    /*if (PhotoId.equalsIgnoreCase("1")) {
-                        Glide.with(getActivity())
-                                .load(responseImage)
-                                .placeholder(R.drawable.loadimage)
-                                .into(imgUserPhotos);
-                    }*/
+                    }else
+                    {
+                        AppConstants.CheckConnection(getActivity());
+                    }
                 } else {
                     String msgError = profileManagePhotoResponse.getMessage();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

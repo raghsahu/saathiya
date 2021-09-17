@@ -179,7 +179,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View view) {
                     if (NetworkConnection.hasConnection(nActivity)) {
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
-                            String msgBlock = "This member is blocked.";
+                            String msgBlock = nActivity.getString(R.string.this_member_has_blocked_you);
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                             builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -242,7 +242,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         Log.d("TAG", "CHECK =" + test);
 
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
-                            String msgBlock = "This member is blocked.";
+                            String msgBlock = nActivity.getString(R.string.this_member_has_blocked_you);
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                             builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -261,8 +261,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         }
                     } else if (RequestType.equalsIgnoreCase("Unlike")) {
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
-                            String msgBlock = "This member is blocked. You can't express your interest.";
-                            String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+                            String msgBlock = nActivity.getString(R.string.you_can_not_express_you_interest_you_can_not_express_your_interest);
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                             builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -292,8 +291,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View view) {
                     if (singleUser.getIs_blocked().equalsIgnoreCase("1")) {
-                        String msgBlock = "This member is blocked. You can't express your interest.";
-                        String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+                        String msgBlock = nActivity.getString(R.string.this_member_has_blocked_you_for_message);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                         builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -1078,7 +1076,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (status.equalsIgnoreCase("1")) {
 
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:+911140844881"));//change the number
+                            callIntent.setData(Uri.parse("tel:+911140844881,"+obj.getString("call_id")));//change the number
                             nActivity.startActivity(callIntent);
                             AppConstants.setToastStr(nActivity, "" + obj.getString("message"));
                         } else {

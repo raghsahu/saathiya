@@ -64,7 +64,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 public void onClick(View v) {
                     ThirdHomeActivity.matri_id = list.get(position).getMatriId();
                     //   MemberViewProfile.is_shortlist=singleUser.getIs_shortlisted();
-                    ctx.startActivity(new Intent(ctx, ThirdHomeActivity.class));
+                    if(!list.get(position).getReminder_mes_type().equalsIgnoreCase("blocked")) {
+                        ctx.startActivity(new Intent(ctx, ThirdHomeActivity.class));
+                    }
                 }
             });
         }

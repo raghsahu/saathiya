@@ -259,7 +259,7 @@ int isReject=0;
                         if (pageType.equalsIgnoreCase("2")) {
                             nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class).putExtra("pageType", "accepted"));
                         } else if (pageType.equalsIgnoreCase("5")) {
-                            nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class).putExtra("pageType", "rejected"));
+                            nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class).putExtra("pageType", "rejected").putExtra("rejectStatus",singleUser.getChatModel().getRejectedStatus()));
                         } else {
 
                             nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));

@@ -797,7 +797,7 @@ Direction direction;
             getIntetData();
         }else{
             videoView.start();
-            videoView.seekTo(stopPosition+2000);
+            videoView.seekTo(stopPosition+4000);
 
             ivPlayPause.setImageResource(R.drawable.ic_pause_circle_white);
             try {

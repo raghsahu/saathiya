@@ -142,16 +142,25 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         stringData.add("What I am looking for?");
         stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
 */
-        if(getIntent().getStringArrayListExtra("profileImages")!=null){
+
+        /*if(getIntent().getStringArrayListExtra("profileImages")!=null){
             for(int i=0;i<getIntent().getStringArrayListExtra("profileImages").size();i++) {
                 Uri uri = Uri.parse(getIntent().getStringArrayListExtra("profileImages").get(i));
                 imguris.add(uri);
                 hobbiesArr.add("");
             }
         }
-
+*/
         JSONArray hobbiesPhotoArr= null;
         try {
+            JSONArray profilePhotoArr=new JSONArray(resItem.getString("profile_photos"));
+            for(int i1=0;i1<profilePhotoArr.length();i1++) {
+                JSONObject profilePhotoObj=profilePhotoArr.getJSONObject(i1);
+                Uri uri = Uri.parse(profilePhotoObj.getString("photo"));
+                imguris.add(uri);
+                hobbiesArr.add("");
+            }
+
             hobbiesPhotoArr = new JSONArray(resItem.getString("hobby_data"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -542,6 +551,7 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
     @Override
     public void onResume() {
+        super.onResume();
         try {
             activityRunning = true;
             mMainViewModel.resume();
@@ -575,7 +585,8 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
 
 
         if (!profileBinding.videoView.isPlaying()) {
-            profileBinding.videoView.seekTo(stopPosition+2000);
+            Log.e("vidPosition onResume",""+(stopPosition));
+            profileBinding.videoView.seekTo(stopPosition);
             profileBinding.videoView.start();
         }
 
@@ -587,12 +598,13 @@ BaseActivity nActivity= DialogPlayVideoActivity.this;
         setViews(stringData, (int) current);
 //to here
 
-        super.onResume();
+
 
     }
 int stopPosition=0;
     @Override
     protected void onPause() {
+        super.onPause();
         try {
             activityRunning = false;
             mMainViewModel.pause();
@@ -613,7 +625,15 @@ int stopPosition=0;
         }catch (Exception e){e.printStackTrace();}
 
        // finish();
-
+try{
+    if (profileBinding.videoView.isPlaying()) {
+        stopPosition = profileBinding.videoView.getCurrentPosition();
+        Log.e("vidPosition onPause",""+stopPosition);
+        profileBinding.videoView.pause();
+    }
+}catch (Exception e){
+    e.printStackTrace();
+}
 //from here
        /* if (mPlayer != null) {
             try {
@@ -637,13 +657,10 @@ int stopPosition=0;
         }
 
 
-        if (profileBinding.videoView.isPlaying()) {
-            stopPosition = profileBinding.videoView.getCurrentPosition();
-            profileBinding.videoView.pause();
-        }
+
 
 //to here
-        super.onPause();
+
     }
 
     @Override

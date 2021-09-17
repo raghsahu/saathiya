@@ -111,13 +111,13 @@
         <com.prometteur.sathiya.utills.RadioButtonCustomFont
             android:id="@+id/tvAccepted"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_right_round_rectengle"
             android:button="@null"
             android:gravity="center_horizontal"
-            android:paddingStart="@dimen/_10sdp"
+            android:paddingStart="@dimen/_15sdp"
             android:paddingTop="@dimen/_4sdp"
-            android:paddingEnd="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_15sdp"
             android:paddingBottom="@dimen/_4sdp"
             android:text="@string/mutually_liked"
             android:textColor="@drawable/textcolor_likereceived_selected" />

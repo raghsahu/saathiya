@@ -66,13 +66,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                if (AppConstants.UID.equalsIgnoreCase(obj.getString("sender_id"))) {
                                    String title = getString(R.string.new_message);
                                    String msg = obj.getString("chat_msg");
-                                   createNotification(title, msg, obj.getString("sender_id"));
+                                   createNotification(title, msg, obj.getString("sender_id"),"");
                                }
                            }else
                            {
                                String title = obj.getString("name");
                                String msg = obj.getString("chat_msg");
-                               createNotification(title, msg, obj.getString("sender_id"));
+                               createNotification(title, msg, obj.getString("sender_id"),obj.getString("notification_type"));
                                try {
                                    isNotification = true;
 
@@ -108,12 +108,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    public void createNotification(String title, String message, String senderId) {
+    public void createNotification(String title, String message, String senderId,String notiType) {
         Intent resultIntent = new Intent(mContext, HomeActivity.class);
         Bundle bundle=new Bundle();
         bundle.putString("name",title);
         bundle.putString("chat_msg",message);
         bundle.putString("senderId",senderId);
+        bundle.putString("notification_type",notiType);
         resultIntent.putExtra("notificat", bundle);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

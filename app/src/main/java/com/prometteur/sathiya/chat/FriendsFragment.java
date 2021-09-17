@@ -1,5 +1,20 @@
 package com.prometteur.sathiya.chat;
 
+import static com.prometteur.sathiya.chat.ChatActivity.edtSearch;
+import static com.prometteur.sathiya.chat.ChatActivity.imgClose;
+import static com.prometteur.sathiya.chat.ChatActivity.imgSearchBack;
+import static com.prometteur.sathiya.chat.ChatActivity.ivBackArrowimg;
+import static com.prometteur.sathiya.chat.ChatActivity.ivSearch;
+import static com.prometteur.sathiya.chat.ChatActivity.linSearch;
+import static com.prometteur.sathiya.chat.ChatActivity.tvTitle;
+import static com.prometteur.sathiya.chat.ChatDetailsActivity.strEmailOthers;
+import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
+import static com.prometteur.sathiya.utills.AppConstants.vibe;
+import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
+import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
+import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -26,7 +41,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,7 +50,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -48,8 +61,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.prometteur.sathiya.R;
-import com.prometteur.sathiya.adapters.UserHomeListAdapter;
-import com.prometteur.sathiya.beans.beanEducation;
 import com.prometteur.sathiya.beans.beanUserData;
 import com.prometteur.sathiya.fcm.ServiceUtils;
 import com.prometteur.sathiya.home.ThirdHomeActivity;
@@ -87,42 +98,27 @@ import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.prometteur.sathiya.chat.ChatActivity.edtSearch;
-import static com.prometteur.sathiya.chat.ChatActivity.imgClose;
-import static com.prometteur.sathiya.chat.ChatActivity.imgSearchBack;
-import static com.prometteur.sathiya.chat.ChatActivity.ivBackArrowimg;
-import static com.prometteur.sathiya.chat.ChatActivity.ivSearch;
-import static com.prometteur.sathiya.chat.ChatActivity.linSearch;
-import static com.prometteur.sathiya.chat.ChatActivity.tvTitle;
-import static com.prometteur.sathiya.chat.ChatDetailsActivity.strEmailOthers;
-import static com.prometteur.sathiya.utills.AppConstants.setToastStrPinkBg;
-import static com.prometteur.sathiya.utills.AppConstants.vibe;
-import static com.prometteur.sathiya.utills.AppConstants.vibrateBig;
-import static com.prometteur.sathiya.utills.AppConstants.vibrateSmall;
-import static com.prometteur.sathiya.utills.AppMethods.showProgress;
-import static com.prometteur.sathiya.utills.AppMethods.shrinkAnim;
 
 public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String ACTION_DELETE_FRIEND = "com.android.rivchat.DELETE_FRIEND";
     public static int ACTION_START_CHAT = 1;
+    public static boolean openChatOnce = false;
     private static ListFriendsAdapter adapter;
     private static ListFriend dataListFriend = null;
     private static ArrayList<String> listFriendID = null;
     private static ArrayList<String> listFriendEmails = null;
+    private static ArrayList<beanUserData> arrShortListedUser;
+    public FragFriendClickFloatButton onClickFloatButton;
     String matriId = "";
     SharedPreferences prefUpdate;
-    public FragFriendClickFloatButton onClickFloatButton;
     Dialog dialogFindAllFriend;
     String friendEmail;
+    Context context;
     private RecyclerView recyclerListFrends;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CountDownTimer detectFriendOnline;
     private BroadcastReceiver deleteFriendReceiver;
-    private static ArrayList<beanUserData> arrShortListedUser;
-    public static boolean openChatOnce = false;
 
     public FriendsFragment() {
         onClickFloatButton = new FragFriendClickFloatButton();
@@ -362,7 +358,11 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     if (dialogFindAllFriend != null) {
                         dialogFindAllFriend.dismiss();
                         mSwipeRefreshLayout.setRefreshing(false);
-                        AppConstants.setToastStr((Activity) context, getString(R.string.messaged_users_not_found));
+                        try {
+                            AppConstants.setToastStr((Activity) context, getString(R.string.messaged_users_not_found));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -443,9 +443,165 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     });
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    private void getUserDetailsByEmails(String login_matri_id, String strEmails, FriendsFragment fragment) {
+
+        Dialog progresDialog = showProgress(context);
+        try {
+            if (!progresDialog.isShowing()) {
+                progresDialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+                String paramsLoginMatriId = params[0];
+                String paramsUserMatriId = params[1];
+
+                HttpClient httpClient = new DefaultHttpClient();
+
+                String URL = "";
+
+                URL = AppConstants.MAIN_URL + "get_data_by_email.php";
+                Log.e("get_data_by_email", "== " + URL);
+
+
+                HttpPost httpPost = new HttpPost(URL);
+
+                BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("login_matri_id", paramsLoginMatriId);
+                BasicNameValuePair UserMatriIdPair = new BasicNameValuePair("emails", paramsUserMatriId);
+
+                List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
+                nameValuePairList.add(LoginMatriIdPair);
+                nameValuePairList.add(UserMatriIdPair);
+
+                try {
+                    UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
+                    httpPost.setEntity(urlEncodedFormEntity);
+                    Log.e("Parametters Array=", "== " + (nameValuePairList.toString().trim().replaceAll(",", "&")));
+                    try {
+                        HttpResponse httpResponse = httpClient.execute(httpPost);
+                        InputStream inputStream = httpResponse.getEntity().getContent();
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String bufferedStrChunk = null;
+                        while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(bufferedStrChunk);
+                        }
+
+                        return stringBuilder.toString();
+
+                    } catch (ClientProtocolException cpe) {
+                        System.out.println("Firstption caz of HttpResponese :" + cpe);
+                        cpe.printStackTrace();
+                    } catch (IOException ioe) {
+                        System.out.println("Secondption caz of HttpResponse :" + ioe);
+                        ioe.printStackTrace();
+                    }
+
+                } catch (Exception uee) //UnsupportedEncodingException
+                {
+                    System.out.println("Anption given because of UrlEncodedFormEntity argument :" + uee);
+                    uee.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+
+                Log.e("user_by_email", "==" + result);
+
+                try {
+                    JSONObject obj = new JSONObject(result);
+
+                    String status = obj.getString("status");
+
+                    if (status.equalsIgnoreCase("1")) {
+                        arrShortListedUser = new ArrayList<beanUserData>();
+                        JSONArray responseData = obj.getJSONArray("responseData");
+
+                       /* if (responseData.has("1")) {
+                            Iterator<String> resIter = responseData.keys();
+                            List<String> keyList = new ArrayList<>();*/
+
+                        for (int i = 0; i < responseData.length(); i++) {
+                            // keyList.add(resIter.next());
+
+
+                            JSONObject resItem = responseData.getJSONObject(i);
+
+                            String matri_id1 = resItem.getString("matri_id");
+                            String eiId = resItem.getString("ei_id");
+                            String user_profile_picture = resItem.getString("profile_picture");
+                            String is_blocked = resItem.getString("is_blocked");
+                            String is_favourite = resItem.getString("is_favourite");
+                            String is_rejected = resItem.getString("rejected_status");
+                            String username = resItem.getString("username");
+
+                            beanUserData beanUserData = new beanUserData("", matri_id1, username, "", "", "", "", "", "", "", "", "",
+                                    "", "", "", is_blocked, is_favourite, user_profile_picture, eiId, "");
+                            beanUserData.setRejectedStatus(is_rejected);
+                            arrShortListedUser.add(beanUserData);
+                        }
+                        adapter = new ListFriendsAdapter(context, dataListFriend, fragment, arrShortListedUser);
+                        recyclerListFrends.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+
+                        // }
+                    } else {
+                        listFriendID.clear();
+                        dataListFriend.getListFriend().clear();
+                        //  adapter.notifyDataSetChanged();
+                        FriendDB.getInstance(getContext()).dropDB();
+                        detectFriendOnline.cancel();
+                        getListFriendUId();
+                       /* String msgError = obj.getString("message");
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+                        builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        android.app.AlertDialog alert = builder.create();
+                        alert.show();*/
+                    }
+
+                    if (progresDialog != null && progresDialog.isShowing()) {
+                        progresDialog.dismiss();
+                    }
+                } catch (Exception t) {
+                    Log.e("fjkhgjkfa", t.getMessage());
+                    if (progresDialog != null && progresDialog.isShowing()) {
+                        progresDialog.dismiss();
+                    }
+                }
+                if (progresDialog != null && progresDialog.isShowing()) {
+                    progresDialog.dismiss();
+                }
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(login_matri_id, strEmails);
     }
 
     public static class FragFriendClickFloatButton implements View.OnClickListener {
@@ -648,179 +804,23 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     }
 
-    Context context;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
-    private void getUserDetailsByEmails(String login_matri_id, String strEmails, FriendsFragment fragment) {
-
-        Dialog progresDialog = showProgress(context);
-        try {
-            if (!progresDialog.isShowing()) {
-                progresDialog.show();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
-            @Override
-            protected String doInBackground(String... params) {
-                String paramsLoginMatriId = params[0];
-                String paramsUserMatriId = params[1];
-
-                HttpClient httpClient = new DefaultHttpClient();
-
-                String URL = "";
-
-                URL = AppConstants.MAIN_URL + "get_data_by_email.php";
-                Log.e("get_data_by_email", "== " + URL);
-
-
-                HttpPost httpPost = new HttpPost(URL);
-
-                BasicNameValuePair LoginMatriIdPair = new BasicNameValuePair("login_matri_id", paramsLoginMatriId);
-                BasicNameValuePair UserMatriIdPair = new BasicNameValuePair("emails", paramsUserMatriId);
-
-                List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
-                nameValuePairList.add(LoginMatriIdPair);
-                nameValuePairList.add(UserMatriIdPair);
-
-                try {
-                    UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairList);
-                    httpPost.setEntity(urlEncodedFormEntity);
-                    Log.e("Parametters Array=", "== " + (nameValuePairList.toString().trim().replaceAll(",", "&")));
-                    try {
-                        HttpResponse httpResponse = httpClient.execute(httpPost);
-                        InputStream inputStream = httpResponse.getEntity().getContent();
-                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-
-                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        String bufferedStrChunk = null;
-                        while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
-                            stringBuilder.append(bufferedStrChunk);
-                        }
-
-                        return stringBuilder.toString();
-
-                    } catch (ClientProtocolException cpe) {
-                        System.out.println("Firstption caz of HttpResponese :" + cpe);
-                        cpe.printStackTrace();
-                    } catch (IOException ioe) {
-                        System.out.println("Secondption caz of HttpResponse :" + ioe);
-                        ioe.printStackTrace();
-                    }
-
-                } catch (Exception uee) //UnsupportedEncodingException
-                {
-                    System.out.println("Anption given because of UrlEncodedFormEntity argument :" + uee);
-                    uee.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-
-                Log.e("user_by_email", "==" + result);
-
-                try {
-                    JSONObject obj = new JSONObject(result);
-
-                    String status = obj.getString("status");
-
-                    if (status.equalsIgnoreCase("1")) {
-                        arrShortListedUser = new ArrayList<beanUserData>();
-                        JSONArray responseData = obj.getJSONArray("responseData");
-
-                       /* if (responseData.has("1")) {
-                            Iterator<String> resIter = responseData.keys();
-                            List<String> keyList = new ArrayList<>();*/
-
-                        for (int i = 0; i < responseData.length(); i++) {
-                            // keyList.add(resIter.next());
-
-
-                            JSONObject resItem = responseData.getJSONObject(i);
-
-                            String matri_id1 = resItem.getString("matri_id");
-                            String eiId = resItem.getString("ei_id");
-                            String user_profile_picture = resItem.getString("profile_picture");
-                            String is_blocked = resItem.getString("is_blocked");
-                            String is_favourite = resItem.getString("is_favourite");
-                            String username = resItem.getString("username");
-
-
-                            arrShortListedUser.add(new beanUserData("", matri_id1, username, "", "", "", "", "", "", "", "", "",
-                                    "", "", "", is_blocked, is_favourite, user_profile_picture, eiId, ""));
-                        }
-                        adapter = new ListFriendsAdapter(context, dataListFriend, fragment, arrShortListedUser);
-                        recyclerListFrends.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-
-                        // }
-                    } else {
-                        listFriendID.clear();
-                        dataListFriend.getListFriend().clear();
-                        //  adapter.notifyDataSetChanged();
-                        FriendDB.getInstance(getContext()).dropDB();
-                        detectFriendOnline.cancel();
-                        getListFriendUId();
-                       /* String msgError = obj.getString("message");
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-                        builder.setMessage("" + msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                        android.app.AlertDialog alert = builder.create();
-                        alert.show();*/
-                    }
-
-                    if (progresDialog != null && progresDialog.isShowing()) {
-                        progresDialog.dismiss();
-                    }
-                } catch (Exception t) {
-                    Log.e("fjkhgjkfa", t.getMessage());
-                    if (progresDialog != null && progresDialog.isShowing()) {
-                        progresDialog.dismiss();
-                    }
-                }
-                if (progresDialog != null && progresDialog.isShowing()) {
-                    progresDialog.dismiss();
-                }
-
-            }
-        }
-
-        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(login_matri_id, strEmails);
-    }
-
-
     static class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        public static Map<String, Boolean> mapMark;
         public Map<String, Query> mapQuery;
         public Map<String, DatabaseReference> mapQueryOnline;
         public Map<String, ChildEventListener> mapChildListener;
         public Map<String, ChildEventListener> mapChildListenerOnline;
-        public static Map<String, Boolean> mapMark;
         Dialog dialogWaitDeleting;
-        private ListFriend listFriend;
-        private Context context;
-        private FriendsFragment fragment;
-        private ArrayList<Friend> arrFilter;
         ArrayList<beanUserData> arrShortListedUser;
         ArrayList<beanUserData> arrShortListedfilter;
         SharedPreferences prefUpdate;
         String matriId = "";
+        Dialog progresDialog;
+        private ListFriend listFriend;
+        private Context context;
+        private FriendsFragment fragment;
+        private ArrayList<Friend> arrFilter;
 
         public ListFriendsAdapter(Context context, ListFriend listFriend, FriendsFragment fragment, ArrayList<beanUserData> arrShortListedUser) {
             this.listFriend = listFriend;
@@ -875,10 +875,11 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             String finalName = name;
 
-                ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
+            ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (arrShortListedUser.get(position).getRejectedStatus().equalsIgnoreCase("not_rejected")) {
                                 ((ItemFriendViewHolder) holder).txtMessage.setTypeface(Typeface.DEFAULT);
                                 ((ItemFriendViewHolder) holder).txtName.setTypeface(Typeface.DEFAULT);
                                 strEmailOthers = email;
@@ -908,7 +909,8 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                                 mapMark.put(id, null);
                                 fragment.startActivityForResult(intent, FriendsFragment.ACTION_START_CHAT);
                             }
-                        });
+                        }
+                    });
 
             //nhấn giữ để xóa bạn
             ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
@@ -945,14 +947,16 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (!arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
-                                if (arrShortListedUser.size() > 0) {
-                                    ThirdHomeActivity.matri_id = arrShortListedUser.get(position).getMatri_id();
-                                    context.startActivity(new Intent(context, ThirdHomeActivity.class));
-                                }
+                            if (arrShortListedUser.get(position).getRejectedStatus().equalsIgnoreCase("not_rejected")) {
+                                if (!arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
+                                    if (arrShortListedUser.size() > 0) {
+                                        ThirdHomeActivity.matri_id = arrShortListedUser.get(position).getMatri_id();
+                                        context.startActivity(new Intent(context, ThirdHomeActivity.class));
+                                    }
 
-                            } else {
-                                AppConstants.setToastStr(((Activity) context), context.getString(R.string.this_member_has_blocked_you_for_message));
+                                } else {
+                                    AppConstants.setToastStr(((Activity) context), context.getString(R.string.this_member_has_blocked_you_for_message));
+                                }
                             }
                         }
                     });
@@ -1105,22 +1109,24 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                                 String test = "";
                                 if (arrShortListedUser.size() > 0) {
                                     test = arrShortListedUser.get(position).getIs_blocked().toString();
-                                    if (arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
-                                        String msgBlock = context.getString(R.string.this_member_has_blocked_you);
-                                        String msgNotPaid = context.getString(R.string.you_are_not_paid_memeber);
+                                    if (arrShortListedUser.get(position).getRejectedStatus().equalsIgnoreCase("not_rejected")) {
+                                        if (arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
+                                            String msgBlock = context.getString(R.string.this_member_has_blocked_you);
+                                            String msgNotPaid = context.getString(R.string.you_are_not_paid_memeber);
 
-                                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                                        builder.setMessage(msgBlock).setCancelable(false).setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        android.app.AlertDialog alert = builder.create();
-                                        alert.show();
-                                    } else {
-                                        vibe.vibrate(vibrateBig);
-                                        shrinkAnim(((ItemFriendViewHolder) holder).ivLike, context);
-                                        sendInterestRequest(matriId, arrShortListedUser.get(position).getMatri_id(), arrShortListedUser.get(position).getIs_favourite(), position, ((ItemFriendViewHolder) holder));
+                                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                                            builder.setMessage(msgBlock).setCancelable(false).setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            android.app.AlertDialog alert = builder.create();
+                                            alert.show();
+                                        } else {
+                                            vibe.vibrate(vibrateBig);
+                                            shrinkAnim(((ItemFriendViewHolder) holder).ivLike, context);
+                                            sendInterestRequest(matriId, arrShortListedUser.get(position).getMatri_id(), arrShortListedUser.get(position).getIs_favourite(), position, ((ItemFriendViewHolder) holder));
+                                        }
                                     }
                                 }
                                 Log.d("TAG", "CHECK =" + test);
@@ -1128,21 +1134,23 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                             } else if (((ItemFriendViewHolder) holder).RequestType.equalsIgnoreCase("Unlike")) {
                                 if (arrShortListedUser.size() > 0) {
-                                    if (arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
-                                        String msgBlock = context.getString(R.string.this_member_has_blocked_you);
-                                        String msgNotPaid = context.getString(R.string.you_are_not_paid_memeber);
+                                    if (arrShortListedUser.get(position).getRejectedStatus().equalsIgnoreCase("not_rejected")) {
+                                        if (arrShortListedUser.get(position).getIs_blocked().equalsIgnoreCase("1")) {
+                                            String msgBlock = context.getString(R.string.this_member_has_blocked_you);
+                                            String msgNotPaid = context.getString(R.string.you_are_not_paid_memeber);
 
-                                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                                        builder.setMessage(msgBlock).setCancelable(false).setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        android.app.AlertDialog alert = builder.create();
-                                        alert.show();
-                                    } else {
-                                        vibe.vibrate(vibrateSmall);
-                                        sendInterestRequestRemind(matriId, arrShortListedUser.get(position).getei_reqid(), arrShortListedUser.get(position).getIs_favourite(), position, ((ItemFriendViewHolder) holder));
+                                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                                            builder.setMessage(msgBlock).setCancelable(false).setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            android.app.AlertDialog alert = builder.create();
+                                            alert.show();
+                                        } else {
+                                            vibe.vibrate(vibrateSmall);
+                                            sendInterestRequestRemind(matriId, arrShortListedUser.get(position).getei_reqid(), arrShortListedUser.get(position).getIs_favourite(), position, ((ItemFriendViewHolder) holder));
+                                        }
                                     }
                                 }
                             }
@@ -1173,7 +1181,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                                 Log.d("FriendsFragment change " + id, (boolean) dataSnapshot.getValue() + "");
                                 listFriend.getListFriend().get(position).status.isOnline = (boolean) dataSnapshot.getValue();
                                 notifyDataSetChanged();
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -1319,31 +1327,6 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 AppConstants.setToastStr((Activity) context, context.getString(R.string.error_occured_during_deleting_friend));
             }
         }
-
-
-        class ItemFriendViewHolder extends RecyclerView.ViewHolder {
-            public ImageScaleView avata;
-            public TextView txtName, txtTime, txtMessage;
-            private Context context;
-            LinearLayout linBlock, linInterest;
-            TextView tvLike;
-            ImageView ivLike;
-            String RequestType;
-
-            ItemFriendViewHolder(Context context, View itemView) {
-                super(itemView);
-                avata = itemView.findViewById(R.id.icon_avata);
-                txtName = (TextView) itemView.findViewById(R.id.txtName);
-                txtTime = (TextView) itemView.findViewById(R.id.txtTime);
-                txtMessage = (TextView) itemView.findViewById(R.id.txtMessage);
-                tvLike = itemView.findViewById(R.id.tvLike);
-                ivLike = itemView.findViewById(R.id.ivLike);
-                linBlock = itemView.findViewById(R.id.linBlock);
-                linInterest = itemView.findViewById(R.id.linInterest);
-                this.context = context;
-            }
-        }
-
 
         public void filter(String charText) {
             try {
@@ -1504,9 +1487,6 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             sendPostReqAsyncTask.execute(login_matri_id, strMatriId, isBlocked);
         }
 
-
-        Dialog progresDialog;
-
         private void sendInterestRequest(String login_matri_id, String strMatriId, final String isFavorite, final int pos, final ItemFriendViewHolder holder) {
             progresDialog = showProgress(context);
             /*progresDialog.setCancelable(false);
@@ -1627,7 +1607,6 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             sendPostReqAsyncTask.execute(login_matri_id, strMatriId);
         }
 
-
         private void sendInterestRequestRemind(String login_matri_id, String strMatriId, final String isFavorite, final int pos, ItemFriendViewHolder holder) {
             progresDialog = showProgress(context);
             /*progresDialog.setCancelable(false);
@@ -1744,6 +1723,29 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
             sendPostReqAsyncTask.execute(login_matri_id, strMatriId);
+        }
+
+        class ItemFriendViewHolder extends RecyclerView.ViewHolder {
+            public ImageScaleView avata;
+            public TextView txtName, txtTime, txtMessage;
+            LinearLayout linBlock, linInterest;
+            TextView tvLike;
+            ImageView ivLike;
+            String RequestType;
+            private Context context;
+
+            ItemFriendViewHolder(Context context, View itemView) {
+                super(itemView);
+                avata = itemView.findViewById(R.id.icon_avata);
+                txtName = (TextView) itemView.findViewById(R.id.txtName);
+                txtTime = (TextView) itemView.findViewById(R.id.txtTime);
+                txtMessage = (TextView) itemView.findViewById(R.id.txtMessage);
+                tvLike = itemView.findViewById(R.id.tvLike);
+                ivLike = itemView.findViewById(R.id.ivLike);
+                linBlock = itemView.findViewById(R.id.linBlock);
+                linInterest = itemView.findViewById(R.id.linInterest);
+                this.context = context;
+            }
         }
 
     }

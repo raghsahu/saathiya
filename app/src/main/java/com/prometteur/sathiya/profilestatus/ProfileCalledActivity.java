@@ -179,23 +179,10 @@ ActivityProfileCalledBinding profileLikedBinding;
                                 String height = resItem.getString("height");
                                 String is_blocked = resItem.getString("is_blocked");
                                 String is_favourite = resItem.getString("is_favourite");
-
-                                mDataList.add(new beanUserData("", matri_id1, username, "", "", height, "", city_name, "", "", "", "",
-                                        "", "", "", is_blocked, is_favourite, user_profile_picture,eiId,""));
-                                /*String contact_view_security = resItem.getString("contact_view_security");
-                                String memberType = "";
-                                if (contact_view_security.equalsIgnoreCase("0")) {
-                                    memberType = "0";
-                                    textVisibleMembers.setText("Show To Express Interest Accepted Paid Members");
-                                    radioAcceptedPaidMembers.setChecked(true);
-                                    radioPaidMembers.setChecked(false);
-                                } else if (contact_view_security.equalsIgnoreCase("1")) {
-                                    memberType = "1";
-                                    textVisibleMembers.setText("Show To Paid Members");
-                                    radioAcceptedPaidMembers.setChecked(false);
-                                    radioPaidMembers.setChecked(true);
-                                }*/
-
+                                beanUserData beanUserData=new beanUserData("", matri_id1, username, "", "", height, "", city_name, "", "", "", "",
+                                        "", "", "", is_blocked, is_favourite, user_profile_picture,eiId,"");
+                                beanUserData.setRejectedStatus(resItem.getString("rejected_status"));
+                                mDataList.add(beanUserData);
 
                             }
                             if(mDataList.size()>0) {

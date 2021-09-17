@@ -390,7 +390,8 @@
     <string name="price_per_call">मूल्य प्रति कॉल (₹)</string>
     <string name="user_has_not_uploaded_any_content">उपयोगकर्ता ने कोई सामग्री अपलोड नहीं की है।</string>
     <string name="my_hobby">मेरा शौक</string>
-    <string name="delete_account">Delete Account</string>
-    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete, you may take a break by deactivating you account. Deleting will permanently erase your account details.</string>
-    <string name="delete">Delete</string>
+    <string name="delete_account">खाता हटा दो</string>
+    <string name="are_you_sure_you_want_to_delete">क्या आप वाकई हटाना चाहते हैं, आप अपना खाता निष्क्रिय करके विराम ले सकते हैं। मिटाने से आपका खाता विवरण स्थायी रूप से मिट जाएगा।</string>
+    <string name="delete">हटाएं</string>
+    <string name="you_can_not_express_you_interest_you_can_not_express_your_interest">इस सदस्य ने ब्लॉक कर दिया है। आप अपनी रुचि व्यक्त नहीं कर सकते।</string>
 </resources>

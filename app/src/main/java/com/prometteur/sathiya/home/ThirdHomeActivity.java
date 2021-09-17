@@ -143,11 +143,18 @@ public class ThirdHomeActivity extends BaseActivity {
             thirdHomeBinding.linlayLike.setEnabled(true);
         } else {
             if (getIntent().getStringExtra("pageType").equalsIgnoreCase("rejected")) {
-                thirdHomeBinding.ivLike.setEnabled(true);
-                thirdHomeBinding.tvLike.setEnabled(true);
+                if(getIntent().getStringExtra("rejectStatus").equalsIgnoreCase("rejected_by")){
+                    thirdHomeBinding.ivLike.setEnabled(false);
+                    thirdHomeBinding.tvLike.setEnabled(false);
+                    thirdHomeBinding.linlayLike.setEnabled(false);
+                }else {
+                    thirdHomeBinding.ivLike.setEnabled(true);
+                    thirdHomeBinding.tvLike.setEnabled(true);
+                    thirdHomeBinding.linlayLike.setEnabled(true);
+                }
                 thirdHomeBinding.linlayCall.setEnabled(false);
                 thirdHomeBinding.linlayChat.setEnabled(false);
-                thirdHomeBinding.linlayLike.setEnabled(true);
+
             } else {
                 thirdHomeBinding.ivLike.setEnabled(true);
                 thirdHomeBinding.tvLike.setEnabled(true);
@@ -165,7 +172,7 @@ public class ThirdHomeActivity extends BaseActivity {
                     Log.d("TAG", "CHECK =" + test);
 
                     if (!is_blocked.equalsIgnoreCase("1")) {
-                        String msgBlock = "This member is blocked. You can't express your interest.";
+                        String msgBlock = nActivity.getString(R.string.you_can_not_express_you_interest_you_can_not_express_your_interest);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                         builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -187,7 +194,7 @@ public class ThirdHomeActivity extends BaseActivity {
                     }
                 } else if (RequestType.equalsIgnoreCase("Unlike")) {
                     if (!is_blocked.equalsIgnoreCase("1")) {
-                        String msgBlock = "This member is blocked. You can't express your interest.";
+                        String msgBlock = nActivity.getString(R.string.you_can_not_express_you_interest_you_can_not_express_your_interest);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                         builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -237,7 +244,7 @@ public class ThirdHomeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!is_blocked.equalsIgnoreCase("1")) {
-                    String msgBlock = "This member blocked.";
+                    String msgBlock = nActivity.getString(R.string.this_member_has_blocked_you_for_message);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                     builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -263,7 +270,7 @@ public class ThirdHomeActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (!is_blocked.equalsIgnoreCase("1")) {
-                    String msgBlock = "This member is blocked.";
+                    String msgBlock = nActivity.getString(R.string.this_member_has_blocked_you_for_message);
                     
                     AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                     builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -1021,7 +1028,7 @@ public class ThirdHomeActivity extends BaseActivity {
 
                         if (status.equalsIgnoreCase("1")) {
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:+911140844881"));//08046805845 //local number
+                            callIntent.setData(Uri.parse("tel:+911140844881,"+obj.getString("call_id")));//08046805845 //local number
                             nActivity.startActivity(callIntent);
                             AppConstants.setToastStrPinkBg(nActivity, "" + obj.getString("message"));
                         } else {

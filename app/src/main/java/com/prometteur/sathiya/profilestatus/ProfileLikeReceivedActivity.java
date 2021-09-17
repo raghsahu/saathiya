@@ -94,6 +94,11 @@ public class ProfileLikeReceivedActivity extends BaseActivity implements OnClick
                 PageType = "1";
                 arrShortListedUser = new ArrayList<>();
                 if (NetworkConnection.hasConnection(nActivity)) {
+                    try {
+                        getLikedCounts(matri_id);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     getShortlistedProfileRequest(matri_id);
 
                 } else {
@@ -110,6 +115,11 @@ public class ProfileLikeReceivedActivity extends BaseActivity implements OnClick
                 // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);
                 profileLikedBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
                 if (NetworkConnection.hasConnection(nActivity)) {
+                    try {
+                        getLikedCounts(matri_id);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     getShortlistedProfileRequest(matri_id, gender);
                 } else {
                     AppConstants.CheckConnection(nActivity);
@@ -124,6 +134,13 @@ public class ProfileLikeReceivedActivity extends BaseActivity implements OnClick
                 arrShortListedUser = new ArrayList<>();
 
                 if (NetworkConnection.hasConnection(nActivity)) {
+
+                        try {
+                            getLikedCounts(matri_id);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                     getShortlistedProfileRequest(matri_id);
                 } else {
                     AppConstants.CheckConnection(nActivity);

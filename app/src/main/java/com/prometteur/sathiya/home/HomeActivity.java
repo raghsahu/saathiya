@@ -1,12 +1,17 @@
 package com.prometteur.sathiya.home;
 
+import static com.prometteur.sathiya.SplashActivity.strLang;
+import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
+import static com.prometteur.sathiya.utills.AppConstants.isNotification;
+import static com.prometteur.sathiya.utills.AppConstants.vibe;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -22,14 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
-import com.github.siyamed.shapeimageview.mask.PorterShapeImageView;
-import com.prometteur.sathiya.BaseActivity;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,12 +37,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.prometteur.sathiya.BaseActivity;
-import com.prometteur.sathiya.LoginActivity;
 import com.prometteur.sathiya.MyApp;
 import com.prometteur.sathiya.R;
-import com.prometteur.sathiya.SignUpStep1Activity;
 import com.prometteur.sathiya.adapters.UserHomeListAdapter;
-import com.prometteur.sathiya.adapters.UserLikedListAdapter;
 import com.prometteur.sathiya.beans.beanUserData;
 import com.prometteur.sathiya.chat.ChatActivity;
 import com.prometteur.sathiya.databinding.ActivityHomeBinding;
@@ -57,7 +53,6 @@ import com.prometteur.sathiya.profile.ProfileActivity;
 import com.prometteur.sathiya.profilestatus.ProfileBlockedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileCalledActivity;
 import com.prometteur.sathiya.profilestatus.ProfileLikeReceivedActivity;
-import com.prometteur.sathiya.profilestatus.ProfileLikedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileRejectedActivity;
 import com.prometteur.sathiya.profilestatus.ProfileVisitedActivity;
 import com.prometteur.sathiya.utills.AppConstants;
@@ -77,7 +72,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.prefs.Preferences;
 
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
@@ -87,24 +81,26 @@ import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.prometteur.sathiya.SplashActivity.strLang;
-import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
-import static com.prometteur.sathiya.utills.AppConstants.isNotification;
-import static com.prometteur.sathiya.utills.AppConstants.vibe;
-import static com.prometteur.sathiya.utills.AppMethods.showProgress;
 
 //import android.support.v7.app.BaseActivity;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static ImageView ivNotification;
     LinearLayoutManager linearLayoutManager;
     UserHomeListAdapter userLikedListAdapter;
-
     BaseActivity nActivity = HomeActivity.this;
     ActivityHomeBinding homeBinding;
-public static ImageView ivNotification;
+    BaseActivity activity = HomeActivity.this;
+    SharedPreferences prefUpdate;
+    String UserId = "", matri_id = "", gender = "", username = "", strUserImage = "", call_package_status = "";
+    String updateStatus;
+    String fieldToUpdate;
+    String AgeM = "", AgeF = "", HeightM = "", HeightF = "", ReligionId = "", CasteId = "", CountryId = "",
+            StateId = "", CityId = "", HighestEducationId = "", AnnualIncome = "", MotherToungueID = "", Diet = "", Manglik = "";
+    Bundle bundle1 = null;
+    private ArrayList<beanUserData> arrUserDataList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,11 +113,11 @@ public static ImageView ivNotification;
         gender = prefUpdate.getString("gender", "");
         strUserImage = prefUpdate.getString("profile_image", "");
         username = prefUpdate.getString("username", "");
-        ivNotification=homeBinding.ivNotification;
+        ivNotification = homeBinding.ivNotification;
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         //set language
-        strLang=prefUpdate.getString("selLang","English");
-        LocaleUtils.setLocale(new Locale(prefUpdate.getString("selLangCode","en")));
+        strLang = prefUpdate.getString("selLang", "English");
+        LocaleUtils.setLocale(new Locale(prefUpdate.getString("selLangCode", "en")));
         LocaleUtils.updateConfig(MyApp.getInstance(), getResources().getConfiguration());
 
 
@@ -186,13 +182,13 @@ public static ImageView ivNotification;
                 startActivity(new Intent(activity, FilterHomeActivity.class));
             }
         });
-homeBinding.rivProfileImage.setOnClickListener(new View.OnClickListener() {
+        homeBinding.rivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(activity, ProfileActivity.class));
             }
         });
-homeBinding.ivNotification.setOnClickListener(new View.OnClickListener() {
+        homeBinding.ivNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(activity, NotificationActivity.class));
@@ -201,24 +197,23 @@ homeBinding.ivNotification.setOnClickListener(new View.OnClickListener() {
         try {
             Field f = homeBinding.refresh.getClass().getDeclaredField("mCircleView");
             f.setAccessible(true);
-            ImageView img = (ImageView)f.get(homeBinding.refresh);
+            ImageView img = (ImageView) f.get(homeBinding.refresh);
             img.setAlpha(0.0f);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-homeBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-    @Override
-    public void onRefresh() {
-        if (NetworkConnection.hasConnection(nActivity)){
-            getUserDataRequest(matri_id, gender);
+        homeBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnection.hasConnection(nActivity)) {
+                    getUserDataRequest(matri_id, gender);
 
-        }else
-        {
-            AppConstants.CheckConnection(nActivity);
-        }
+                } else {
+                    AppConstants.CheckConnection(nActivity);
+                }
 
-    }
-});
+            }
+        });
         setSearchView();
         /*try {
             ChatUI.getInstance().setContext(this);
@@ -228,92 +223,90 @@ homeBinding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListene
         }*/
 
 
-        Bundle bundle=new Bundle();
-        bundle=getIntent().getBundleExtra("notificat");
-if(bundle!=null) {
-    Log.e("notifi message home",""+bundle.getString("name"));
-    openActivityOnNotification(bundle);
-}
+        Bundle bundle = new Bundle();
+        bundle = getIntent().getBundleExtra("notificat");
+        if (bundle != null) {
+            Log.e("notifi message home", "" + bundle.getString("name"));
+            openActivityOnNotification(bundle);
+        }
     }
 
     private void openActivityOnNotification(Bundle bundle) {
-        if(bundle.getString("name").contains("New Message"))
+        if (bundle.getString("name").contains("New Message")) {
+            startActivity(new Intent(nActivity, ChatActivity.class));
+        } else //if(bundle.getString("name").contains("Interest Rejected") ||bundle.getString("name").contains("Interest Received")||bundle.getString("name").contains("Interest accepted") )
         {
-            startActivity(new Intent(nActivity,ChatActivity.class));
-        }else //if(bundle.getString("name").contains("Interest Rejected") ||bundle.getString("name").contains("Interest Received")||bundle.getString("name").contains("Interest accepted") )
-        {
-            ThirdHomeActivity.matri_id=bundle.getString("senderId");
-            startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+            if (!bundle.getString("notification_type").equalsIgnoreCase("blocked")) {
+                ThirdHomeActivity.matri_id = bundle.getString("senderId");
+                startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+            }
         }
     }
 
-    public void setSearchView()
-{
+    public void setSearchView() {
 
-    homeBinding.ivSearch.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
-            homeBinding.linSearch.setVisibility(View.VISIBLE);
-            homeBinding.linToolbar.setVisibility(View.GONE);
-            homeBinding.ivMenuDrawer.setVisibility(View.GONE);
-            homeBinding.ivFilter.setVisibility(View.GONE);
-            homeBinding.ivWedRing.setVisibility(View.GONE);
-        }
-    });
-    homeBinding.edtSearch.setOnEditorActionListener(
-            new EditText.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    // Identifier of the action. This will be either the identifier you supplied,
-                    // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH
-                            || actionId == EditorInfo.IME_ACTION_DONE
-                            || event.getAction() == KeyEvent.ACTION_DOWN
-                            && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                        if(!homeBinding.edtSearch.getText().toString().isEmpty()) {
-                            ThirdHomeActivity.matri_id = homeBinding.edtSearch.getText().toString().replace("#","");
-                            nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
-                            homeBinding.edtSearch.setText("");
-                            homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
-                            homeBinding.linSearch.setVisibility(View.GONE);
-                            homeBinding.linToolbar.setVisibility(View.VISIBLE);
-                            homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
-                            homeBinding.ivFilter.setVisibility(View.VISIBLE);
-                            homeBinding.ivWedRing.setVisibility(View.VISIBLE);
-                        }else
-                        {
-                            AppConstants.setToastStr(nActivity,getString(R.string.please_enter_valid_matri_id));
-                        }
-                        return true;
-                    }
-                    // Return true if you have consumed the action, else false.
-                    return false;
-                }
-            });
-
-    homeBinding.imgSearch.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if(!homeBinding.edtSearch.getText().toString().isEmpty()) {
-                ThirdHomeActivity.matri_id = homeBinding.edtSearch.getText().toString().replace("#","");
-                nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
-                homeBinding.edtSearch.setText("");
+        homeBinding.ivSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
-                homeBinding.linSearch.setVisibility(View.GONE);
-                homeBinding.linToolbar.setVisibility(View.VISIBLE);
-                homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
-                homeBinding.ivFilter.setVisibility(View.VISIBLE);
-                homeBinding.ivWedRing.setVisibility(View.VISIBLE);
-            }else
-            {
-                AppConstants.setToastStr(nActivity,getString(R.string.please_enter_valid_matri_id));
+                homeBinding.linSearch.setVisibility(View.VISIBLE);
+                homeBinding.linToolbar.setVisibility(View.GONE);
+                homeBinding.ivMenuDrawer.setVisibility(View.GONE);
+                homeBinding.ivFilter.setVisibility(View.GONE);
+                homeBinding.ivWedRing.setVisibility(View.GONE);
             }
-        }
-    });
-    homeBinding.imgSearchBack.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+        });
+        homeBinding.edtSearch.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        // Identifier of the action. This will be either the identifier you supplied,
+                        // or EditorInfo.IME_NULL if being called due to the enter key being pressed.
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH
+                                || actionId == EditorInfo.IME_ACTION_DONE
+                                || event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                            if (!homeBinding.edtSearch.getText().toString().isEmpty()) {
+                                ThirdHomeActivity.matri_id = homeBinding.edtSearch.getText().toString().replace("#", "");
+                                nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+                                homeBinding.edtSearch.setText("");
+                                homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
+                                homeBinding.linSearch.setVisibility(View.GONE);
+                                homeBinding.linToolbar.setVisibility(View.VISIBLE);
+                                homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
+                                homeBinding.ivFilter.setVisibility(View.VISIBLE);
+                                homeBinding.ivWedRing.setVisibility(View.VISIBLE);
+                            } else {
+                                AppConstants.setToastStr(nActivity, getString(R.string.please_enter_valid_matri_id));
+                            }
+                            return true;
+                        }
+                        // Return true if you have consumed the action, else false.
+                        return false;
+                    }
+                });
+
+        homeBinding.imgSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!homeBinding.edtSearch.getText().toString().isEmpty()) {
+                    ThirdHomeActivity.matri_id = homeBinding.edtSearch.getText().toString().replace("#", "");
+                    nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+                    homeBinding.edtSearch.setText("");
+                    homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
+                    homeBinding.linSearch.setVisibility(View.GONE);
+                    homeBinding.linToolbar.setVisibility(View.VISIBLE);
+                    homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
+                    homeBinding.ivFilter.setVisibility(View.VISIBLE);
+                    homeBinding.ivWedRing.setVisibility(View.VISIBLE);
+                } else {
+                    AppConstants.setToastStr(nActivity, getString(R.string.please_enter_valid_matri_id));
+                }
+            }
+        });
+        homeBinding.imgSearchBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 homeBinding.edtSearch.setText("");
                 homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
                 homeBinding.linSearch.setVisibility(View.GONE);
@@ -321,11 +314,11 @@ if(bundle!=null) {
                 homeBinding.ivMenuDrawer.setVisibility(View.VISIBLE);
                 homeBinding.ivFilter.setVisibility(View.VISIBLE);
                 homeBinding.ivWedRing.setVisibility(View.VISIBLE);
-        }
-    });
+            }
+        });
 
 
-}
+    }
 
     @Override
     public void onBackPressed() {
@@ -350,6 +343,7 @@ if(bundle!=null) {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
     private void getHeaderView() {
         View header = homeBinding.navView.getHeaderView(0);
         ImageScaleView civProfileImg = header.findViewById(R.id.civProfileImg);
@@ -358,13 +352,12 @@ if(bundle!=null) {
         TextView tvId = header.findViewById(R.id.tvId);
         TextView tvMembership = header.findViewById(R.id.tvMembership);
         LinearLayout linHeaderClick = header.findViewById(R.id.linHeaderClick);
-        tvProfileName.setText(""+username);
-        tvId.setText("ID - #"+matri_id);
-        if(call_package_status.equalsIgnoreCase("active")) {
-            tvMembership.setText(getString(R.string.membership_status)+" "+getString(R.string.paid));
-        }else
-        {
-            tvMembership.setText(getString(R.string.membership_status)+" "+getString(R.string.unpaid));
+        tvProfileName.setText("" + username);
+        tvId.setText("ID - #" + matri_id);
+        if (call_package_status.equalsIgnoreCase("active")) {
+            tvMembership.setText(getString(R.string.membership_status) + " " + getString(R.string.paid));
+        } else {
+            tvMembership.setText(getString(R.string.membership_status) + " " + getString(R.string.unpaid));
         }
         tvMembership.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -378,7 +371,7 @@ if(bundle!=null) {
             @Override
             public void onClick(View v) {
                 homeBinding.drawerLayout.closeDrawer(GravityCompat.START);
-              //  startActivity(new Intent(DashboardMainActivity.this, SettingsActivity.class));
+                //  startActivity(new Intent(DashboardMainActivity.this, SettingsActivity.class));
             }
         });
         linHeaderClick.setOnClickListener(new View.OnClickListener() {
@@ -398,54 +391,54 @@ if(bundle!=null) {
      /*   tvLocation.setText(Preferences.getPreferenceValue(DashboardMainActivity.this, BRANCHADDRESS));
         salonName.setText(Preferences.getPreferenceValue(DashboardMainActivity.this, BRANCHNAME));
         tvTitle.setText(Preferences.getPreferenceValue(DashboardMainActivity.this, BRANCHNAME));
-        Glide.with(this).load(Preferences.getPreferenceValue(DashboardMainActivity.this, BRANCHIMG)).error(R.drawable.img_chair).into(ivSalonImg)*/;
+        Glide.with(this).load(Preferences.getPreferenceValue(DashboardMainActivity.this, BRANCHIMG)).error(R.drawable.img_chair).into(ivSalonImg)*/
+        ;
     }
-BaseActivity activity=HomeActivity.this;
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
-                case R.id.nav_edt_profile:
-startActivity(new Intent(activity, EditProfileActivity.class).putExtra("page","Other"));
+        switch (item.getItemId()) {
+            case R.id.nav_edt_profile:
+                startActivity(new Intent(activity, EditProfileActivity.class).putExtra("page", "Other"));
                 break;
                 /*case R.id.nav_liked_prof:
                     startActivity(new Intent(activity, ProfileLikedActivity.class));
                 break;*/
-                case R.id.nav_liked_received_prof:
-                    startActivity(new Intent(activity, ProfileLikeReceivedActivity.class));
+            case R.id.nav_liked_received_prof:
+                startActivity(new Intent(activity, ProfileLikeReceivedActivity.class));
                 break;
-                case R.id.nav_rejected:
-                    startActivity(new Intent(activity, ProfileRejectedActivity.class));
+            case R.id.nav_rejected:
+                startActivity(new Intent(activity, ProfileRejectedActivity.class));
                 break;
-                case R.id.nav_hobies_interest:
-                    startActivity(new Intent(activity, HobbiesInterestActivity.class));
+            case R.id.nav_hobies_interest:
+                startActivity(new Intent(activity, HobbiesInterestActivity.class));
                 break;
-                case R.id.nav_visited:
-                    startActivity(new Intent(activity, ProfileVisitedActivity.class));
+            case R.id.nav_visited:
+                startActivity(new Intent(activity, ProfileVisitedActivity.class));
                 break;
-                case R.id.nav_called_users:
-                    startActivity(new Intent(activity, ProfileCalledActivity.class));
+            case R.id.nav_called_users:
+                startActivity(new Intent(activity, ProfileCalledActivity.class));
                 break;
-                case R.id.nav_messaged_users:
-                    // Login
+            case R.id.nav_messaged_users:
+                // Login
                   /*  ChatSDK.auth().authenticate(AccountDetails.username("trimbake10@gmail.com", "admin@123")).subscribe(() -> {
                         ChatSDK.ui().startSplashScreenActivity(this);
                         }, throwable -> {
 Log.i("chat login","Chat login");
                     });*/
-                   // ChatSDK.ui().startSplashScreenActivity(this);
+                // ChatSDK.ui().startSplashScreenActivity(this);
 //
-                    openChatOnce=true;
-                    startActivity(new Intent(activity, ChatActivity.class));
+                openChatOnce = true;
+                startActivity(new Intent(activity, ChatActivity.class));
                 break;
-                case R.id.nav_blocked_users:
-                    startActivity(new Intent(activity, ProfileBlockedActivity.class));
+            case R.id.nav_blocked_users:
+                startActivity(new Intent(activity, ProfileBlockedActivity.class));
                 break;
-                case R.id.nav_package:
-                    startActivity(new Intent(activity, PackageActivity.class));
+            case R.id.nav_package:
+                startActivity(new Intent(activity, PackageActivity.class));
                 break;
-                case R.id.nav_setting:
-                    startActivity(new Intent(activity, SettingActivity.class));
+            case R.id.nav_setting:
+                startActivity(new Intent(activity, SettingActivity.class));
                 break;
         }
 
@@ -453,15 +446,9 @@ Log.i("chat login","Chat login");
         return true;
     }
 
-    private ArrayList<beanUserData> arrUserDataList;
-    SharedPreferences prefUpdate;
-    String UserId = "", matri_id = "", gender = "",username="",strUserImage="",call_package_status="";
-    String updateStatus;
-    String fieldToUpdate;
     private void getUserDataRequest(String MatriId, String Gender) {
         final Dialog progresDialog11 = showProgress(nActivity);
-        if(!progresDialog11.isShowing())
-        {
+        if (!progresDialog11.isShowing()) {
             progresDialog11.show();
         }
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -519,17 +506,17 @@ Log.i("chat login","Chat login");
             @Override
             protected void onPostExecute(String result) {
                 super.onPostExecute(result);
-                try{
-                if(progresDialog11.isShowing()) {
-                    progresDialog11.dismiss();
-                }}catch (Exception e)
-                {
+                try {
+                    if (progresDialog11.isShowing()) {
+                        progresDialog11.dismiss();
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 Log.e("Recent_Listing", "==" + result);
                 try {
-                    if (result!=null) {
+                    if (result != null) {
 
 
                         JSONObject obj = new JSONObject(result);
@@ -540,18 +527,19 @@ Log.i("chat login","Chat login");
                             strUserImage = obj.getString("my_photo");
                             prefUpdate.edit().putString("profile_image", strUserImage).apply();
                             getHeaderView();
-                        }catch (Exception e)
-                        {e.printStackTrace();}
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         if (status.equalsIgnoreCase("1")) {
                             arrUserDataList = new ArrayList<beanUserData>();
                             try {
                                 JSONArray responseData = obj.getJSONArray("responseData");
 
-                                updateStatus=obj.getString("update_status");
-                                fieldToUpdate=obj.getString("field_to_update");
+                                updateStatus = obj.getString("update_status");
+                                fieldToUpdate = obj.getString("field_to_update");
 
-                                if(updateStatus.equalsIgnoreCase("1")){
-                                    startActivity(new Intent(HomeActivity.this,DialogUdateFieldsActivity.class).putExtra("fieldToUpdate",fieldToUpdate));
+                                if (updateStatus.equalsIgnoreCase("1")) {
+                                    startActivity(new Intent(HomeActivity.this, DialogUdateFieldsActivity.class).putExtra("fieldToUpdate", fieldToUpdate));
                                 }
 
                                 if (responseData.length() > 0) {
@@ -565,7 +553,7 @@ Log.i("chat login","Chat login");
                                         String username = resItem.getString("username");
                                         String birthdate = resItem.getString("birthdate");
                                         String ocp_name = resItem.getString("ocp_name");
-                                        String height = getString(R.string.age)+" " + resItem.getString("age") +" "+ getString(R.string.years) +", "+ resItem.getString("height");
+                                        String height = getString(R.string.age) + " " + resItem.getString("age") + " " + getString(R.string.years) + ", " + resItem.getString("height");
                                         String Address = resItem.getString("profile_text");
                                         String city_name = resItem.getString("city_name");
                                         String country_name = resItem.getString("country_name");
@@ -583,9 +571,9 @@ Log.i("chat login","Chat login");
                                         String income = resItem.getString("email");
                                         String user_profile_picture = resItem.getString("old_user_profile_picture");
                                         tokans.add(resItem.getString("tokan"));
-                                        beanUserData beanUserData=new beanUserData(user_id, matri_id1, username, birthdate, ocp_name, height, Address,
+                                        beanUserData beanUserData = new beanUserData(user_id, matri_id1, username, birthdate, ocp_name, height, Address,
                                                 city_name, country_name, photo1_approve, photo_view_status, photo_protect,
-                                                photo_pswd, gender1, is_shortlisted, is_blocked, is_favourite, user_profile_picture, eiId,userMobile,userEmail,"");
+                                                photo_pswd, gender1, is_shortlisted, is_blocked, is_favourite, user_profile_picture, eiId, userMobile, userEmail, "");
                                         beanUserData.setIncome(resItem.getString("income"));
                                         arrUserDataList.add(beanUserData);
 
@@ -597,12 +585,12 @@ Log.i("chat login","Chat login");
                                         userLikedListAdapter = new UserHomeListAdapter(nActivity, false, arrUserDataList, tokans, new UserHomeListAdapter.OnNotifyDataSetChanged() {
                                             @Override
                                             public void OnNotifyDataSetChangedFired(int dataSize) {
-                                                if(dataSize==0){
+                                                if (dataSize == 0) {
                                                     homeBinding.rvLikedUsers.setVisibility(View.GONE);
                                                     homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                                                 }
                                             }
-                                        },null);
+                                        }, null);
                                         homeBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
                                         homeBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                                         userLikedListAdapter.notifyDataSetChanged();
@@ -611,8 +599,7 @@ Log.i("chat login","Chat login");
                                         homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                                     }
                                 }
-                            }catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 homeBinding.rvLikedUsers.setVisibility(View.GONE);
                                 homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                                 e.printStackTrace();
@@ -620,13 +607,13 @@ Log.i("chat login","Chat login");
                             }
                         } else {
                             String msgError = obj.getString("message");
-                            try{
-                            if(progresDialog11.isShowing()) {
-                                progresDialog11.dismiss();
-                            }}catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                            try {
+                                if (progresDialog11.isShowing()) {
+                                    progresDialog11.dismiss();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
 						/*AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 						builder.setMessage(""+msgError).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
@@ -640,12 +627,11 @@ Log.i("chat login","Chat login");
 						alert.show();*/
                         }
                         homeBinding.refresh.setRefreshing(false);
-                    }else {
-                        if (NetworkConnection.hasConnection(nActivity)){
+                    } else {
+                        if (NetworkConnection.hasConnection(nActivity)) {
                             getUserDataRequest(matri_id, gender);
 
-                        }else
-                        {
+                        } else {
                             AppConstants.CheckConnection(nActivity);
                         }
                     }
@@ -654,20 +640,20 @@ Log.i("chat login","Chat login");
                 } catch (Exception t) {
                     t.printStackTrace();
                     homeBinding.refresh.setRefreshing(false);
-                    try{
-                        if(progresDialog11.isShowing()) {
+                    try {
+                        if (progresDialog11.isShowing()) {
                             progresDialog11.dismiss();
-                        }}catch (Exception e)
-                    {
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
 
-                try{
-                    if(progresDialog11.isShowing()) {
+                try {
+                    if (progresDialog11.isShowing()) {
                         progresDialog11.dismiss();
-                    }}catch (Exception e)
-                {
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -679,17 +665,14 @@ Log.i("chat login","Chat login");
     @Override
     public void onResume() {
         super.onResume();
-        try{
-        if(isNotification)
-        {
-            Glide.with(nActivity).asGif().load(R.drawable.notification_gif).into(ivNotification);
-            ivNotification.setPadding(0,15,0,15);
-        }else
-        {
-            Glide.with(nActivity).load(R.drawable.ic_notification).into(ivNotification);
-        }
-        }catch (Exception e)
-        {
+        try {
+            if (isNotification) {
+                Glide.with(nActivity).asGif().load(R.drawable.notification_gif).into(ivNotification);
+                ivNotification.setPadding(0, 15, 0, 15);
+            } else {
+                Glide.with(nActivity).load(R.drawable.ic_notification).into(ivNotification);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         call_package_status = prefUpdate.getString("call_package_status", "");
@@ -700,13 +683,10 @@ Log.i("chat login","Chat login");
 
     }
 
-    String AgeM="", AgeF="", HeightM="", HeightF="", ReligionId="", CasteId="", CountryId="",
-            StateId="", CityId="", HighestEducationId="", AnnualIncome="", MotherToungueID="", Diet="",Manglik="";
-Bundle bundle1=null;
     public void getIntetData() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        bundle1=bundle;
+        bundle1 = bundle;
 
         if (bundle != null) {
             String SearchType = bundle.getString("SearchType");
@@ -725,8 +705,8 @@ Bundle bundle1=null;
             } else if (SearchType.equalsIgnoreCase("bydata")) {*/
             //textviewHeaderText.setText("SEARCH RESULT");
             //Gender = bundle.getString("Gender");
-           // Log.e("genderr", Gender);
-            if(bundle.getString("AgeM")!=null) {
+            // Log.e("genderr", Gender);
+            if (bundle.getString("AgeM") != null) {
                 homeBinding.ivFilter.setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_ATOP);
                 AgeM = bundle.getString("AgeM");
                 AgeF = bundle.getString("AgeF");
@@ -748,7 +728,7 @@ Bundle bundle1=null;
 
                     getSearchResultRequest(gender, AgeM, AgeF, HeightM, HeightF, ReligionId,
                             CasteId, CountryId, StateId, CityId, HighestEducationId, AnnualIncome,
-                            matri_id, MotherToungueID, Diet,Manglik);
+                            matri_id, MotherToungueID, Diet, Manglik);
 
                 } else {
                     AppConstants.CheckConnection(nActivity);
@@ -756,16 +736,14 @@ Bundle bundle1=null;
 
                 //}
 
-            }else
-            {
+            } else {
                 if (NetworkConnection.hasConnection(nActivity)) {
                     getUserDataRequest(matri_id, gender);
                 } else {
                     AppConstants.CheckConnection(nActivity);
                 }
             }
-        }else
-        {
+        } else {
             if (NetworkConnection.hasConnection(nActivity)) {
                 getUserDataRequest(matri_id, gender);
             } else {
@@ -775,10 +753,10 @@ Bundle bundle1=null;
     }
 
     private void getSearchResultRequest(final String Gender, String AgeM, String AgeF, String HeightM, String HeightF,
-                                         String ReligionId,
+                                        String ReligionId,
                                         String CasteId, String CountryId, String StateId, String CityId, String HighestEducationId,
                                         String AnnualIncome,
-                                        String login_matriId, String MotherToungueID, String Diet,String Manglik) {
+                                        String login_matriId, String MotherToungueID, String Diet, String Manglik) {
         //refresh.setRefreshing(true);
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
@@ -925,8 +903,8 @@ Bundle bundle1=null;
                                 String user_profile_picture = resItem.getString("old_user_profile_picture");
                                 String eiId = resItem.getString("ei_id");
                                 tokans.add(resItem.getString("tokan"));
-                                beanUserData beanUserData=new beanUserData(user_id, matri_id1, username, birthdate, ocp_name, height, Address, city_name, country_name, photo1_approve, photo_view_status, photo_protect,
-                                        photo_pswd, gender1, AppConstants.is_shortlisted, AppConstants.is_blocked, is_favourite, user_profile_picture,eiId,"");
+                                beanUserData beanUserData = new beanUserData(user_id, matri_id1, username, birthdate, ocp_name, height, Address, city_name, country_name, photo1_approve, photo_view_status, photo_protect,
+                                        photo_pswd, gender1, AppConstants.is_shortlisted, AppConstants.is_blocked, is_favourite, user_profile_picture, eiId, "");
                                 beanUserData.setIncome(resItem.getString("income"));
                                 arrUserDataList.add(beanUserData);
 
@@ -940,12 +918,12 @@ Bundle bundle1=null;
                                 userLikedListAdapter = new UserHomeListAdapter(nActivity, false, arrUserDataList, tokans, new UserHomeListAdapter.OnNotifyDataSetChanged() {
                                     @Override
                                     public void OnNotifyDataSetChangedFired(int dataSize) {
-                                        if(dataSize==0){
+                                        if (dataSize == 0) {
                                             homeBinding.rvLikedUsers.setVisibility(View.GONE);
                                             homeBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                                         }
                                     }
-                                },bundle1);
+                                }, bundle1);
                                 homeBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
                                 userLikedListAdapter.notifyDataSetChanged();
 
@@ -981,7 +959,7 @@ Bundle bundle1=null;
 
         sendPostReqAsyncTask.execute(Gender, AgeM, AgeF, HeightM, HeightF, ReligionId,
                 CasteId, CountryId, StateId, CityId, HighestEducationId, AnnualIncome,
-                login_matriId, MotherToungueID, Diet,Manglik);
+                login_matriId, MotherToungueID, Diet, Manglik);
 
     }
 

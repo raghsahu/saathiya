@@ -1,5 +1,8 @@
 package com.prometteur.sathiya.hobbies;
 
+import static com.prometteur.sathiya.SplashActivity.strLang;
+import static com.prometteur.sathiya.utills.AppMethods.showProgress;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,29 +51,29 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
-import static com.prometteur.sathiya.SplashActivity.strLang;
-import static com.prometteur.sathiya.utills.AppMethods.showProgress;
-
 public class HobbiesInterestActivity extends BaseActivity {
 
-     RecyclerView.LayoutManager linearLayoutManager;
+    public static String intType = "Others";
+    //    public static String intType="myHobby";
+    public static String km = "";
+    public static String hobbyId = "";
+    RecyclerView.LayoutManager linearLayoutManager;
     HobbiesListAdapter userLikedListAdapter;
     HobbiesOtherListAdapter hobbiesOtherListAdapter;
-
-    BaseActivity nActivity= HobbiesInterestActivity.this;
-ActivityHobbiesInterestBinding hobbiesInterestBinding;
-String matri_id="",strUserImage,username,cityName,otherMatriId="";
+    BaseActivity nActivity = HobbiesInterestActivity.this;
+    ActivityHobbiesInterestBinding hobbiesInterestBinding;
+    String matri_id = "", strUserImage, username, cityName, otherMatriId = "";
     SharedPreferences prefUpdate;
-    public static String intType="myHobby";
-    public static String km="";
-    public static String hobbyId="";
-    String firstTime="0";
+    String firstTime = "0";
     boolean isLoading = false;
     Dialog progressDialogSendReq;
+    List<beanHobbyImage> arrHobby = new ArrayList<>();
+    List<ListObject> consolidatedList1 = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hobbiesInterestBinding=ActivityHobbiesInterestBinding.inflate(getLayoutInflater());
+        hobbiesInterestBinding = ActivityHobbiesInterestBinding.inflate(getLayoutInflater());
 
         setContentView(hobbiesInterestBinding.getRoot());
         prefUpdate = PreferenceManager.getDefaultSharedPreferences(nActivity);
@@ -96,16 +99,16 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
         hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
         hobbiesInterestBinding.rvLikedUsers.setVisibility(View.VISIBLE);
         hobbiesInterestBinding.tvSearchResults.setVisibility(View.VISIBLE);
-        linearLayoutManager=new GridLayoutManager(nActivity,2);
+        linearLayoutManager = new GridLayoutManager(nActivity, 2);
 
 
-        if(getIntent().getStringExtra("fromOtherProfile")!=null){
-            otherMatriId=getIntent().getStringExtra("matriId");
+        if (getIntent().getStringExtra("fromOtherProfile") != null) {
+            otherMatriId = getIntent().getStringExtra("matriId");
 
             hobbiesInterestBinding.radioGroup1.setVisibility(View.GONE);
-            linearLayoutManager=new LinearLayoutManager(nActivity);
-            firstTime="0";
-            intType="Others";
+            linearLayoutManager = new LinearLayoutManager(nActivity);
+            firstTime = "0";
+            intType = "Others";
            /* if (NetworkConnection.hasConnection(nActivity)) {
                 progressDialogSendReq = showProgress(nActivity);
                 progressDialogSendReq.show();
@@ -124,13 +127,13 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
                 hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.GONE);
                 hobbiesInterestBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                 hobbiesInterestBinding.tvSearchResults.setVisibility(View.VISIBLE);
-                linearLayoutManager=new GridLayoutManager(nActivity,2);
+                linearLayoutManager = new GridLayoutManager(nActivity, 2);
 
-                intType="myHobby";
+                intType = "myHobby";
                 // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);v
                 //  hobbiesInterestBinding.rvLikedUsers.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(getResources().getDimensionPixelOffset(R.dimen._5sdp)), true));
                 if (NetworkConnection.hasConnection(nActivity)) {
-                    getHobbyImageList(matri_id,hobbyId,km);
+                    getHobbyImageList(matri_id, hobbyId, km);
                 } else {
                     AppConstants.CheckConnection(nActivity);
                 }
@@ -144,18 +147,17 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
                 hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.VISIBLE);
                 hobbiesInterestBinding.rvLikedUsers.setVisibility(View.GONE);
                 hobbiesInterestBinding.tvSearchResults.setVisibility(View.GONE);
-                linearLayoutManager=new LinearLayoutManager(nActivity);
-                firstTime="0";
-                intType="Others";
+                linearLayoutManager = new LinearLayoutManager(nActivity);
+                firstTime = "0";
+                intType = "Others";
                 if (NetworkConnection.hasConnection(nActivity)) {
                     progressDialogSendReq = showProgress(nActivity);
                     progressDialogSendReq.show();
-                    consolidatedList1=new ArrayList<>();
-                    getOtherHobbyImageList(matri_id,hobbyId,km,0);
+                    consolidatedList1 = new ArrayList<>();
+                    getOtherHobbyImageList(matri_id, hobbyId, km, 0);
                 } else {
                     AppConstants.CheckConnection(nActivity);
                 }
-
 
 
                 // listSalonBinding.recycleListsaloonView.setNestedScrollingEnabled(false);
@@ -169,29 +171,27 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
     @Override
     protected void onResume() {
         super.onResume();
-        if(intType.equalsIgnoreCase("myHobby")) {
+        if (intType.equalsIgnoreCase("myHobby")) {
             if (NetworkConnection.hasConnection(nActivity)) {
-                getHobbyImageList(matri_id,hobbyId,km);
+                getHobbyImageList(matri_id, hobbyId, km);
             } else {
                 AppConstants.CheckConnection(nActivity);
             }
-        }else
-        {
-            consolidatedList1=new ArrayList<>();
+        } else {
+            consolidatedList1 = new ArrayList<>();
             if (NetworkConnection.hasConnection(nActivity)) {
 
-                 progressDialogSendReq = showProgress(nActivity);
+                progressDialogSendReq = showProgress(nActivity);
                 progressDialogSendReq.show();
-                firstTime="0";
-                getOtherHobbyImageList(matri_id,hobbyId,km,0);
+                firstTime = "0";
+                getOtherHobbyImageList(matri_id, hobbyId, km, 0);
             } else {
                 AppConstants.CheckConnection(nActivity);
             }
         }
     }
 
-    List<beanHobbyImage> arrHobby =new ArrayList<>();
-    private void getHobbyImageList(String matri_id,String hoby_id,String km) {
+    private void getHobbyImageList(String matri_id, String hoby_id, String km) {
 
         progressDialogSendReq = showProgress(nActivity);
         progressDialogSendReq.show();
@@ -275,34 +275,32 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
                             String photo = resItem.getString("photo");
                             String approvalStatus = resItem.getString("approval_status");
 
-                            arrHobby.add(new beanHobbyImage(hobyId, hobyName,matriId,intrestId,photo,approvalStatus));
+                            arrHobby.add(new beanHobbyImage(hobyId, hobyName, matriId, intrestId, photo, approvalStatus));
 
                         }
-                        arrHobby.add(new beanHobbyImage("","","","","",""));
+                        arrHobby.add(new beanHobbyImage("", "", "", "", "", ""));
                         if (arrHobby.size() > 0) {
                             hobbiesInterestBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                             hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.GONE);
                             hobbiesInterestBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
-                            userLikedListAdapter=new HobbiesListAdapter(nActivity, false, arrHobby);
+                            userLikedListAdapter = new HobbiesListAdapter(nActivity, false, arrHobby);
                             hobbiesInterestBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
-                        }else
-                        {
+                        } else {
                             hobbiesInterestBinding.rvLikedUsers.setVisibility(View.GONE);
                             hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                         }
 
                         resIter = null;
 
-                    }else{
-                        arrHobby.add(new beanHobbyImage("","","","","",""));
+                    } else {
+                        arrHobby.add(new beanHobbyImage("", "", "", "", "", ""));
                         if (arrHobby.size() > 0) {
                             hobbiesInterestBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                             hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.GONE);
                             hobbiesInterestBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
-                            userLikedListAdapter=new HobbiesListAdapter(nActivity, false, arrHobby);
+                            userLikedListAdapter = new HobbiesListAdapter(nActivity, false, arrHobby);
                             hobbiesInterestBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
-                        }else
-                        {
+                        } else {
                             hobbiesInterestBinding.rvLikedUsers.setVisibility(View.GONE);
                             hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                         }
@@ -314,12 +312,12 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
                     progressDialogSendReq.dismiss();
                 } catch (Exception e) {
                     progressDialogSendReq.dismiss();
-                    arrHobby.add(new beanHobbyImage("","","","","",""));
+                    arrHobby.add(new beanHobbyImage("", "", "", "", "", ""));
                     if (arrHobby.size() > 0) {
                         hobbiesInterestBinding.rvLikedUsers.setVisibility(View.VISIBLE);
                         hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.GONE);
                         hobbiesInterestBinding.rvLikedUsers.setLayoutManager(linearLayoutManager);
-                        userLikedListAdapter=new HobbiesListAdapter(nActivity, false, arrHobby);
+                        userLikedListAdapter = new HobbiesListAdapter(nActivity, false, arrHobby);
                         hobbiesInterestBinding.rvLikedUsers.setAdapter(userLikedListAdapter);
                     }
                     progressDialogSendReq.dismiss();
@@ -332,7 +330,7 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
         sendPostReqAsyncTask.execute();
     }
 
-    private void getOtherHobbyImageList(String matri_id,String hoby_id,String km,int nextLimit) {
+    private void getOtherHobbyImageList(String matri_id, String hoby_id, String km, int nextLimit) {
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
@@ -349,8 +347,8 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
                 BasicNameValuePair HobbyIdPair = new BasicNameValuePair("hoby_id", hoby_id);
                 BasicNameValuePair KmPair = new BasicNameValuePair("km", km);
                 BasicNameValuePair languagePAir = new BasicNameValuePair("language", strLang);
-                BasicNameValuePair nextLimitPAir = new BasicNameValuePair("last_id", ""+nextLimit);
-                BasicNameValuePair otherMatriIdPAir = new BasicNameValuePair("other_matri_id", ""+otherMatriId);
+                BasicNameValuePair nextLimitPAir = new BasicNameValuePair("last_id", "" + nextLimit);
+                BasicNameValuePair otherMatriIdPAir = new BasicNameValuePair("other_matri_id", "" + otherMatriId);
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(MatriIdPair);
                 nameValuePairList.add(HobbyIdPair);
@@ -396,9 +394,9 @@ String matri_id="",strUserImage,username,cityName,otherMatriId="";
                 super.onPostExecute(Ressponce);
 
                 Log.e("--City --", "==" + Ressponce);
-if(progressDialogSendReq!=null){
-    progressDialogSendReq.dismiss();
-}
+                if (progressDialogSendReq != null) {
+                    progressDialogSendReq.dismiss();
+                }
                 try {
                     arrHobby = new ArrayList<beanHobbyImage>();
                     JSONObject responseObj = new JSONObject(Ressponce);
@@ -423,7 +421,7 @@ if(progressDialogSendReq!=null){
                             String userPhoto = resItem.getString("profile_photo");
                             String isLiked = resItem.getString("like_status");
 
-                            arrHobby.add(new beanHobbyImage(hobyId, hobyName,matriId,intrestId,photo,name,city,userPhoto,isLiked));
+                            arrHobby.add(new beanHobbyImage(hobyId, hobyName, matriId, intrestId, photo, name, city, userPhoto, isLiked));
 
                         }
                         if (arrHobby.size() > 0) {
@@ -432,41 +430,40 @@ if(progressDialogSendReq!=null){
                             groupDataIntoHashMap(arrHobby);
 
 
-                        }else
-                        {
+                        } else {
                             hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
                             hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
                         }
 
                         resIter = null;
 
-                    }else{
+                    } else {
 
-                            hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
-                            hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
+                        hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
+                        hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
 
                     }
 
                     responseData = null;
                     responseObj = null;
-                    if(progressDialogSendReq!=null && progressDialogSendReq.isShowing()) {
+                    if (progressDialogSendReq != null && progressDialogSendReq.isShowing()) {
                         progressDialogSendReq.dismiss();
                     }
 
                 } catch (Exception e) {
                     hobbiesInterestBinding.rvOthersHobbies.setVisibility(View.GONE);
                     hobbiesInterestBinding.tvEmptyMsg.setVisibility(View.VISIBLE);
-                    if(progressDialogSendReq!=null){
+                    if (progressDialogSendReq != null) {
                         progressDialogSendReq.dismiss();
                     }
-                    if(consolidatedList1.size()!=0) {
+                    if (consolidatedList1.size() != 0) {
                         consolidatedList1.remove(consolidatedList1.size() - 1);
                     }
                     int scrollPosition = consolidatedList1.size();
-                    if(hobbiesOtherListAdapter!=null) {
+                    if (hobbiesOtherListAdapter != null) {
                         hobbiesOtherListAdapter.notifyItemRemoved(scrollPosition);
                     }
-                    if(progressDialogSendReq!=null && progressDialogSendReq.isShowing()) {
+                    if (progressDialogSendReq != null && progressDialogSendReq.isShowing()) {
                         progressDialogSendReq.dismiss();
                     }
                 }
@@ -477,6 +474,7 @@ if(progressDialogSendReq!=null){
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute();
     }
+
     private void groupDataIntoHashMap(List<beanHobbyImage> chatModelList) {
         LinkedHashMap<String, Set<beanHobbyImage>> groupedHashMap = new LinkedHashMap<>();
         Set<beanHobbyImage> list = null;
@@ -496,42 +494,42 @@ if(progressDialogSendReq!=null){
             }
         }
         //Generate list from map
-        if(consolidatedList1.size()!=0) {
+        if (consolidatedList1.size() != 0) {
             consolidatedList1.remove(consolidatedList1.size() - 1);
         }
         int scrollPosition = consolidatedList1.size();
-        if(hobbiesOtherListAdapter!=null) {
+        if (hobbiesOtherListAdapter != null) {
             hobbiesOtherListAdapter.notifyItemRemoved(scrollPosition);
         }
-        List<ListObject> objectList=generateListFromMap(groupedHashMap);
-        if(objectList.size()!=0) {
+        List<ListObject> objectList = generateListFromMap(groupedHashMap);
+        if (objectList.size() != 0) {
             consolidatedList1.addAll(objectList);
         }
-        if(firstTime.equalsIgnoreCase("0")) {
+        if (firstTime.equalsIgnoreCase("0")) {
             hobbiesInterestBinding.rvOthersHobbies.setLayoutManager(linearLayoutManager);
             hobbiesOtherListAdapter = new HobbiesOtherListAdapter(nActivity, false, null);
             hobbiesInterestBinding.rvOthersHobbies.setAdapter(hobbiesOtherListAdapter);
             hobbiesOtherListAdapter.setDataChange(consolidatedList1);
-        }else {
+        } else {
             hobbiesOtherListAdapter.setDataChange(consolidatedList1);
             hobbiesOtherListAdapter.notifyDataSetChanged();
         }
         isLoading = false;
         int currentSize = scrollPosition;
         int nextLimit = currentSize + 10;
-        initScrollListener(Integer.parseInt(arrHobby.get(arrHobby.size()-1).getIntrest_id()));
+        initScrollListener(Integer.parseInt(arrHobby.get(arrHobby.size() - 1).getIntrest_id()));
     }
-    List<ListObject> consolidatedList1=new ArrayList<>();
+
     private List<ListObject> generateListFromMap(LinkedHashMap<String, Set<beanHobbyImage>> groupedHashMap) {
         // We linearly add every item into the consolidatedList.
         List<ListObject> consolidatedList = new ArrayList<>();
         for (String date : groupedHashMap.keySet()) {
             UserDataObject dateItem = new UserDataObject();
             Set<beanHobbyImage> chatModelSet = groupedHashMap.get(date);
-            List<beanHobbyImage> chatModelList=new ArrayList<>(chatModelSet);
+            List<beanHobbyImage> chatModelList = new ArrayList<>(chatModelSet);
             dateItem.setMatriId(date);
             dateItem.setUserName(chatModelList.get(0).getName());
-            if(chatModelList.get(0).getLocation()!=null && !chatModelList.get(0).getLocation().equalsIgnoreCase("null")) {
+            if (chatModelList.get(0).getLocation() != null && !chatModelList.get(0).getLocation().equalsIgnoreCase("null")) {
                 dateItem.setLocation(chatModelList.get(0).getLocation());
             }
             dateItem.setUserPhoto(chatModelList.get(0).getUserPhoto());
@@ -575,19 +573,19 @@ if(progressDialogSendReq!=null){
     private void loadMore(int nextLimit) {
         consolidatedList1.add(null);
         hobbiesOtherListAdapter.notifyItemInserted(consolidatedList1.size() - 1);
-        firstTime="1";
-        getOtherHobbyImageList(matri_id,hobbyId,km,nextLimit);
+        firstTime = "1";
+        getOtherHobbyImageList(matri_id, hobbyId, km, nextLimit);
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(getIntent().getStringExtra("fromOtherProfile")!=null) {
+        if (getIntent().getStringExtra("fromOtherProfile") != null) {
             intType = "Others";
-        }else
-        {
+        } else {
             intType = "myHobby";
         }
-        km="";
-        hobbyId="";
+        km = "";
+        hobbyId = "";
     }
 }

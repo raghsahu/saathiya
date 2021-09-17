@@ -196,11 +196,26 @@ public class UserVisitedListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             }
                         });
 
+            if(!singleUser.getRejectedStatus().equalsIgnoreCase("not_rejected")) {
+                holder.likedUserBinding.linlayReject.setVisibility(View.INVISIBLE);
+                if(singleUser.getRejectedStatus().equalsIgnoreCase("rejected_by")) {
+                    holder.likedUserBinding.tvLike.setVisibility(View.INVISIBLE);
+                }else {
+                    holder.likedUserBinding.tvLike.setVisibility(View.VISIBLE);
+                }
+            }else {
+                holder.likedUserBinding.linlayReject.setVisibility(View.VISIBLE);
+            }
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ThirdHomeActivity.matri_id=singleUser.getMatri_id();
-                        nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+                        if(singleUser.getRejectedStatus().equalsIgnoreCase("not_rejected")) {
+                            nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class));
+                        }else {
+                            nActivity.startActivity(new Intent(nActivity, ThirdHomeActivity.class).putExtra("pageType", "rejected").putExtra("rejectStatus",homeResultList.get(position).getRejectedStatus()));
+                        }
+
                     }
                 });
 
@@ -211,8 +226,7 @@ public class UserVisitedListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         {
                         if (singleUser.getIs_blocked().equalsIgnoreCase("1"))
                         {
-                            String msgBlock = "This member is blocked. You can't express your interest.";
-                            String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+                            String msgBlock = nActivity.getString(R.string.you_can_not_express_you_interest_you_can_not_express_your_interest);
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                             builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
@@ -234,8 +248,8 @@ public class UserVisitedListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         {
                             if (singleUser.getIs_blocked().equalsIgnoreCase("1"))
                             {
-                                String msgBlock = "This member is blocked. You can't express your interest.";
-                                String msgNotPaid = "You are not paid member. Please update your membership to express your interest.";
+                                String msgBlock = nActivity.getString(R.string.you_can_not_express_you_interest_you_can_not_express_your_interest);
+
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(nActivity);
                                 builder.setMessage(msgBlock).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()

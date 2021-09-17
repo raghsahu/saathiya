@@ -95,22 +95,10 @@ ActivityProfileVisitedBinding profileLikedBinding;
                 HttpClient httpClient = new DefaultHttpClient();
 
                 String URL = "";
-                if (PageType.equalsIgnoreCase("1")) {
-                    URL = AppConstants.MAIN_URL + "intrest_receive_all.php";
-                    Log.e("URL shortlisted", "== " + URL);
-                } else if (PageType.equalsIgnoreCase("2")) {
-                    URL = AppConstants.MAIN_URL + "intrest_accept_list.php";
-                    Log.e("blocklist", "== " + URL);
-                } else if (PageType.equalsIgnoreCase("3")) {
-                    URL = AppConstants.MAIN_URL + "profile_viewd_by_me.php";
-                    Log.e("profile_viewd_by_me", "== " + URL);
-                } else if (PageType.equalsIgnoreCase("4")) {
+
                     URL = AppConstants.MAIN_URL + "profile_visited_by_i.php";
                     Log.e("profile_visited_by_i", "== " + URL);
-                } else if (PageType.equalsIgnoreCase("5")) {
-                    URL = AppConstants.MAIN_URL + "reject_list.php";
-                    Log.e("reject_list", "== " + URL);
-                }
+
 
 
                 HttpPost httpPost = new HttpPost(URL);
@@ -215,8 +203,10 @@ ActivityProfileVisitedBinding profileLikedBinding;
 
 
                                         tokans.add(resItem.getString("tokan"));
-                                        arrShortListedUser.add(new beanUserData("", matri_id1, username, "", "", height, "", city_name, "", "", "", "",
-                                                "", gender1, "", is_blocked, is_favourite, user_profile_picture, eiId,""));
+                                        beanUserData beanUserData=new beanUserData("", matri_id1, username, "", "", height, "", city_name, "", "", "", "",
+                                                "", gender1, "", is_blocked, is_favourite, user_profile_picture, eiId,"");
+                                        beanUserData.setRejectedStatus(resItem.getString("reject_status"));
+                                        arrShortListedUser.add(beanUserData);
                                     }
                                 }catch (Exception e)
                                 {

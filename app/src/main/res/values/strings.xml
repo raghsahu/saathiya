@@ -367,9 +367,9 @@ When they install this app, you will get 10 calls in your account.
     <string name="deleting">Deleting…</string>
     <string name="cancel">CANCEL</string>
     <string name="your_payment_failed">Your Payment Failed</string>
-    <string name="this_member_has_blocked_you">This member is blocked. You can\'t express your interest.</string>
+    <string name="this_member_has_blocked_you">This member has blocked you. You can not express your interest.</string>
     <string name="you_are_not_paid_memeber">You are not paid member. Please update your membership to express your interest.</string>
-    <string name="this_member_has_blocked_you_for_message">This member is blocked you. You can\'t send message.</string>
+    <string name="this_member_has_blocked_you_for_message">This member has blocked you. You can not send message.</string>
     <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove this photo?</string>
     <string name="remove">Remove</string>
     <string name="liked_profiles">Likes \nSent</string>
@@ -412,4 +412,5 @@ When they install this app, you will get 10 calls in your account.
     <string name="delete_account">Delete Account</string>
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete, you may take a break by deactivating you account. Deleting will permanently erase your account details.</string>
     <string name="delete">Delete</string>
+    <string name="you_can_not_express_you_interest_you_can_not_express_your_interest">This member has blocked. You can not express your interest.</string>
 </resources>
