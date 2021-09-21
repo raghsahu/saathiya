@@ -6,10 +6,12 @@ import static com.prometteur.sathiya.chat.FriendsFragment.openChatOnce;
 import static com.prometteur.sathiya.home.MusicService.mPlayer;
 import static com.prometteur.sathiya.home.SecondHomeActivity.activityRunning;
 import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimer;
-import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimerPlayPause;
+//import static com.prometteur.sathiya.home.SecondHomeActivity.countDownTimerPlayPause;
 import static com.prometteur.sathiya.home.SecondHomeActivity.isSwiped;
 import static com.prometteur.sathiya.home.SecondHomeActivity.ivPlayPause;
 import static com.prometteur.sathiya.home.SecondHomeActivity.mMainViewModel;
+import static com.prometteur.sathiya.home.SecondHomeActivity.running;
+import static com.prometteur.sathiya.home.SecondHomeActivity.stopPosition;
 import static com.prometteur.sathiya.home.SecondHomeActivity.videoStarted;
 import static com.prometteur.sathiya.home.SecondHomeActivity.videoView;
 import static com.prometteur.sathiya.utills.AppConstants.setToastStr;
@@ -38,16 +40,19 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,6 +67,7 @@ import com.prometteur.sathiya.chat.ChatActivity;
 import com.prometteur.sathiya.chat.FriendsFragment;
 import com.prometteur.sathiya.databinding.ItemHomeProfileBinding;
 import com.prometteur.sathiya.home.MusicService;
+import com.prometteur.sathiya.home.SecondHomeActivity;
 import com.prometteur.sathiya.home.ThirdHomeActivity;
 import com.prometteur.sathiya.translateapi.Http;
 import com.prometteur.sathiya.utills.AppConstants;
@@ -114,6 +120,24 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     long milliLeft = 0;
     int pauseVal=0;
     private OnNotifyDataSetChanged onNotifyDataSetChanged;
+
+    boolean speak_pos_status1 = false;
+    boolean speak_pos_status2 = false;
+    boolean speak_pos_status3 = false;
+    boolean speak_pos_status4 = false;
+    boolean speak_pos_status5 = false;
+    boolean speak_pos_status6 = false;
+    boolean speak_pos_status7 = false;
+    boolean speak_pos_status8 = false;
+    boolean speak_pos_status9 = false;
+    boolean speak_pos_status10 = false;
+    boolean speak_pos_status11 = false;
+    boolean speak_pos_status12 = false;
+    boolean speak_pos_status13 = false;
+    boolean speak_pos_status14 = false;
+    boolean speak_pos_status15 = false;
+    boolean speak_pos_status16 = false;
+    boolean speak_pos_status17 = false;
 
     public CardStackAdapter(Activity nActivity, List<beanUserData> mDataList, CardStackView cardStackView, ArrayList<String> tokans, CardStackLayoutManager manager, OnNotifyDataSetChanged onNotifyDataSetChanged) {
         this.nContext = nActivity;
@@ -227,12 +251,12 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 //holder.btnSendInterest.setVisibility(View.GONE);
                 //holder.btnRemaind.setVisibility(View.VISIBLE);
-            } else {
+            }
+            else {
                 RequestType = "Like";
                 /*holder.profileBinding.ivLike.setImageResource(R.drawable.ic_heart_greybg);
                 holder.profileBinding.tvLike.setText("Like");*/
             }
-
 
             holder.profileBinding.civLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -312,8 +336,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
 
-//new added integration of video
-
+    //new added integration of video
 
             holder.animationtypes.add(AnimationUtils.loadAnimation(nActivity, R.anim.bounce_anim));
             holder.animationtypes.add(AnimationUtils.loadAnimation(nActivity, R.anim.bounce_anim));
@@ -345,7 +368,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (singleUser.getGender() != null && singleUser.getGender().equalsIgnoreCase("Male")) {
                 holder.profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + nContext.getPackageName() + "/" + R.raw.video_male));
-            } else {
+            }
+            else {
                 holder.profileBinding.videoView.setVideoURI(Uri.parse("android.resource://" + nContext.getPackageName() + "/" + R.raw.video_female));
             }
 
@@ -429,8 +453,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((Animatable) holder.drawable).stop();
                         }
 
-
-                        holder.countDownTimer.cancel();
+                      //  holder.countDownTimer.cancel();
 
                         if (holder.imageIndex < holder.imguris.size()) {
                             holder.handler2.removeCallbacks(holder.runnable2);
@@ -440,7 +463,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             holder.profileBinding.videoView.pause();
                         }
                         showHideView(holder, holder.paused);
-                    } else {
+                    }
+                    else {
                         holder.paused = true;
                         videoStarted=true;
                         nActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -475,6 +499,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         try {
                             if (!holder.profileBinding.videoView.isPlaying()) {
                                 holder.profileBinding.videoView.start();
+
+                                getVideoTrack(holder.stringData, holder, holder.current, singleUser);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -490,12 +516,11 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (holder.current == 17) {
                             holder.current = 0;
                         }
-                        setViews(holder.stringData, holder, holder.current, singleUser);
+                        //setViews(holder.stringData, holder, holder.current, singleUser);
                     }
-
-
                 }
             });
+
             holder.profileBinding.ivVolume.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -525,7 +550,9 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         holder.profileBinding.ivVolume.setImageResource(R.drawable.ic_volume_up);
                         holder.mute = true;
                         AudioManager mAlramMAnager = (AudioManager) nActivity.getSystemService(Context.AUDIO_SERVICE);
-                        MusicService.mPlayer.setVolume(0.05f, 0.05f);
+                        if (MusicService.mPlayer!=null){
+                            MusicService.mPlayer.setVolume(0.05f, 0.05f);
+                        }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             // mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0);
                             mAlramMAnager.adjustStreamVolume(AudioManager.STREAM_ALARM, AudioManager.ADJUST_UNMUTE, 0);
@@ -547,96 +574,250 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder1;
             loadingViewHolder.progressBar.setIndeterminate(true);
         }
-
     }
 
-    private void setViews(final ArrayList<String> arraylist, ViewHolder holder, int pos, beanUserData userData) {
+//    private void setViews(final ArrayList<String> arraylist, ViewHolder holder, int pos, beanUserData userData) {
+//        holder.profileBinding.tvDetail.setVisibility(View.VISIBLE);
+//        holder.profileBinding.videoView.setVisibility(View.VISIBLE);
+//        ArrayList<Long> longArrayList = new ArrayList<>();
+//       /* longArrayList.add(3000L);//holder.stringData.add("Blank");
+//        longArrayList.add(3000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
+//        longArrayList.add(3000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
+//        longArrayList.add(3000L);//holder.stringData.add("Blank");
+//        longArrayList.add(10000L);//holder.stringData.add("Meri umar 38 saal hai");
+//        longArrayList.add(2000L);//holder.stringData.add("Blank");
+//        longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
+//        longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+//        longArrayList.add(2000L);//holder.stringData.add("Mein shakahari hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
+//        longArrayList.add(2000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+//        longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
+//        longArrayList.add(2000L);//holder.stringData.add("Blank");
+//        longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+//        longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
+//        longArrayList.add(2000L);//holder.stringData.add("Lekin khushiya bonus mein");
+//        longArrayList.add(2000L);//holder.stringData.add("What I am looking for?");
+//        longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");*/
+//
+//        longArrayList.add(3000L);//holder.stringData.add("Blank");
+//        longArrayList.add(4000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
+//        longArrayList.add(4000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
+//        // longArrayList.add(5000L);//holder.stringData.add("Blank");
+//        longArrayList.add(7000L);//holder.stringData.add("Meri umar 38 saal hai");
+//        longArrayList.add(5000L);//holder.stringData.add("Blank");
+//        longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
+//        // longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
+//        longArrayList.add(4000L);//holder.stringData.add("Mein shakahari hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
+//        longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
+//        //  longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
+//        longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
+//        longArrayList.add(5000L);//holder.stringData.add("Blank");
+//        longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
+//        //  longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
+//        longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
+//        longArrayList.add(3000L);//holder.stringData.add("Lekin khushiya bonus mein");
+//        longArrayList.add(3000L);//holder.stringData.add("What I am looking for?");
+//        longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
+//        final int[] poss = {pos};
+//        /*if(milliLeft>0)
+//        {
+//           longArrayList.set(poss[0],milliLeft);
+//            milliLeft=0;
+//        }*/
+//        if (activityRunning) {
+//            if (longArrayList.size() > 0) {
+//                if(pauseVal==1){
+//                    pauseVal=0;
+//                    if(milliLeft<1000){
+//                        milliLeft=1000;
+//                    }
+//                    longArrayList.set(poss[0],(milliLeft));
+//                    Log.e("In restart ",poss[0]+" Remaining Time : "+(milliLeft));
+//                }
+//                countDownTimerPlayPause=holder.countDownTimer;
+//                holder.countDownTimer = new CountDownTimer(longArrayList.get(poss[0]), 1000) {
+//                    @Override
+//                    public void onTick(long l) {
+//                        milliLeft = l;
+//                        try {
+//                            Log.e("Mili", poss[0] + " Remaining Time : " + l);
+//                            if (!arraylist.get(poss[0]).isEmpty() && !arraylist.get(poss[0]).equalsIgnoreCase("blank")) {
+//                                holder.translateText(arraylist.get(poss[0]), userData.getGender());
+//                            } else {
+//                                holder.profileBinding.tvDetail.setText(arraylist.get(poss[0]));
+//                            }
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFinish() {
+//                        poss[0]++;
+//                        try{
+//                        holder.current = poss[0];
+//                        if (arraylist.size() == poss[0]) {
+//
+//                            if (holder.imguris.size() > 0) {
+//                                holder.profileBinding.recycler.setVisibility(View.VISIBLE);
+//                                Glide.with(nActivity)
+//                                        .asBitmap()
+//                                        .apply(new RequestOptions()
+////                            .fitCenter()
+//                                                .format(DecodeFormat.PREFER_ARGB_8888)
+//                                                .override(Target.SIZE_ORIGINAL))
+//                                        .thumbnail(0.5f)
+////                    .load(R.drawable.bg_pink_card)
+//                                        .load("")
+//                                        .placeholder(R.drawable.bg_pink_card)
+//                                        .error(R.drawable.bg_pink_card)
+//                                        .into(holder.profileBinding.rivProfileImage);
+//
+//                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, holder.profileBinding.videoView.getHeight());
+//                                params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+//                                holder.profileBinding.recycler.setLayoutParams(params);
+//                                holder.adapter = new RecycleImagesAdapter(nContext, holder.imguris, holder.hobbiesTextArr, new RecycleImagesAdapter.OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(int position) {
+//                                        holder.profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+//                                        holder.playPauseHandler.postDelayed(holder.playPauserunnable, 2000);
+//                                    }
+//                                });
+//                                holder.profileBinding.recycler.setLayoutManager(new LinearLayoutManager(nContext, LinearLayoutManager.HORIZONTAL, false));
+//                                holder.profileBinding.recycler.setAdapter(holder.adapter);
+//                                holder.loadjpgs();
+//                            }
+//                            else {
+//                                holder.profileBinding.recycler.setVisibility(View.GONE);
+//                                holder.profileBinding.rivProfileImage.setVisibility(View.VISIBLE);
+//                                holder.profileBinding.videoView.setVisibility(View.GONE);
+//                                Glide.with(nActivity)
+//                                        .asBitmap()
+//                                        .apply(new RequestOptions()
+////                            .fitCenter()
+//                                                .format(DecodeFormat.PREFER_ARGB_8888)
+//                                                .override(Target.SIZE_ORIGINAL))
+//                                        .thumbnail(0.5f)
+////                    .load(R.drawable.bg_pink_card)
+//                                        .load(userData.getUser_profile_picture())
+//                                        .placeholder(R.drawable.bg_pink_card)
+//                                        .error(R.drawable.bg_pink_card)
+//                                        .into(holder.profileBinding.rivProfileImage);
+//
+//                                if (MusicService.mPlayer == null) {
+//                                    MusicService.mPlayer = new MediaPlayer();
+//                                }
+//                                MusicService.mPlayer.stop();
+//                                nActivity.stopService(new Intent(nActivity, MusicService.class));
+//                                holder.repeat = false;
+//                            }
+//
+//                            holder.profileBinding.tvDetail.setVisibility(View.GONE);
+//                            holder.profileBinding.videoView.setVisibility(View.GONE);
+//                            if (holder.imguris.size() == 0) {
+//                                holder.profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
+//                                holder.paused = false;
+//                                holder.profileBinding.ivPlayPause.setImageResource(R.drawable.ic_play_circle_white);
+//
+//                                showHideView(holder, holder.paused);
+//                            }
+//                        }
+//                        else {
+//                            holder.voiceCall = true;
+//                            pauseVal=0;
+//                            setViews(arraylist, holder, poss[0], userData);
+//                        }
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }.start();
+//                countDownTimer.add(holder.countDownTimer);
+//            }
+//        }
+//        else {
+//            holder.countDownTimer.cancel();
+//        }
+//    }
+
+    public void getVideoTrack(final ArrayList<String> arraylist, ViewHolder holder, int pos, beanUserData userData) {
         holder.profileBinding.tvDetail.setVisibility(View.VISIBLE);
         holder.profileBinding.videoView.setVisibility(View.VISIBLE);
-        ArrayList<Long> longArrayList = new ArrayList<>();
-       /* longArrayList.add(3000L);//holder.stringData.add("Blank");
-        longArrayList.add(3000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
-        longArrayList.add(3000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
-        longArrayList.add(3000L);//holder.stringData.add("Blank");
-        longArrayList.add(10000L);//holder.stringData.add("Meri umar 38 saal hai");
-        longArrayList.add(2000L);//holder.stringData.add("Blank");
-        longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
-        longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
-        longArrayList.add(2000L);//holder.stringData.add("Mein shakahari hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
-        longArrayList.add(2000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
-        longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
-        longArrayList.add(2000L);//holder.stringData.add("Blank");
-        longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
-        longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
-        longArrayList.add(2000L);//holder.stringData.add("Lekin khushiya bonus mein");
-        longArrayList.add(2000L);//holder.stringData.add("What I am looking for?");
-        longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");*/
 
-        longArrayList.add(3000L);//holder.stringData.add("Blank");
-        longArrayList.add(4000L);//holder.stringData.add("Mera naam Sumit Dhara hai");
-        longArrayList.add(4000L);//holder.stringData.add("Mein iss app pe apna Saathiya dhoondne aaya hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Mien orisa ka rahne wala hoon");
-        // longArrayList.add(5000L);//holder.stringData.add("Blank");
-        longArrayList.add(7000L);//holder.stringData.add("Meri umar 38 saal hai");
-        longArrayList.add(5000L);//holder.stringData.add("Blank");
-        longArrayList.add(4000L);//holder.stringData.add("Mera kad 5 ft 10 inch hai");
-        // longArrayList.add(3000L);//holder.stringData.add("Par koshish karunga tumhare liye tare tod laaun");
-        longArrayList.add(4000L);//holder.stringData.add("Mein shakahari hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Mein ghar pe bana kuch bhi khaa leta hoon");
-        longArrayList.add(4000L);//holder.stringData.add("Mere ghar pe Hindi boli jaati h");
-        //  longArrayList.add(5000L);//holder.stringData.add("Lekin hum pyaar ki bhasha jaldi samajh jaate h ya fir papa ki pitayi");
-        longArrayList.add(4000L);//holder.stringData.add("Mien 12th tak pada hoon");
-        longArrayList.add(5000L);//holder.stringData.add("Blank");
-        longArrayList.add(6000L);//holder.stringData.add("Mein plumber hoon");
-        //  longArrayList.add(6000L);//holder.stringData.add("Or zindagi mein m kuch bada karna chahta hoon");
-        longArrayList.add(5000L);//holder.stringData.add("Meri maasik aay 10 haazaar hai");
-        longArrayList.add(3000L);//holder.stringData.add("Lekin khushiya bonus mein");
-        longArrayList.add(3000L);//holder.stringData.add("What I am looking for?");
-        longArrayList.add(4000L);//holder.stringData.add("Agar apko mera profile aacha laga ho to mujhe jarror sampark kijiye.");
-        final int[] poss = {pos};
-        /*if(milliLeft>0)
-        {
-           longArrayList.set(poss[0],milliLeft);
-            milliLeft=0;
-        }*/
-        if (activityRunning) {
-            if (longArrayList.size() > 0) {
-                if(pauseVal==1){
-                    pauseVal=0;
-                    if(milliLeft<1000){
-                        milliLeft=1000;
-                    }
-                    longArrayList.set(poss[0],(milliLeft));
-                    Log.e("In restart ",poss[0]+" Remaining Time : "+(milliLeft));
-                }
-                countDownTimerPlayPause=holder.countDownTimer;
-                holder.countDownTimer = new CountDownTimer(longArrayList.get(poss[0]), 1000) {
-                    @Override
-                    public void onTick(long l) {
-                        milliLeft = l;
-                        try {
-                            Log.e("Mili", poss[0] + " Remaining Time : " + l);
-                            if (!arraylist.get(poss[0]).isEmpty() && !arraylist.get(poss[0]).equalsIgnoreCase("blank")) {
-                                holder.translateText(arraylist.get(poss[0]), userData.getGender());
-                            } else {
-                                holder.profileBinding.tvDetail.setText(arraylist.get(poss[0]));
+        holder.profileBinding.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            public void onPrepared(MediaPlayer mp) {
+                // Log.e("video_rrr", "aaaaa");
+                running = true;
+                final int duration = holder.profileBinding.videoView.getDuration();
+
+                new Thread(new Runnable() {
+                    public void run() {
+                        do {
+                            int time = (holder.profileBinding.videoView.getCurrentPosition()) / 1000;
+                            Log.e("video_track_time", "" + time);
+
+                            ((AppCompatActivity)nContext).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Stuff that updates the UI
+                                    setVoiceText(time, arraylist,  holder,  pos,  userData);
+                                }
+                            });
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        }catch (Exception e){
-                            e.printStackTrace();
+                            if (!running) break;
                         }
+                        while (holder.profileBinding.videoView.getCurrentPosition() < duration);
                     }
+                }).start();
+            }
+        });
 
-                    @Override
-                    public void onFinish() {
-                        poss[0]++;
-                        try{
-                        holder.current = poss[0];
-                        if (arraylist.size() == poss[0]) {
 
+        holder.profileBinding.videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                stopPosition = 0;
+                // profileBinding.videoView.seekTo(stopPosition);
+                speak_pos_status1 = false;
+                speak_pos_status2 = false;
+                speak_pos_status3 = false;
+                speak_pos_status4 = false;
+                speak_pos_status5 = false;
+                speak_pos_status6 = false;
+                speak_pos_status7 = false;
+                speak_pos_status8 = false;
+                speak_pos_status9 = false;
+                speak_pos_status10 = false;
+                speak_pos_status11 = false;
+                speak_pos_status12 = false;
+                speak_pos_status13 = false;
+                speak_pos_status14 = false;
+                speak_pos_status15 = false;
+                speak_pos_status16 = false;
+                speak_pos_status17 = false;
+            }
+        });
+    }
+
+    private void setVoiceText(int time, List<String> arraylist, ViewHolder holder, int pos, beanUserData userData) {
+        try {
+            if (activityRunning) {
+                if (time == 69 ) {
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             if (holder.imguris.size() > 0) {
                                 holder.profileBinding.recycler.setVisibility(View.VISIBLE);
                                 Glide.with(nActivity)
@@ -665,7 +846,8 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 holder.profileBinding.recycler.setLayoutManager(new LinearLayoutManager(nContext, LinearLayoutManager.HORIZONTAL, false));
                                 holder.profileBinding.recycler.setAdapter(holder.adapter);
                                 holder.loadjpgs();
-                            } else {
+                            }
+                            else {
                                 holder.profileBinding.recycler.setVisibility(View.GONE);
                                 holder.profileBinding.rivProfileImage.setVisibility(View.VISIBLE);
                                 holder.profileBinding.videoView.setVisibility(View.GONE);
@@ -692,6 +874,11 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                             holder.profileBinding.tvDetail.setVisibility(View.GONE);
                             holder.profileBinding.videoView.setVisibility(View.GONE);
+                            holder.profileBinding.tvDetail.setText("");
+
+                          //  stopPosition = 0;
+                          //  holder.profileBinding.videoView.seekTo(stopPosition);
+
                             if (holder.imguris.size() == 0) {
                                 holder.profileBinding.ivPlayPause.setVisibility(View.VISIBLE);
                                 holder.paused = false;
@@ -699,20 +886,198 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                                 showHideView(holder, holder.paused);
                             }
-                        } else {
-                            holder.voiceCall = true;
-                            pauseVal=0;
-                            setViews(arraylist, holder, poss[0], userData);
+
                         }
-                        }catch (Exception e){
-                            e.printStackTrace();
+                    }, 5000);
+
+                } else {
+                    holder.voiceCall = true;
+                    pauseVal=0;
+                    // setViews(arraylist, poss[0]);
+                    if (time == 1) {
+                        if (!speak_pos_status1) {
+                            if (!arraylist.get(0).isEmpty() && !arraylist.get(0).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(0), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(0));
+                            }
+
+                            speak_pos_status1 = true;
                         }
                     }
-                }.start();
-                countDownTimer.add(holder.countDownTimer);
+                    if (time == 3) {
+                        if (!speak_pos_status2) {
+                            if (!arraylist.get(1).isEmpty() && !arraylist.get(1).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(1), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(1));
+                            }
+                            speak_pos_status2 = true;
+                        }
+                    }
+                    if (time == 6) {
+                        if (!speak_pos_status3) {
+                            if (!arraylist.get(2).isEmpty() && !arraylist.get(2).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(2), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(2));
+                            }
+
+                            speak_pos_status3 = true;
+                        }
+
+                    }
+                    if (time == 10) {
+                        if (!speak_pos_status4) {
+                            if (!arraylist.get(3).isEmpty() && !arraylist.get(3).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(3), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(3));
+                            }
+                            speak_pos_status4 = true;
+                        }
+                    }
+                    if (time == 14) {
+                        if (!speak_pos_status5) {
+                            if (!arraylist.get(4).isEmpty() && !arraylist.get(4).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(4), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(4));
+                            }
+                            speak_pos_status5 = true;
+                        }
+
+                    }
+                    if (time == 21) {
+                        if (!speak_pos_status6) {
+                            if (!arraylist.get(5).isEmpty() && !arraylist.get(5).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(5), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(5));
+                            }
+                            speak_pos_status6 = true;
+                        }
+
+                    }
+                    if (time == 26) {
+                        if (!speak_pos_status7) {
+                            if (!arraylist.get(6).isEmpty() && !arraylist.get(6).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(6), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(6));
+                            }
+                            speak_pos_status7 = true;
+                        }
+
+                    }
+                    if (time == 30) {
+                        if (!speak_pos_status8) {
+                            if (!arraylist.get(7).isEmpty() && !arraylist.get(7).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(7), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(7));
+                            }
+                            speak_pos_status8 = true;
+                        }
+                    }
+                    if (time == 34) {
+                        if (!speak_pos_status9) {
+                            if (!arraylist.get(8).isEmpty() && !arraylist.get(8).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(8), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(8));
+                            }
+                            speak_pos_status9 = true;
+                        }
+
+                    }
+                    if (time == 38) {
+                        if (!speak_pos_status10) {
+                            if (!arraylist.get(9).isEmpty() && !arraylist.get(9).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(9), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(9));
+                            }
+                            speak_pos_status10 = true;
+                        }
+                    }
+                    if (time == 42) {
+                        if (!speak_pos_status11) {
+                            if (!arraylist.get(10).isEmpty() && !arraylist.get(10).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(10), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(10));
+                            }
+                            speak_pos_status11 = true;
+                        }
+                    }
+                    if (time == 46) {
+                        if (!speak_pos_status12) {
+                            if (!arraylist.get(11).isEmpty() && !arraylist.get(11).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(11), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(11));
+                            }
+                            speak_pos_status12 = true;
+                        }
+                    }
+                    if (time == 51) {
+                        if (!speak_pos_status13) {
+                            if (!arraylist.get(12).isEmpty() && !arraylist.get(12).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(12), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(12));
+                            }
+                            speak_pos_status13 = true;
+                        }
+
+                    }
+                    if (time == 57) {
+                        if (!speak_pos_status14) {
+                            if (!arraylist.get(13).isEmpty() && !arraylist.get(13).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(13), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(13));
+                            }
+                            speak_pos_status14 = true;
+                        }
+
+                    }
+                    if (time == 62) {
+                        if (!speak_pos_status15) {
+                            if (!arraylist.get(14).isEmpty() && !arraylist.get(14).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(14), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(14));
+                            }
+                            speak_pos_status15 = true;
+                        }
+                    }
+                    if (time == 65) {
+                        if (!speak_pos_status16) {
+                            if (!arraylist.get(15).isEmpty() && !arraylist.get(15).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(15), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(15));
+                            }
+                            speak_pos_status16 = true;
+                        }
+                    }
+                    if (time == 67) {
+                        if (!speak_pos_status17) {
+                            if (!arraylist.get(16).isEmpty() && !arraylist.get(16).equalsIgnoreCase("blank")) {
+                                holder.translateText(arraylist.get(16), userData.getGender());
+                            } else {
+                                holder.profileBinding.tvDetail.setText(arraylist.get(16));
+                            }
+                            speak_pos_status17 = true;
+                        }
+                    }
+                }
             }
-        } else {
-            holder.countDownTimer.cancel();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -727,6 +1092,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.profileBinding.linBottomMenu.setVisibility(View.VISIBLE);
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -1220,7 +1586,7 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Drawable drawable;
         boolean repeat = false;
         Handler handler2 = new Handler();
-        CountDownTimer countDownTimer;
+       // CountDownTimer countDownTimer;
         boolean voiceCall = true;
         Runnable runnable2 = new Runnable() {
             @Override
@@ -1288,7 +1654,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             profileBinding = ItemHomeProfileBinding.bind(itemView);
         }
 
-
         private void loadjpgs() {
             profileBinding.tvDetail.setText("");
             profileBinding.tvDetail.setVisibility(View.GONE);
@@ -1349,7 +1714,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 });
             }
         }
-
 
         private void speakOut(String text, String gender) {
             mMainViewModel.speak(text)
